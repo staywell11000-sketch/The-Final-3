@@ -18,6 +18,7 @@ import {
   type WhatsAppAccount,
 } from "@/lib/whatsapp-accounts-api"
 import { WhatsAppEmbeddedSignup } from "./WhatsAppConnect"
+import { WhatsAppAccessPanel } from "./WhatsAppAccessPanel"
 import { usePlan } from "@/lib/plan-context"
 import { toast } from "sonner"
 
@@ -415,6 +416,11 @@ export function WhatsAppSettingsTab() {
           ))}
         </div>
       )}
+
+      {/* ─── Team Access Management ──────────────────── */}
+      <div className="border-t border-border/40 pt-6">
+        <WhatsAppAccessPanel />
+      </div>
     </div>
   )
 }
