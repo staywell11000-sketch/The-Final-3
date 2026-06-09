@@ -10,7 +10,9 @@ import { Progress } from "@/components/ui/progress"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { CheckCircle2, Clock, XCircle, Zap, CreditCard, Package, AlertTriangle, TrendingUp, ImagePlus, X, Loader2, Sparkles, Bot } from "lucide-react"
+import { CheckCircle2, Clock, XCircle, Zap, CreditCard, Package, AlertTriangle, TrendingUp, ImagePlus, X, Loader2, Sparkles, Bot, MessageCircle } from "lucide-react"
+import { FaWhatsapp } from "react-icons/fa"
+import { useWaLimit } from "@/lib/whatsapp-accounts-api"
 import { format } from "date-fns"
 
 const PLAN_COLORS: Record<string, string> = {
@@ -217,6 +219,7 @@ function SubmitPaymentDialog({ title, plan, amount, onSuccess, variant = "defaul
 export default function BillingPage() {
   const { org, credits, isSuperAdmin } = usePlan()
   const queryClient = useQueryClient()
+  const { data: waLimit } = useWaLimit()
 
   const { data: paymentsData } = useQuery({
     queryKey: ["payments-mine"],
@@ -296,6 +299,60 @@ export default function BillingPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* WhatsApp Numbers */}
+      {waLimit && (
+        <Card>
+          <CardHeader className="pb-3">
+            <div className="flex items-center gap-2">
+              <FaWhatsapp className="h-4 w-4 text-[#25D366]" />
+              <CardTitle className="text-base">WhatsApp Numbers</CardTitle>
+            </div>
+            <CardDescription>WhatsApp Business numbers connected to your organization.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {isSuperAdmin || waLimit.limit === null ? (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <CheckCircle2 className="h-4 w-4 text-green-500" />
+                {isSuperAdmin ? "Super Admin — unlimited WhatsApp numbers." : `Unlimited numbers on ${waLimit.plan} plan.`}
+              </div>
+            ) : (
+              <>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>Numbers Connected</span>
+                    <span className="font-medium">{waLimit.used} / {waLimit.limit}</span>
+                  </div>
+                  <Progress
+                    value={waLimit.limit > 0 ? Math.min(100, (waLimit.used / waLimit.limit) * 100) : 0}
+                    className="h-2.5"
+                  />
+                </div>
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="rounded-lg bg-muted p-3">
+                    <p className="text-muted-foreground text-xs">Connected</p>
+                    <p className="font-bold text-lg mt-1 text-[#25D366]">{waLimit.used}</p>
+                  </div>
+                  <div className="rounded-lg bg-muted p-3">
+                    <p className="text-muted-foreground text-xs">Available</p>
+                    <p className="font-bold text-lg mt-1">{Math.max(0, waLimit.limit - waLimit.used)}</p>
+                  </div>
+                  <div className="rounded-lg bg-muted p-3">
+                    <p className="text-muted-foreground text-xs">Plan Limit</p>
+                    <p className="font-bold text-lg mt-1">{waLimit.limit}</p>
+                  </div>
+                </div>
+                {waLimit.used >= waLimit.limit && (
+                  <div className="rounded-lg bg-amber-500/10 border border-amber-500/20 p-3 text-sm text-amber-600 flex items-center gap-2">
+                    <AlertTriangle className="h-4 w-4" />
+                    Inbox limit reached. Upgrade your plan to connect more WhatsApp numbers.
+                  </div>
+                )}
+              </>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       {/* AI Actions Usage */}
       <Card>

@@ -27,6 +27,7 @@ import {
 import { FaWhatsapp } from "react-icons/fa"
 import { toast } from "sonner"
 import { useWhatsAppStatus } from "@/lib/whatsapp-api"
+import { useWaAccounts } from "@/lib/whatsapp-accounts-api"
 import { useLocation } from "wouter"
 
 // ─── Avatar ───────────────────────────────────────────────
@@ -370,6 +371,7 @@ export default function MessagesPage() {
   const { hasFeature, isSuperAdmin } = usePlan()
   const canUseAiSuggestions = isSuperAdmin || hasFeature("ai_reply_suggestions")
   const { data: waStatus } = useWhatsAppStatus()
+  const { data: waAccounts = [] } = useWaAccounts()
 
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [loadingConvs, setLoadingConvs] = useState(true)
@@ -382,6 +384,7 @@ export default function MessagesPage() {
   const [search, setSearch] = useState("")
   const [showNewModal, setShowNewModal] = useState(false)
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "pending" | "resolved">("all")
+  const [inboxFilter, setInboxFilter] = useState<number | "all" | "crm">("all")
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -479,6 +482,12 @@ export default function MessagesPage() {
   const filtered = conversations
     .filter((c) => statusFilter === "all" || c.status === statusFilter)
     .filter((c) => {
+      if (inboxFilter === "all") return true
+      if (inboxFilter === "crm") return c.channel !== "whatsapp"
+      // numeric: filter by wa_account_id stored in meta or just by channel for now
+      return c.channel === "whatsapp"
+    })
+    .filter((c) => {
       if (!search) return true
       const name = (c.contact?.name ?? c.title ?? "").toLowerCase()
       return name.includes(search.toLowerCase())
@@ -502,7 +511,53 @@ export default function MessagesPage() {
         {/* ── Left: Conversation List ─────────────────── */}
         <div className="flex w-72 flex-shrink-0 flex-col border-r border-border bg-card/40">
           {/* WhatsApp connect banner */}
-          {waStatus && !waStatus.connected && <WhatsAppBanner />}
+          {waStatus && !waStatus.connected && waAccounts.length === 0 && <WhatsAppBanner />}
+
+          {/* Multi-inbox tabs */}
+          {waAccounts.length > 0 && (
+            <div className="flex gap-1 overflow-x-auto p-2 pb-1.5 border-b border-border/60 no-scrollbar">
+              <button
+                onClick={() => setInboxFilter("all")}
+                className={cn(
+                  "flex-shrink-0 flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-semibold transition-colors",
+                  inboxFilter === "all"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-secondary text-muted-foreground hover:text-foreground"
+                )}
+              >
+                All Inboxes
+              </button>
+              <button
+                onClick={() => setInboxFilter("crm")}
+                className={cn(
+                  "flex-shrink-0 flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-semibold transition-colors",
+                  inboxFilter === "crm"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-secondary text-muted-foreground hover:text-foreground"
+                )}
+              >
+                CRM
+              </button>
+              {waAccounts.map(acc => (
+                <button
+                  key={acc.id}
+                  onClick={() => setInboxFilter(acc.id)}
+                  className={cn(
+                    "flex-shrink-0 flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-semibold transition-colors",
+                    inboxFilter === acc.id
+                      ? "bg-[#25D366] text-white"
+                      : "bg-secondary text-muted-foreground hover:text-foreground"
+                  )}
+                  title={acc.phoneNumber ?? acc.displayName ?? "WhatsApp"}
+                >
+                  <FaWhatsapp className="h-3 w-3 shrink-0" />
+                  <span className="truncate max-w-[80px]">
+                    {acc.displayName ?? acc.phoneNumber ?? `Inbox ${acc.id}`}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
 
           {/* Search */}
           <div className="p-3 border-b border-border/60">

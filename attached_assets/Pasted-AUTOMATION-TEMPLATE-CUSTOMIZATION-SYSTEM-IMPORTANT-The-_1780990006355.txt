@@ -1,0 +1,403 @@
+AUTOMATION TEMPLATE CUSTOMIZATION SYSTEM
+
+IMPORTANT
+
+The CRM already contains automation templates.
+
+The problem is not creating templates.
+
+The problem is that users need complete control over every template.
+
+Audit all existing automation templates and redesign them so they are fully editable and customizable.
+
+==================================================
+GOAL
+====
+
+Every automation template should act as a starting point.
+
+Users must be able to modify anything.
+
+No hardcoded workflows.
+
+No locked automation logic.
+
+No hidden settings.
+
+==================================================
+FULL TEMPLATE EDITABILITY
+=========================
+
+For every automation template allow editing:
+
+* Name
+* Description
+* Trigger
+* Conditions
+* Actions
+* Delays
+* Notifications
+* Assignments
+* WhatsApp Messages
+* Email Messages
+* AI Actions
+* Tags
+* Status Changes
+* Lead Routing
+* Scheduling
+* Follow-Up Logic
+
+Everything should be editable.
+
+==================================================
+AUTOMATION CLONING
+==================
+
+Allow:
+
+Duplicate Template
+
+Example:
+
+New Lead Follow-Up
+
+↓
+
+Duplicate
+
+↓
+
+My B-17 Follow-Up Workflow
+
+Users should be able to create unlimited customized versions.
+
+==================================================
+VISUAL AUTOMATION EDITOR
+========================
+
+Replace any confusing forms.
+
+Create visual flow builder.
+
+Example:
+
+WHEN
+
+New Lead Created
+
+↓
+
+Assign Agent
+
+↓
+
+Send WhatsApp Message
+
+↓
+
+Wait 24 Hours
+
+↓
+
+Check Lead Status
+
+↓
+
+Send Follow-Up
+
+↓
+
+Create Task
+
+Users should visually understand the workflow.
+
+==================================================
+TRIGGER CUSTOMIZATION
+=====================
+
+Allow changing template triggers.
+
+Examples:
+
+Lead Created
+
+Lead Updated
+
+Property Inquiry
+
+Deal Stage Changed
+
+Appointment Created
+
+WhatsApp Message Received
+
+Tag Added
+
+Document Uploaded
+
+Custom Trigger
+
+==================================================
+CONDITION BUILDER
+=================
+
+Allow unlimited conditions.
+
+Examples:
+
+Lead Source = Facebook
+
+Lead Source = Instagram
+
+Budget > 10 Million
+
+City = Islamabad
+
+Property Type = Commercial
+
+Campaign = B17 Launch
+
+Multiple conditions should be supported.
+
+==================================================
+ACTION CUSTOMIZATION
+====================
+
+Every action must be editable.
+
+Examples:
+
+Send WhatsApp
+
+Send Email
+
+Create Task
+
+Assign User
+
+Add Tag
+
+Remove Tag
+
+Move Pipeline Stage
+
+Generate AI Summary
+
+Generate AI Follow-Up
+
+Create Appointment
+
+Send Notification
+
+==================================================
+WHATSAPP CUSTOMIZATION
+======================
+
+Users must be able to edit:
+
+Message Content
+
+Variables
+
+Timing
+
+Recipient
+
+Assigned Inbox
+
+Attachments
+
+Templates
+
+==================================================
+AI CUSTOMIZATION
+================
+
+Users must be able to edit:
+
+AI Prompt
+
+AI Goal
+
+AI Summary Instructions
+
+AI Follow-Up Instructions
+
+AI Analysis Instructions
+
+without needing developer assistance.
+
+==================================================
+DELAY CUSTOMIZATION
+===================
+
+Allow:
+
+Minutes
+
+Hours
+
+Days
+
+Weeks
+
+Months
+
+Example:
+
+Wait 2 Days
+
+↓
+
+Send Follow-Up
+
+==================================================
+AUTOMATION TEST MODE
+====================
+
+Create:
+
+Test Automation
+
+Button
+
+Users should be able to simulate workflow execution.
+
+Display:
+
+Trigger
+
+Conditions
+
+Actions
+
+Expected Result
+
+==================================================
+AUTOMATION EXECUTION LOGS
+=========================
+
+Add execution history.
+
+Show:
+
+Success
+
+Failure
+
+Skipped
+
+Pending
+
+Execution Time
+
+Triggered By
+
+Users should always know what happened.
+
+==================================================
+ERROR HANDLING
+==============
+
+If an automation fails:
+
+Show exact failure reason.
+
+Do NOT silently fail.
+
+Examples:
+
+WhatsApp Connection Missing
+
+Lead Not Found
+
+Invalid Condition
+
+Permission Error
+
+==================================================
+TEMPLATE LIBRARY
+================
+
+Keep existing templates.
+
+Examples:
+
+New Lead Follow-Up
+
+Missed Lead Recovery
+
+Appointment Reminder
+
+Property Inquiry Response
+
+Deal Won Workflow
+
+Deal Lost Recovery
+
+Agent Assignment
+
+Each template should remain editable.
+
+==================================================
+SAVE AS TEMPLATE
+================
+
+Allow users to save their customized workflows.
+
+Example:
+
+My B17 Premium Follow-Up
+
+↓
+
+Save As Template
+
+↓
+
+Reuse Later
+
+==================================================
+PERMISSIONS
+===========
+
+Organization Owners:
+
+Full Access
+
+Managers:
+
+Based on permissions
+
+Employees:
+
+Based on permissions
+
+==================================================
+FINAL REQUIREMENT
+=================
+
+Audit every automation template currently in the CRM.
+
+Ensure:
+
+* No template is locked.
+* Every trigger is editable.
+* Every condition is editable.
+* Every action is editable.
+* Every WhatsApp message is editable.
+* Every AI action is editable.
+* Every delay is editable.
+* Every workflow can be duplicated.
+* Every workflow can be tested.
+* Every workflow can be saved as a custom template.
+
+Provide:
+
+1. Templates audited
+2. Templates modified
+3. New customization capabilities
+4. New UI components
+5. Execution logging improvements
+6. Testing tools added
+7. Final confirmation that all automation templates are fully customizable.

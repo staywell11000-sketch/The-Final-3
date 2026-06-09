@@ -1,0 +1,325 @@
+WHATSAPP MULTI-INBOX & PERMISSION SYSTEM
+
+IMPORTANT
+
+The current plan structure includes:
+
+Starter = 1 WhatsApp Number
+Professional = 3 WhatsApp Numbers
+Agency = Unlimited WhatsApp Numbers
+
+I need the WhatsApp architecture implemented correctly.
+
+DO NOT interpret WhatsApp limits as user limits.
+
+A WhatsApp Number is NOT a User.
+
+A WhatsApp Number is a connected business inbox.
+
+==================================================
+CORRECT BUSINESS LOGIC
+======================
+
+Example:
+
+Professional Plan
+
+Includes:
+
+* 5 Users
+* 3 WhatsApp Numbers
+
+This means:
+
+5 users may log into the CRM.
+
+The organization may connect up to 3 WhatsApp Business Accounts.
+
+Users and WhatsApp numbers are separate resources.
+
+==================================================
+WHATSAPP ACCOUNT LIMIT ENFORCEMENT
+==================================
+
+Before connecting a WhatsApp Business Account:
+
+Check:
+
+Current Plan
+
+Current Connected WhatsApp Accounts
+
+Plan Limit
+
+Examples:
+
+Starter
+Limit = 1
+
+Professional
+Limit = 3
+
+Agency
+Limit = Unlimited
+
+==================================================
+CONNECTION BLOCKING
+===================
+
+If organization exceeds limit:
+
+Prevent connection.
+
+Display:
+
+"You have reached your WhatsApp account limit for your current plan."
+
+Buttons:
+
+Upgrade Plan
+Purchase Additional WhatsApp Slot
+
+==================================================
+WHATSAPP ACCOUNT STORAGE
+========================
+
+Each connected WhatsApp Business Account must be stored separately.
+
+Fields:
+
+id
+organization_id
+phone_number
+display_name
+business_name
+status
+connected_at
+created_at
+updated_at
+
+==================================================
+MESSAGES PAGE REDESIGN
+======================
+
+Redesign Messages page to support multiple WhatsApp inboxes.
+
+Example:
+
+Messages
+
+📱 +92 300 1111111
+📱 +92 300 2222222
+📱 +92 300 3333333
+
+Or
+
+Sales Inbox
+Support Inbox
+Owner Inbox
+
+Users can switch between inboxes.
+
+==================================================
+INBOX FILTERING
+===============
+
+When user selects a WhatsApp account:
+
+Only conversations belonging to that WhatsApp account should be shown.
+
+Prevent conversation mixing.
+
+==================================================
+EMPLOYEE ACCESS CONTROL
+=======================
+
+Organization Owner must control who can access each WhatsApp account.
+
+Create:
+
+user_whatsapp_permissions
+
+Fields:
+
+id
+user_id
+whatsapp_account_id
+can_view
+can_reply
+can_assign
+created_at
+
+==================================================
+PERMISSION EXAMPLES
+===================
+
+Owner
+
+Access:
+
+✓ All Numbers
+
+==================================================
+
+Agent Ali
+
+Access:
+
+✓ Number 1
+✓ Number 2
+✗ Number 3
+
+==================================================
+
+Agent Ahmed
+
+Access:
+
+✓ Number 1
+✗ Number 2
+✗ Number 3
+
+==================================================
+
+Manager
+
+Access:
+
+✓ All Numbers
+
+==================================================
+MESSAGES PAGE BEHAVIOR
+======================
+
+Users should only see inboxes they have permission to access.
+
+If user has no access:
+
+Hide inbox completely.
+
+Do not display locked inboxes.
+
+==================================================
+OWNER MANAGEMENT PANEL
+======================
+
+Create WhatsApp Access Management.
+
+Location:
+
+Settings
+→ Team Permissions
+
+Owner can:
+
+* Grant inbox access
+* Remove inbox access
+* Grant reply permission
+* Grant assignment permission
+* Grant full control
+
+==================================================
+LEAD ASSIGNMENT
+===============
+
+Allow conversations and leads to be assigned.
+
+Example:
+
+Lead arrives through:
+
+WhatsApp Number 2
+
+Owner assigns:
+
+Agent Ali
+
+Only Agent Ali and managers can handle it.
+
+==================================================
+ADD-ON STORE
+============
+
+Create purchasable add-on:
+
+Extra WhatsApp Slot
+
+Price:
+
+Configurable by Super Admin
+
+Example:
+
+Rs. 2,000/month
+
+Adds:
+
++1 WhatsApp Number
+
+==================================================
+PLAN DISPLAY
+============
+
+Billing page should show:
+
+WhatsApp Numbers Used
+
+Example:
+
+2 / 3 Used
+
+or
+
+5 / Unlimited
+
+==================================================
+SECURITY
+========
+
+Prevent:
+
+* Cross-organization WhatsApp access
+* Cross-organization conversations
+* Cross-organization leads
+* Unauthorized inbox viewing
+
+Enforce organization ownership at all levels.
+
+==================================================
+SUPER ADMIN ANALYTICS
+=====================
+
+Display:
+
+* WhatsApp Accounts Per Organization
+* Messages Per Organization
+* Inbox Usage
+* Add-On Purchases
+* Most Active Inboxes
+
+==================================================
+FINAL REQUIREMENT
+=================
+
+Implement a scalable multi-inbox WhatsApp architecture.
+
+Ensure:
+
+* Users are separate from WhatsApp Numbers.
+* WhatsApp limits are enforced by plan.
+* Permissions are managed per inbox.
+* Conversations never cross inboxes.
+* Organizations remain fully isolated.
+
+Provide:
+
+1. Database changes
+2. New tables
+3. API changes
+4. UI changes
+5. Permission architecture
+6. Security checks
+7. Migration instructions
+8. Testing checklist
+
+This must be production-ready and scalable for agencies managing multiple teams and multiple WhatsApp Business Accounts.

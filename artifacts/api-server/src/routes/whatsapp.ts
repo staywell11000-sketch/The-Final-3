@@ -2,15 +2,15 @@ import { Router } from "express"
 import crypto from "crypto"
 import { requireAuth } from "../middlewares/requireAuth"
 import { supabaseAdmin } from "../lib/supabase"
-import { db, connectedAccounts } from "@workspace/db"
-import { eq, and } from "drizzle-orm"
+import { db, connectedAccounts, whatsappAccounts, conversationWaAccounts } from "@workspace/db"
+import { eq, and, sql } from "drizzle-orm"
 import { logger } from "../lib/logger"
 
 const router = Router()
 
 const GRAPH_API_BASE = "https://graph.facebook.com/v18.0"
 
-// ─── Signature verification ──────────────────────────────
+// ─── Helpers ──────────────────────────────────────────────
 
 function verifySignature(rawBody: Buffer, signature: string, secret: string): boolean {
   if (!signature.startsWith("sha256=")) return false
@@ -20,6 +20,18 @@ function verifySignature(rawBody: Buffer, signature: string, secret: string): bo
   } catch {
     return false
   }
+}
+
+function getApiBaseUrl(): string {
+  if (process.env.API_URL) return process.env.API_URL
+  if (process.env.REPLIT_DEV_DOMAIN) return `https://${process.env.REPLIT_DEV_DOMAIN}`
+  return "http://localhost:8080"
+}
+
+function parseMetadata(raw: unknown): Record<string, unknown> {
+  if (!raw) return {}
+  if (typeof raw === "object") return raw as Record<string, unknown>
+  try { return JSON.parse(raw as string) } catch { return {} }
 }
 
 // ─── GET /api/whatsapp/webhook — Meta hub challenge ──────
@@ -97,14 +109,38 @@ router.post("/whatsapp/webhook", async (req: any, res) => {
         for (const msg of value.messages ?? []) {
           if (msg.type !== "text") continue
 
-          const senderPhone  = msg.from   as string
-          const wamid        = msg.id     as string
-          const content      = (msg.text?.body as string) ?? ""
-          const phoneNumId   = value.metadata?.phone_number_id as string | undefined
+          const senderPhone = msg.from   as string
+          const wamid       = msg.id     as string
+          const content     = (msg.text?.body as string) ?? ""
+          const phoneNumId  = value.metadata?.phone_number_id as string | undefined
 
-          // Find the connected account owner by phone_number_id — uses Drizzle (Replit PG)
-          let ownerUserId: string | null = null
+          // Try new multi-inbox: find WA account by phone_number_id
+          let ownerUserId:       string | null = null
+          let waAccountId:       number | null = null
+
           if (phoneNumId) {
+            const waAccts = await db
+              .select({ id: whatsappAccounts.id, organizationId: whatsappAccounts.organizationId })
+              .from(whatsappAccounts)
+              .where(and(
+                eq(whatsappAccounts.phoneNumberId, phoneNumId),
+                eq(whatsappAccounts.status, "active"),
+              ))
+              .limit(1)
+
+            if (waAccts.length) {
+              waAccountId = waAccts[0].id
+              const orgId = waAccts[0].organizationId
+              // Get org owner as conversation owner
+              const orgRows = await db.execute(sql`SELECT owner_id FROM organizations WHERE id = ${orgId} LIMIT 1`)
+              if (orgRows.rows.length) {
+                ownerUserId = (orgRows.rows[0] as any).owner_id as string
+              }
+            }
+          }
+
+          // Fallback: legacy connected_accounts
+          if (!ownerUserId && phoneNumId) {
             const accounts = await db
               .select({ userId: connectedAccounts.userId, metadata: connectedAccounts.metadata })
               .from(connectedAccounts)
@@ -114,7 +150,7 @@ router.post("/whatsapp/webhook", async (req: any, res) => {
               ))
 
             for (const acct of accounts) {
-              const meta = acct.metadata as Record<string, string> | null
+              const meta = parseMetadata(acct.metadata)
               if (meta?.phone_number_id === phoneNumId) {
                 ownerUserId = acct.userId
                 break
@@ -123,11 +159,11 @@ router.post("/whatsapp/webhook", async (req: any, res) => {
           }
 
           if (!ownerUserId) {
-            logger.warn({ phoneNumId }, "No connected WhatsApp account found for incoming message")
+            logger.warn({ phoneNumId }, "No WA account found for incoming message")
             continue
           }
 
-          // Find or create contact by phone number — uses Supabase
+          // Find or create contact by phone number
           let contactId: string
 
           const { data: existingContact } = await supabaseAdmin
@@ -167,7 +203,7 @@ router.post("/whatsapp/webhook", async (req: any, res) => {
             contactId = newContact.id
           }
 
-          // Find or create conversation (channel = 'whatsapp') — uses Supabase
+          // Find or create conversation (channel = 'whatsapp')
           let conversationId: string
 
           const { data: existingConv } = await supabaseAdmin
@@ -203,6 +239,15 @@ router.post("/whatsapp/webhook", async (req: any, res) => {
             conversationId = newConv.id
           }
 
+          // Store whatsapp_account → conversation mapping in Drizzle
+          if (waAccountId) {
+            await db
+              .insert(conversationWaAccounts)
+              .values({ conversationId, whatsappAccountId: waAccountId, createdAt: new Date() })
+              .onConflictDoNothing()
+              .catch(e => logger.warn({ e }, "Failed to store conversation WA account mapping"))
+          }
+
           // Deduplicate by wamid
           const { data: dup } = await supabaseAdmin
             .from("messages")
@@ -212,7 +257,6 @@ router.post("/whatsapp/webhook", async (req: any, res) => {
 
           if (dup) continue
 
-          // Insert the inbound message row
           const { error: me } = await supabaseAdmin
             .from("messages")
             .insert({
@@ -230,7 +274,6 @@ router.post("/whatsapp/webhook", async (req: any, res) => {
             continue
           }
 
-          // Update conversation last_message + increment unread_count
           await supabaseAdmin
             .from("conversations")
             .update({
@@ -258,7 +301,6 @@ router.post("/whatsapp/send", requireAuth, async (req: any, res) => {
   }
 
   try {
-    // Get conversation + contact phone — scope to req.userId to prevent IDOR
     const { data: conv, error: ce } = await supabaseAdmin
       .from("conversations")
       .select("id, channel, contact:contacts(phone)")
@@ -278,28 +320,53 @@ router.post("/whatsapp/send", requireAuth, async (req: any, res) => {
       return res.status(400).json({ error: "Contact has no phone number" })
     }
 
-    // Get WhatsApp connected account from Replit PG (Drizzle)
-    const accounts = await db
-      .select({ accessToken: connectedAccounts.accessToken, metadata: connectedAccounts.metadata })
-      .from(connectedAccounts)
-      .where(and(
-        eq(connectedAccounts.userId, req.userId),
-        eq(connectedAccounts.provider, "whatsapp"),
-        eq(connectedAccounts.status, "active"),
-      ))
+    let accessToken:  string | null = null
+    let phoneNumId:   string | null = null
+    let waAccountId:  number | null = null
+
+    // Try new multi-inbox: look up via conversation mapping → whatsapp_accounts
+    const mapping = await db
+      .select({ whatsappAccountId: conversationWaAccounts.whatsappAccountId })
+      .from(conversationWaAccounts)
+      .where(eq(conversationWaAccounts.conversationId, conversationId))
       .limit(1)
 
-    const account = accounts[0]
-    if (!account) {
-      return res.status(400).json({ error: "No active WhatsApp account connected" })
+    if (mapping.length) {
+      waAccountId = mapping[0].whatsappAccountId
+      const waAccts = await db
+        .select({ accessToken: whatsappAccounts.accessToken, phoneNumberId: whatsappAccounts.phoneNumberId })
+        .from(whatsappAccounts)
+        .where(eq(whatsappAccounts.id, waAccountId))
+        .limit(1)
+
+      if (waAccts.length) {
+        accessToken = waAccts[0].accessToken
+        phoneNumId  = waAccts[0].phoneNumberId
+      }
     }
 
-    const meta         = account.metadata as Record<string, string> | null
-    const phoneNumId   = meta?.phone_number_id
-    const accessToken  = account.accessToken as string
+    // Fallback: legacy connected_accounts
+    if (!accessToken) {
+      const accounts = await db
+        .select({ accessToken: connectedAccounts.accessToken, metadata: connectedAccounts.metadata })
+        .from(connectedAccounts)
+        .where(and(
+          eq(connectedAccounts.userId, req.userId),
+          eq(connectedAccounts.provider, "whatsapp"),
+          eq(connectedAccounts.status, "active"),
+        ))
+        .limit(1)
 
-    if (!phoneNumId) {
-      return res.status(400).json({ error: "Phone number ID not found — reconnect your WhatsApp account" })
+      const account = accounts[0]
+      if (account) {
+        const meta = parseMetadata(account.metadata)
+        accessToken = account.accessToken as string
+        phoneNumId  = (meta?.phone_number_id as string) ?? null
+      }
+    }
+
+    if (!accessToken || !phoneNumId) {
+      return res.status(400).json({ error: "No active WhatsApp account found for this conversation — reconnect" })
     }
 
     // Call WhatsApp Cloud API
@@ -328,7 +395,6 @@ router.post("/whatsapp/send", requireAuth, async (req: any, res) => {
 
     const wamid = waJson.messages[0].id as string
 
-    // Insert message row only after confirmed API response
     const { data: message, error: me } = await supabaseAdmin
       .from("messages")
       .insert({
@@ -348,13 +414,9 @@ router.post("/whatsapp/send", requireAuth, async (req: any, res) => {
       return res.status(500).json({ error: "Message sent but failed to save" })
     }
 
-    // Update conversation last_message
     await supabaseAdmin
       .from("conversations")
-      .update({
-        last_message:    content,
-        last_message_at: new Date().toISOString(),
-      })
+      .update({ last_message: content, last_message_at: new Date().toISOString() })
       .eq("id", conversationId)
 
     return res.json({ message })
@@ -365,10 +427,51 @@ router.post("/whatsapp/send", requireAuth, async (req: any, res) => {
 })
 
 // ─── GET /api/whatsapp/status ─────────────────────────────
-// Returns WhatsApp connection status for the authenticated user
+// Legacy single-account status — now reads from whatsapp_accounts first
 
 router.get("/whatsapp/status", requireAuth, async (req: any, res) => {
   try {
+    // Try new multi-inbox table first
+    const orgRow = await db.execute(sql`
+      SELECT o.id FROM organizations o
+      WHERE o.owner_id = ${req.userId}
+         OR o.id = (SELECT organization_id FROM users WHERE id = ${req.userId})
+      LIMIT 1
+    `)
+
+    if (orgRow.rows.length) {
+      const orgId = (orgRow.rows[0] as any).id
+      const waAccts = await db
+        .select()
+        .from(whatsappAccounts)
+        .where(and(
+          eq(whatsappAccounts.organizationId, orgId),
+          eq(whatsappAccounts.status, "active"),
+        ))
+        .limit(1)
+
+      const acct = waAccts[0]
+      if (acct) {
+        const meta = parseMetadata(acct.metadata as string | null)
+        return res.json({
+          connected:         true,
+          status:            acct.status,
+          accountName:       acct.displayName ?? acct.businessName,
+          phoneNumberId:     acct.phoneNumberId,
+          phoneNumber:       acct.phoneNumber,
+          wabaId:            acct.wabaId,
+          businessName:      acct.businessName,
+          lastSyncedAt:      acct.lastSyncedAt,
+          webhookUrl:        `${getApiBaseUrl()}/api/whatsapp/webhook`,
+          verifyToken:       process.env.WHATSAPP_WEBHOOK_VERIFY_TOKEN ? "configured" : "not_configured",
+          templates:         (meta.templates as unknown[]) ?? [],
+          templatesSyncedAt: (meta.templates_synced_at as string) ?? null,
+          multiInbox:        true,
+        })
+      }
+    }
+
+    // Fallback: legacy connected_accounts
     const accounts = await db
       .select({
         id:           connectedAccounts.id,
@@ -389,7 +492,7 @@ router.get("/whatsapp/status", requireAuth, async (req: any, res) => {
       return res.json({ connected: false })
     }
 
-    const meta = account.metadata as Record<string, unknown> | null
+    const meta = parseMetadata(account.metadata)
     return res.json({
       connected:         true,
       status:            account.status,
@@ -403,6 +506,7 @@ router.get("/whatsapp/status", requireAuth, async (req: any, res) => {
       verifyToken:       process.env.WHATSAPP_WEBHOOK_VERIFY_TOKEN ? "configured" : "not_configured",
       templates:         (meta?.templates as unknown[]) ?? [],
       templatesSyncedAt: (meta?.templates_synced_at as string) ?? null,
+      multiInbox:        false,
     })
   } catch (err: any) {
     logger.error({ err }, "Error in /whatsapp/status")
@@ -410,14 +514,7 @@ router.get("/whatsapp/status", requireAuth, async (req: any, res) => {
   }
 })
 
-function getApiBaseUrl(): string {
-  if (process.env.API_URL) return process.env.API_URL
-  if (process.env.REPLIT_DEV_DOMAIN) return `https://${process.env.REPLIT_DEV_DOMAIN}`
-  return "http://localhost:8080"
-}
-
 // ─── GET /api/whatsapp/sdk-config ─────────────────────────
-// Public: returns Facebook App ID + optional WhatsApp config ID for EBS
 
 router.get("/whatsapp/sdk-config", (_req, res) => {
   const appId    = process.env.FACEBOOK_APP_ID ?? null
@@ -427,20 +524,21 @@ router.get("/whatsapp/sdk-config", (_req, res) => {
 })
 
 // ─── POST /api/whatsapp/embedded-signup ───────────────────
-// Exchanges EBS code for an access token and stores the WhatsApp account
+// Legacy: now delegates to /whatsapp/accounts/connect but also
+// keeps connected_accounts for backward compat
 
 router.post("/whatsapp/embedded-signup", requireAuth, async (req: any, res) => {
   const { code } = req.body as { code?: string }
   if (!code) return res.status(400).json({ error: "code is required" })
 
-  const appId    = process.env.FACEBOOK_APP_ID
+  const appId     = process.env.FACEBOOK_APP_ID
   const appSecret = process.env.FACEBOOK_APP_SECRET
   if (!appId || !appSecret) {
     return res.status(503).json({ error: "Meta app credentials are not configured" })
   }
 
   try {
-    // Exchange EBS code for access token (no redirect_uri needed for EBS)
+    // Exchange EBS code for access token
     const tokenRes  = await fetch(
       `${GRAPH_API_BASE}/oauth/access_token?client_id=${appId}&client_secret=${appSecret}&code=${encodeURIComponent(code)}`,
     )
@@ -450,14 +548,12 @@ router.post("/whatsapp/embedded-signup", requireAuth, async (req: any, res) => {
     }
     const accessToken = tokenJson.access_token as string
 
-    // Get user profile
     const profileRes  = await fetch(`${GRAPH_API_BASE}/me?fields=id,name&access_token=${encodeURIComponent(accessToken)}`)
     const profileJson = await profileRes.json() as any
     if (profileJson.error) throw new Error(profileJson.error.message)
-    const fbUserId = String(profileJson.id ?? "")
+    const fbUserId   = String(profileJson.id ?? "")
     const fbUserName = String(profileJson.name ?? "")
 
-    // Fetch WABA list
     let wabaId:       string | null = null
     let phoneNumId:   string | null = null
     let phoneNumber:  string | null = null
@@ -475,7 +571,6 @@ router.post("/whatsapp/embedded-signup", requireAuth, async (req: any, res) => {
         businessName = (waba.name as string) || fbUserName
         businessId   = waba.business?.id ?? wabaId
 
-        // Fetch phone numbers for WABA
         const phoneRes  = await fetch(
           `${GRAPH_API_BASE}/${wabaId}/phone_numbers?fields=id,display_phone_number,verified_name,quality_rating&access_token=${encodeURIComponent(accessToken)}`,
         )
@@ -490,15 +585,43 @@ router.post("/whatsapp/embedded-signup", requireAuth, async (req: any, res) => {
       logger.warn({ waErr }, "Could not fetch WABA details — storing basic account")
     }
 
-    const metadata = {
-      waba_id:         wabaId,
-      phone_number_id: phoneNumId,
-      phone_number:    phoneNumber,
-      business_id:     businessId,
-      business_name:   businessName,
+    const metadata = { waba_id: wabaId, phone_number_id: phoneNumId, phone_number: phoneNumber, business_id: businessId, business_name: businessName }
+
+    // Also write to new whatsapp_accounts table (org-level)
+    try {
+      const orgRow = await db.execute(sql`
+        SELECT id FROM organizations
+        WHERE owner_id = ${req.userId}
+           OR id = (SELECT organization_id FROM users WHERE id = ${req.userId})
+        LIMIT 1
+      `)
+      if (orgRow.rows.length) {
+        const orgId = (orgRow.rows[0] as any).id as number
+        await db
+          .insert(whatsappAccounts)
+          .values({
+            organizationId: orgId,
+            phoneNumber,
+            phoneNumberId:  phoneNumId,
+            displayName:    businessName,
+            businessName,
+            wabaId,
+            accountId:      fbUserId,
+            accessToken,
+            status:         "active",
+            connectedAt:    new Date(),
+            lastSyncedAt:   new Date(),
+            metadata:       JSON.stringify(metadata),
+            createdAt:      new Date(),
+            updatedAt:      new Date(),
+          })
+          .onConflictDoNothing()
+      }
+    } catch (orgErr) {
+      logger.warn({ orgErr }, "Could not write to whatsapp_accounts — non-fatal")
     }
 
-    // Upsert connected account
+    // Legacy: upsert connected account (for backward compat)
     await db
       .insert(connectedAccounts)
       .values({
@@ -526,7 +649,6 @@ router.post("/whatsapp/embedded-signup", requireAuth, async (req: any, res) => {
       })
 
     logger.info({ userId: req.userId, wabaId, phoneNumId }, "WhatsApp account connected via EBS")
-
     return res.json({ success: true, wabaId, phoneNumberId: phoneNumId, phoneNumber, businessName, businessId })
   } catch (err: any) {
     logger.error({ err }, "WhatsApp EBS failed")
@@ -535,47 +657,73 @@ router.post("/whatsapp/embedded-signup", requireAuth, async (req: any, res) => {
 })
 
 // ─── GET /api/whatsapp/health ─────────────────────────────
-// Verifies access token + phone number ID are still valid via Graph API
 
 router.get("/whatsapp/health", requireAuth, async (req: any, res) => {
   try {
-    const accounts = await db
-      .select({
-        accessToken:  connectedAccounts.accessToken,
-        metadata:     connectedAccounts.metadata,
-        lastSyncedAt: connectedAccounts.lastSyncedAt,
-      })
-      .from(connectedAccounts)
-      .where(and(
-        eq(connectedAccounts.userId, req.userId),
-        eq(connectedAccounts.provider, "whatsapp"),
-      ))
-      .limit(1)
+    // Try new multi-inbox table first
+    const orgRow = await db.execute(sql`
+      SELECT o.id FROM organizations o
+      WHERE o.owner_id = ${req.userId}
+         OR o.id = (SELECT organization_id FROM users WHERE id = ${req.userId})
+      LIMIT 1
+    `)
 
-    const account = accounts[0]
-    if (!account) return res.json({ connected: false })
+    let accessToken: string | null = null
+    let phoneNumId:  string | null = null
+    let lastSyncedAt: Date | null  = null
 
-    const meta        = account.metadata as Record<string, string> | null
-    const phoneNumId  = meta?.phone_number_id
-    const token       = account.accessToken as string
+    if (orgRow.rows.length) {
+      const orgId = (orgRow.rows[0] as any).id
+      const waAccts = await db
+        .select()
+        .from(whatsappAccounts)
+        .where(and(
+          eq(whatsappAccounts.organizationId, orgId),
+          eq(whatsappAccounts.status, "active"),
+        ))
+        .limit(1)
+
+      if (waAccts[0]) {
+        accessToken  = waAccts[0].accessToken
+        phoneNumId   = waAccts[0].phoneNumberId
+        lastSyncedAt = waAccts[0].lastSyncedAt
+      }
+    }
+
+    if (!accessToken) {
+      const accounts = await db
+        .select({ accessToken: connectedAccounts.accessToken, metadata: connectedAccounts.metadata, lastSyncedAt: connectedAccounts.lastSyncedAt })
+        .from(connectedAccounts)
+        .where(and(
+          eq(connectedAccounts.userId, req.userId),
+          eq(connectedAccounts.provider, "whatsapp"),
+        ))
+        .limit(1)
+
+      const account = accounts[0]
+      if (!account) return res.json({ connected: false })
+
+      const meta = parseMetadata(account.metadata)
+      accessToken  = account.accessToken as string
+      phoneNumId   = (meta?.phone_number_id as string) ?? null
+      lastSyncedAt = account.lastSyncedAt
+    }
 
     let tokenValid = false
     let phoneValid = false
     const details: Record<string, unknown> = {}
 
-    // Verify access token
     try {
-      const r = await fetch(`${GRAPH_API_BASE}/me?access_token=${encodeURIComponent(token)}`)
+      const r = await fetch(`${GRAPH_API_BASE}/me?access_token=${encodeURIComponent(accessToken!)}`)
       const j = await r.json() as any
       tokenValid     = !j.error
       details.fbName = j.name ?? null
     } catch { tokenValid = false }
 
-    // Verify phone number ID
     if (phoneNumId && tokenValid) {
       try {
         const r = await fetch(
-          `${GRAPH_API_BASE}/${phoneNumId}?fields=id,display_phone_number,verified_name,quality_rating&access_token=${encodeURIComponent(token)}`,
+          `${GRAPH_API_BASE}/${phoneNumId}?fields=id,display_phone_number,verified_name,quality_rating&access_token=${encodeURIComponent(accessToken!)}`,
         )
         const j = await r.json() as any
         phoneValid             = !j.error
@@ -588,20 +736,20 @@ router.get("/whatsapp/health", requireAuth, async (req: any, res) => {
     }
 
     const warnings: string[] = []
-    if (!tokenValid)                  warnings.push("Access token is invalid or expired — reconnect your account")
-    if (tokenValid && !phoneValid)    warnings.push("Phone number ID is unreachable — reconnect your account")
+    if (!tokenValid)               warnings.push("Access token is invalid or expired — reconnect your account")
+    if (tokenValid && !phoneValid) warnings.push("Phone number ID is unreachable — reconnect your account")
     if (!process.env.WHATSAPP_WEBHOOK_VERIFY_TOKEN) warnings.push("Webhook verify token not configured")
 
     return res.json({
-      connected:          true,
-      healthy:            tokenValid && phoneValid,
+      connected:         true,
+      healthy:           tokenValid && phoneValid,
       tokenValid,
       phoneValid,
-      webhookConfigured:  !!process.env.WHATSAPP_WEBHOOK_VERIFY_TOKEN,
+      webhookConfigured: !!process.env.WHATSAPP_WEBHOOK_VERIFY_TOKEN,
       warnings,
       details,
-      webhookUrl:         `${getApiBaseUrl()}/api/whatsapp/webhook`,
-      verifyToken:        process.env.WHATSAPP_WEBHOOK_VERIFY_TOKEN ?? null,
+      webhookUrl:        `${getApiBaseUrl()}/api/whatsapp/webhook`,
+      verifyToken:       process.env.WHATSAPP_WEBHOOK_VERIFY_TOKEN ?? null,
     })
   } catch (err: any) {
     logger.error({ err }, "Error in /whatsapp/health")
@@ -610,62 +758,78 @@ router.get("/whatsapp/health", requireAuth, async (req: any, res) => {
 })
 
 // ─── POST /api/whatsapp/templates/sync ────────────────────
-// Fetches approved message templates from Meta and caches in metadata
 
 router.post("/whatsapp/templates/sync", requireAuth, async (req: any, res) => {
   try {
-    const accounts = await db
-      .select({ id: connectedAccounts.id, accessToken: connectedAccounts.accessToken, metadata: connectedAccounts.metadata })
-      .from(connectedAccounts)
-      .where(and(
-        eq(connectedAccounts.userId, req.userId),
-        eq(connectedAccounts.provider, "whatsapp"),
-        eq(connectedAccounts.status, "active"),
-      ))
-      .limit(1)
+    let accountRecord: any = null
 
-    const account = accounts[0]
-    if (!account) return res.status(404).json({ error: "No active WhatsApp account found" })
+    // Try new multi-inbox table
+    const orgRow = await db.execute(sql`
+      SELECT o.id FROM organizations o
+      WHERE o.owner_id = ${req.userId}
+         OR o.id = (SELECT organization_id FROM users WHERE id = ${req.userId})
+      LIMIT 1
+    `)
 
-    const meta   = account.metadata as Record<string, unknown> | null
-    const wabaId = meta?.waba_id as string | undefined
-    const token  = account.accessToken as string
+    if (orgRow.rows.length) {
+      const orgId = (orgRow.rows[0] as any).id
+      const waAccts = await db.select().from(whatsappAccounts)
+        .where(and(eq(whatsappAccounts.organizationId, orgId), eq(whatsappAccounts.status, "active")))
+        .limit(1)
+      if (waAccts[0]) accountRecord = { ...waAccts[0], source: "multi" }
+    }
 
-    if (!wabaId) return res.status(400).json({ error: "WABA ID not found — reconnect your WhatsApp account" })
+    if (!accountRecord) {
+      const accounts = await db
+        .select({ id: connectedAccounts.id, accessToken: connectedAccounts.accessToken, metadata: connectedAccounts.metadata })
+        .from(connectedAccounts)
+        .where(and(eq(connectedAccounts.userId, req.userId), eq(connectedAccounts.provider, "whatsapp")))
+        .limit(1)
+      if (accounts[0]) accountRecord = { ...accounts[0], source: "legacy" }
+    }
 
-    const r = await fetch(
-      `${GRAPH_API_BASE}/${wabaId}/message_templates?fields=id,name,language,category,status&limit=200&access_token=${encodeURIComponent(token)}`,
+    if (!accountRecord) return res.status(400).json({ error: "No WhatsApp account connected" })
+
+    const meta   = parseMetadata(accountRecord.metadata ?? accountRecord.accessToken)
+    const token  = accountRecord.accessToken as string
+    const wabaId = accountRecord.wabaId ?? (meta?.waba_id as string) ?? null
+
+    if (!wabaId) return res.status(400).json({ error: "No WABA ID found — reconnect your account" })
+
+    const templatesRes  = await fetch(
+      `${GRAPH_API_BASE}/${wabaId}/message_templates?fields=id,name,language,category,status&limit=100&access_token=${encodeURIComponent(token)}`,
     )
-    const j = await r.json() as any
-    if (j.error) throw new Error(j.error.message)
+    const templatesJson = await templatesRes.json() as any
+    if (templatesJson.error) throw new Error(templatesJson.error.message ?? "Failed to fetch templates")
 
-    const templates = (j.data ?? []).map((t: any) => ({
-      id:       t.id,
-      name:     t.name,
-      language: t.language,
-      category: t.category,
-      status:   t.status,
+    const templates = (templatesJson.data ?? []).map((t: any) => ({
+      id: t.id, name: t.name, language: t.language, category: t.category, status: t.status,
     }))
 
-    const updatedMeta = { ...(meta ?? {}), templates, templates_synced_at: new Date().toISOString() }
+    const syncedAt = new Date().toISOString()
 
-    await db
-      .update(connectedAccounts)
-      .set({ metadata: updatedMeta, updatedAt: new Date() })
-      .where(and(
-        eq(connectedAccounts.userId, req.userId),
-        eq(connectedAccounts.provider, "whatsapp"),
-      ))
+    if (accountRecord.source === "multi") {
+      const updatedMeta = { ...parseMetadata(accountRecord.metadata), templates, templates_synced_at: syncedAt }
+      await db.update(whatsappAccounts)
+        .set({ metadata: JSON.stringify(updatedMeta), lastSyncedAt: new Date(), updatedAt: new Date() })
+        .where(eq(whatsappAccounts.id, accountRecord.id))
+    } else {
+      const updatedMeta = { ...meta, templates, templates_synced_at: syncedAt }
+      await db.update(connectedAccounts)
+        .set({ metadata: updatedMeta, lastSyncedAt: new Date(), updatedAt: new Date() })
+        .where(eq(connectedAccounts.id, accountRecord.id))
+    }
 
+    logger.info({ count: templates.length }, "Templates synced")
     return res.json({ synced: templates.length, templates })
   } catch (err: any) {
-    logger.error({ err }, "Error syncing WhatsApp templates")
+    logger.error({ err }, "POST /whatsapp/templates/sync error")
     return res.status(500).json({ error: err?.message ?? "Template sync failed" })
   }
 })
 
-// ─── DELETE /api/whatsapp/disconnect ──────────────────────
-// Removes the connected WhatsApp account for the user
+// ─── DELETE /api/whatsapp/disconnect ─────────────────────
+// Legacy single-account disconnect
 
 router.delete("/whatsapp/disconnect", requireAuth, async (req: any, res) => {
   try {
@@ -676,10 +840,9 @@ router.delete("/whatsapp/disconnect", requireAuth, async (req: any, res) => {
         eq(connectedAccounts.provider, "whatsapp"),
       ))
 
-    logger.info({ userId: req.userId }, "WhatsApp account disconnected")
     return res.status(204).send()
   } catch (err: any) {
-    logger.error({ err }, "Error disconnecting WhatsApp")
+    logger.error({ err }, "Error in /whatsapp/disconnect")
     return res.status(500).json({ error: err?.message ?? "Disconnect failed" })
   }
 })

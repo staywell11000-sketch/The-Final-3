@@ -29,6 +29,7 @@ import orgMembersRouter from "./orgMembers";
 import supportRouter from "./support";
 import privacyRouter from "./privacy";
 import onboardingRouter from "./onboarding";
+import whatsappAccountsRouter from "./whatsappAccounts";
 
 const router: IRouter = Router();
 
@@ -62,5 +63,6 @@ router.use(orgMembersRouter);
 router.use(supportRouter);
 router.use(privacyRouter);
 router.use(onboardingRouter);
+router.use(whatsappAccountsRouter);
 
 export default router;

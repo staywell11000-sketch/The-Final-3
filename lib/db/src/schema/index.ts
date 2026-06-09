@@ -30,3 +30,6 @@ export * from "./invitations";
 export * from "./support_tickets";
 export * from "./support_messages";
 export * from "./organization_ai_usage";
+export * from "./whatsapp_accounts";
+export * from "./user_whatsapp_permissions";
+export * from "./conversation_wa_accounts";
