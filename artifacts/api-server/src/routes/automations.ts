@@ -138,6 +138,34 @@ router.delete("/automations/:id", requireAuth, async (req: any, res) => {
   }
 });
 
+// ── Clone ───────────────────────────────────────────────────────────────────
+router.post("/automations/:id/clone", requireAuth, async (req: any, res) => {
+  const id = parseInt(req.params.id as string, 10);
+  const userId: string = req.userId;
+  if (isNaN(id)) return void res.status(400).json({ error: "Invalid ID" });
+  try {
+    const [original] = await db
+      .select()
+      .from(automations)
+      .where(and(eq(automations.id, id), or(eq(automations.createdById, userId), isNull(automations.createdById))));
+    if (!original) return void res.status(404).json({ error: "Automation not found" });
+    const [cloned] = await db.insert(automations).values({
+      name:          `${original.name} (Copy)`,
+      description:   original.description,
+      triggerType:   original.triggerType,
+      triggerConfig: (original.triggerConfig ?? {}) as Record<string, unknown>,
+      conditions:    (original.conditions ?? []) as Array<{ field: string; operator: string; value: unknown }>,
+      actions:       (original.actions ?? []) as Array<{ type: string; config: Record<string, unknown> }>,
+      isActive:      false,
+      createdById:   userId,
+    }).returning();
+    res.status(201).json(cloned);
+  } catch (err) {
+    console.error("Clone automation error:", err);
+    res.status(500).json({ error: "Failed to clone automation" });
+  }
+});
+
 router.post("/automations/:id/test", requireAuth, async (req: any, res) => {
   const id = parseInt(req.params.id as string, 10);
   const userId: string = req.userId;
