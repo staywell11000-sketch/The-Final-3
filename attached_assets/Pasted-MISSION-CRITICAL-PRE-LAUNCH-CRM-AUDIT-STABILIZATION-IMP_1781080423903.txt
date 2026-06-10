@@ -1,0 +1,744 @@
+MISSION CRITICAL PRE-LAUNCH CRM AUDIT, STABILIZATION, IMPLEMENTATION AND QA
+
+IMPORTANT:
+
+This is a production readiness task.
+
+Do NOT implement superficial fixes.
+
+Do NOT create placeholders.
+
+Do NOT disable functionality.
+
+Do NOT remove existing data.
+
+Do NOT create temporary workarounds.
+
+Perform a complete architecture audit, identify root causes, implement permanent fixes, test all affected systems, and ensure the CRM is fully operational and ready for deployment.
+
+Preserve all existing organizations, users, leads, contacts, properties, deals, messages, automations, analytics, settings, and billing data.
+
+====================================================
+PHASE 1 – FULL SYSTEM AUDIT
+===========================
+
+Audit the following:
+
+Authentication
+
+Authorization
+
+Organizations
+
+Teams
+
+Invitations
+
+Billing
+
+Subscriptions
+
+Add-On Store
+
+Messages
+
+WhatsApp
+
+Facebook Leads
+
+Automations
+
+Notifications
+
+AI Intelligence
+
+Analytics
+
+Settings
+
+Overview Dashboard
+
+Properties
+
+Deals
+
+Leads
+
+Super Admin
+
+Identify:
+
+* Broken functionality
+* Broken API calls
+* Broken database relationships
+* Missing permissions
+* Failed workflows
+* Missing validations
+* Incomplete integrations
+* Inconsistent plan enforcement
+
+Fix root causes.
+
+====================================================
+PRICING CORRECTION
+==================
+
+Update all pricing everywhere.
+
+FREE PLAN
+
+Basic CRM Access
+
+STARTER PLAN
+
+PKR 9,999/month
+
+PROFESSIONAL PLAN
+
+PKR 19,999/month
+
+AGENCY PLAN
+
+PKR 29,999/month
+
+Update:
+
+Pricing Page
+
+Billing Logic
+
+Upgrade Flows
+
+Plan Validation
+
+Subscription Enforcement
+
+Super Admin Billing Dashboard
+
+Add-On Store
+
+====================================================
+AUTHENTICATION
+==============
+
+Audit and fix authentication completely.
+
+Fix Google Sign-In.
+
+Investigate:
+
+OAuth
+
+Supabase
+
+Redirect URI
+
+Callback URLs
+
+Environment Variables
+
+Session Handling
+
+Ensure:
+
+Login works
+
+Signup works
+
+Google Login works
+
+Google Signup works
+
+Logout works
+
+Session persistence works
+
+Friendly error messages displayed
+
+Wrong email/password shows:
+
+"Incorrect email or password"
+
+Existing account attempting signup receives:
+
+"An account already exists. Please log in."
+
+====================================================
+ORGANIZATION OWNERSHIP AND ROLES
+================================
+
+Fix role assignment logic.
+
+Organization creators must become:
+
+Organization Owner
+
+Admin
+
+Full Access User
+
+New signups must never be incorrectly assigned as employees.
+
+Employees should only exist when:
+
+Created
+
+Invited
+
+Assigned
+
+By organization admins.
+
+Verify:
+
+Owner permissions
+
+Admin permissions
+
+Employee permissions
+
+Custom permissions
+
+Organization membership
+
+====================================================
+TEAM MANAGEMENT
+===============
+
+Fix entire Teams module.
+
+Verify:
+
+Create Member
+
+Invite Member
+
+Pending Invites
+
+Accept Invite
+
+Resend Invite
+
+Cancel Invite
+
+Remove Member
+
+Edit Permissions
+
+Role Changes
+
+All buttons must function.
+
+Add phone number field to invitations.
+
+Generate WhatsApp invitation message.
+
+Allow invitation by:
+
+Email
+
+WhatsApp
+
+Both
+
+Invited users must join correct organization.
+
+====================================================
+ORGANIZATION PERFORMANCE DASHBOARD
+==================================
+
+Clicking Members should show:
+
+Assigned Leads
+
+Total Leads
+
+Open Deals
+
+Closed Deals
+
+Revenue Generated
+
+Conversion Rate
+
+Tasks
+
+Activities
+
+Response Time
+
+Last Active
+
+Performance Rankings
+
+====================================================
+WHATSAPP MONITORING
+===================
+
+Create WhatsApp Monitoring Dashboard.
+
+Display:
+
+Connected
+
+Disconnected
+
+Token Expiring
+
+Webhook Error
+
+Last Incoming Message
+
+Last Outgoing Message
+
+Connection Health
+
+Number Status
+
+Webhook Status
+
+Sync Status
+
+Visual indicators required.
+
+====================================================
+WHATSAPP LIMITS
+===============
+
+Enforce WhatsApp limits based on plan.
+
+Starter:
+1 Number
+
+Professional:
+3 Numbers
+
+Agency:
+Unlimited
+
+Add-On:
+Additional WhatsApp Numbers
+
+If add-on approved:
+
+Increase available slots immediately.
+
+Reflect changes in:
+
+Messages
+
+Organization Settings
+
+Subscription Details
+
+Billing
+
+====================================================
+FACEBOOK LEADS BACKUP
+=====================
+
+Implement backup lead retrieval.
+
+If webhook fails:
+
+Automatically poll Facebook.
+
+Prevent lead loss.
+
+Log all failures.
+
+Recover missed leads.
+
+====================================================
+AUTOMATIONS
+===========
+
+Audit automation engine completely.
+
+Fix:
+
+Automation Creation
+
+Automation Saving
+
+Automation Editing
+
+Automation Activation
+
+Automation Execution
+
+Automation Templates
+
+Verify:
+
+Triggers
+
+Conditions
+
+Filters
+
+Actions
+
+Delays
+
+Notifications
+
+Lead Updates
+
+Deal Updates
+
+WhatsApp Actions
+
+Email Actions
+
+CRM Notifications
+
+Automation templates must work immediately.
+
+====================================================
+NOTIFICATIONS
+=============
+
+Verify notifications function correctly.
+
+CRM Notifications
+
+Email Notifications
+
+WhatsApp Notifications
+
+Automation Notifications
+
+Billing Notifications
+
+Approval Notifications
+
+Test every channel.
+
+Fix failures.
+
+====================================================
+AI INTELLIGENCE
+===============
+
+Verify all AI modules.
+
+AI Lead Summary
+
+AI Reply Suggestions
+
+AI Property Matching
+
+AI Chat
+
+AI Insights
+
+Ensure:
+
+Accessible
+
+Functional
+
+Connected
+
+No dead buttons
+
+No broken routes
+
+Users can access features directly.
+
+====================================================
+SETTINGS
+========
+
+Fix Appearance Settings.
+
+Currently displays:
+
+"Something went wrong"
+
+Investigate root cause.
+
+Repair.
+
+Verify:
+
+Theme Changes
+
+Appearance Preferences
+
+Persistence
+
+Saving
+
+Loading
+
+====================================================
+OVERVIEW, ANALYTICS AND CONNECTIVITY
+====================================
+
+Verify module connectivity.
+
+Overview
+
+Analytics
+
+Leads
+
+Properties
+
+Deals
+
+Messages
+
+Teams
+
+Automations
+
+AI
+
+Notifications
+
+Billing
+
+Settings
+
+All data should remain synchronized.
+
+Analytics must reflect real activity.
+
+Revenue calculations must be accurate.
+
+Conversion calculations must be accurate.
+
+====================================================
+TOUR GUIDE
+==========
+
+Tour Guide should only appear:
+
+First Login Only
+
+Store completion state.
+
+Never show repeatedly.
+
+Allow restart manually from settings.
+
+Verify onboarding flow.
+
+====================================================
+PAYMENTS
+========
+
+Improve payment workflow.
+
+When user uploads screenshot:
+
+Allow direct upload.
+
+Do not require URL.
+
+Do not create unnecessary dialogs.
+
+Store securely.
+
+Send to Super Admin.
+
+====================================================
+PAYMENT APPROVALS
+=================
+
+When Super Admin approves:
+
+Plan Upgrade
+
+Add-On
+
+Storage Upgrade
+
+WhatsApp Number
+
+Any Purchase
+
+System must:
+
+Apply immediately
+
+Update limits immediately
+
+Show success notification
+
+Send notification
+
+Refresh UI
+
+====================================================
+PLAN UPGRADES
+=============
+
+When upgrading:
+
+Starter → Professional
+
+Professional → Agency
+
+Any Upgrade
+
+DO NOT:
+
+Delete data
+
+Reset organization
+
+Create duplicate organizations
+
+Remove permissions
+
+Lose messages
+
+Lose leads
+
+Lose properties
+
+Only expand limits.
+
+====================================================
+PLAN EXPIRY
+===========
+
+When subscription expires:
+
+Move organization to Free Plan.
+
+Preserve ALL DATA.
+
+Do not delete:
+
+Leads
+
+Properties
+
+Deals
+
+Contacts
+
+Messages
+
+Analytics
+
+Automations
+
+Settings
+
+Upon renewal:
+
+Restore paid access instantly.
+
+====================================================
+BOOSTER STORE
+=============
+
+Add:
+
+WhatsApp Number Add-On
+
+Storage Add-On
+
+Future Add-On Support
+
+All approved add-ons must immediately reflect throughout the system.
+
+====================================================
+CALCULATOR
+==========
+
+Remove Currency Exchange Calculator entirely.
+
+====================================================
+SUPER ADMIN
+===========
+
+Verify Super Admin Dashboard.
+
+Display:
+
+Organizations
+
+Users
+
+Revenue
+
+Payments
+
+Pending Approvals
+
+Add-On Requests
+
+Subscription Status
+
+System Statistics
+
+All data must be accurate.
+
+====================================================
+FINAL QA
+========
+
+Perform full end-to-end testing.
+
+Verify:
+
+Authentication
+
+Google Login
+
+Organizations
+
+Permissions
+
+Invitations
+
+WhatsApp
+
+Facebook Leads
+
+Notifications
+
+Billing
+
+Payments
+
+Approvals
+
+Automations
+
+Analytics
+
+AI
+
+Settings
+
+Tour Guide
+
+Plan Upgrades
+
+Plan Downgrades
+
+Add-On Store
+
+Super Admin
+
+Generate final implementation report summarizing:
+
+Issues Found
+
+Root Causes
+
+Fixes Applied
+
+Systems Tested
+
+Outstanding Risks
+
+Do not finish until all critical launch blockers are resolved and verified.

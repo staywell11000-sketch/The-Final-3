@@ -5,7 +5,7 @@ export const PLAN_DISPLAY: Record<PlanSlug, { name: string; price: number; color
   trial:        { name: "Free Trial",   price: 0,     color: "bg-slate-400" },
   starter:      { name: "Starter",      price: 9999,  color: "bg-blue-500" },
   professional: { name: "Professional", price: 19999, color: "bg-purple-500" },
-  agency:       { name: "Agency",       price: 25000, color: "bg-amber-500" },
+  agency:       { name: "Agency",       price: 29999, color: "bg-amber-500" },
 }
 
 export const PLAN_ORDER: PlanSlug[] = ["free", "trial", "starter", "professional", "agency"]

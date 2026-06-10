@@ -73,7 +73,7 @@ const PLANS: PlanCard[] = [
   {
     slug: "agency",
     name: "Agency",
-    price: 25000,
+    price: 29999,
     badge: "Full Power",
     badgeColor: "bg-amber-500",
     icon: Brain,

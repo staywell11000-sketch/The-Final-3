@@ -81,7 +81,7 @@ function ExportTab({ leads }: { leads: Lead[] }) {
   const selectNone = () => setFields(new Set())
 
   const filteredLeads = leads.filter((l) => {
-    if (scope === "available" || scope === "sold") return l.status === scope
+    if (scope === "available" || scope === "sold") return (l.status as string) === scope
     if (scope === "hot") return l.priority === "hot"
     return true
   })

@@ -13,13 +13,17 @@ router.post("/payments", requireAuth, async (req, res) => {
   const { amount, plan, screenshotUrl, notes } = req.body;
   if (!amount || !plan) return res.status(400).json({ error: "amount and plan are required" });
   try {
-    const org = await db.execute(sql`
-      SELECT id FROM organizations WHERE owner_id = ${userId}
-         OR id = (SELECT organization_id FROM users WHERE id = ${userId})
-      LIMIT 1
-    `);
-    if (!org.rows.length) return res.status(404).json({ error: "Organization not found" });
-    const orgId = (org.rows[0] as any).id;
+    let orgId: number | null = null;
+    const ownerOrg = await db.execute(sql`SELECT id FROM organizations WHERE owner_id = ${userId} LIMIT 1`);
+    if (ownerOrg.rows.length) {
+      orgId = (ownerOrg.rows[0] as any).id;
+    } else {
+      const memberUser = await db.execute(sql`SELECT organization_id FROM users WHERE id = ${userId} LIMIT 1`);
+      if (memberUser.rows.length && (memberUser.rows[0] as any).organization_id) {
+        orgId = (memberUser.rows[0] as any).organization_id;
+      }
+    }
+    if (!orgId) return res.status(404).json({ error: "Organization not found" });
     const result = await db.execute(sql`
       INSERT INTO payment_requests (organization_id, amount, plan, screenshot_url, notes, status, submitted_at, created_at, updated_at)
       VALUES (${orgId}, ${amount}, ${plan}, ${screenshotUrl ?? null}, ${notes ?? null}, 'pending', NOW(), NOW(), NOW())
@@ -35,18 +39,23 @@ router.post("/payments", requireAuth, async (req, res) => {
 router.get("/payments/mine", requireAuth, async (req, res) => {
   const userId = (req as any).userId as string;
   try {
-    const org = await db.execute(sql`
-      SELECT id FROM organizations WHERE owner_id = ${userId}
-         OR id = (SELECT organization_id FROM users WHERE id = ${userId})
-      LIMIT 1
-    `);
-    if (!org.rows.length) return res.json({ data: [] });
-    const orgId = (org.rows[0] as any).id;
+    let orgId: number | null = null;
+    const ownerOrg = await db.execute(sql`SELECT id FROM organizations WHERE owner_id = ${userId} LIMIT 1`);
+    if (ownerOrg.rows.length) {
+      orgId = (ownerOrg.rows[0] as any).id;
+    } else {
+      const memberUser = await db.execute(sql`SELECT organization_id FROM users WHERE id = ${userId} LIMIT 1`);
+      if (memberUser.rows.length && (memberUser.rows[0] as any).organization_id) {
+        orgId = (memberUser.rows[0] as any).organization_id;
+      }
+    }
+    if (!orgId) return res.json({ data: [] });
     const rows = await db.execute(sql`
       SELECT * FROM payment_requests WHERE organization_id = ${orgId} ORDER BY submitted_at DESC
     `);
     return res.json({ data: rows.rows });
   } catch (err) {
+    logger.error({ err }, "GET /payments/mine error");
     return res.status(500).json({ error: "Server error" });
   }
 });

@@ -472,7 +472,7 @@ export default function BillingPage() {
           {(plans.length > 0 ? plans : [
             { slug: "starter", name: "Starter", price_monthly: 9999 },
             { slug: "professional", name: "Professional", price_monthly: 19999 },
-            { slug: "agency", name: "Agency", price_monthly: 25000 },
+            { slug: "agency", name: "Agency", price_monthly: 29999 },
           ]).map((plan: any) => {
             const isCurrent = org?.plan === plan.slug
             return (

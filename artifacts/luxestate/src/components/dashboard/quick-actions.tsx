@@ -135,6 +135,7 @@ export function QuickActions({ onLeadAdded }: QuickActionsProps) {
         onAdd={async (lead) => {
           onLeadAdded?.(lead as any)
           navigate("/dashboard/leads")
+          return undefined as any
         }}
       />
 

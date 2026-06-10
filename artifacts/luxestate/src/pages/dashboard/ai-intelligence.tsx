@@ -687,7 +687,8 @@ function UsageTab() {
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function AIIntelligencePage() {
   const [tab, setTab] = useState("modules")
-  const { plan, isSuperAdmin } = usePlan()
+  const { org, isSuperAdmin } = usePlan()
+  const plan = (org?.plan ?? "free") as PlanSlug
   const showChatLock = !isSuperAdmin && !meetsRequirement(plan, "agency")
 
   return (

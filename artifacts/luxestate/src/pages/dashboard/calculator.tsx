@@ -734,8 +734,7 @@ export default function CalculatorPage() {
     <div className="flex flex-col h-full">
       <DashboardPageHeader
         title="Financial Calculator"
-        subtitle="Property, mortgage, ROI, closing costs, commission & currency tools"
-        icon={<Calculator className="h-5 w-5" />}
+        description="Property, mortgage, ROI, closing costs, commission & currency tools"
       />
 
       <div className="flex-1 overflow-auto p-4 md:p-6 space-y-5">

@@ -167,7 +167,7 @@ export function IntegrationConnectModal({
 
       const accountName =
         platform === "whatsapp" ? wa.name :
-        platform === "website" ? (form?.name ?? "Website Form") :
+        (platform as string) === "website" ? (form?.name ?? "Website Form") :
         (profile?.displayName ?? "Account")
 
       const adAccountName = selectedAdAccount?.name ?? undefined
@@ -193,7 +193,7 @@ export function IntegrationConnectModal({
         defaultPipeline: config.defaultPipeline,
         defaultAgent: config.defaultAgent,
         extraTags: config.extraTags.split(",").map((t) => t.trim()).filter(Boolean),
-        webhookUrl: platform === "website" ? generateWebhookUrl(platform, integrationId) : undefined,
+        webhookUrl: (platform as string) === "website" ? generateWebhookUrl(platform, integrationId) : undefined,
       }
 
       upsertIntegration(integration)
@@ -239,7 +239,7 @@ export function IntegrationConnectModal({
                 {platform === "instagram" && <FaInstagram className="h-7 w-7 text-white" />}
                 {platform === "tiktok" && <FaTiktok className="h-7 w-7 text-white" />}
                 {platform === "whatsapp" && <FaWhatsapp className="h-7 w-7 text-white" />}
-                {platform === "website" && <Globe className="h-7 w-7 text-white" />}
+                {(platform as string) === "website" && <Globe className="h-7 w-7 text-white" />}
               </div>
             </div>
             <DialogTitle className="text-white text-base font-semibold">{cfg.name}</DialogTitle>
@@ -324,7 +324,7 @@ export function IntegrationConnectModal({
                   platform={platform}
                   config={config}
                   setConfig={(patch) => setConfig((c) => ({ ...c, ...patch }))}
-                  webhookPreview={platform === "website" ? generateWebhookUrl(platform, "preview") : undefined}
+                  webhookPreview={(platform as string) === "website" ? generateWebhookUrl(platform, "preview") : undefined}
                 />
               )}
               {step === "connecting" && (

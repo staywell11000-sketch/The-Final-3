@@ -62,7 +62,7 @@ const ONBOARDING_PLANS = [
   {
     id: "agency",
     name: "Agency",
-    price: "Rs. 25,000",
+    price: "Rs. 29,999",
     period: "/month",
     description: "Full AI & automation suite",
     icon: Crown,

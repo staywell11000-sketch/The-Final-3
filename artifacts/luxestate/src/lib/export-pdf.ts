@@ -229,7 +229,7 @@ export async function exportAnalyticsPDF(data: AnalyticsData): Promise<void> {
     doc.setFillColor(220, 215, 205);
     doc.roundedRect(tx, y - 3.5, 65, 5, 1, 1, "F");
     if (barW > 0) {
-      doc.setFillColor(...color);
+      doc.setFillColor(...(color as [number, number, number]));
       doc.roundedRect(tx, y - 3.5, barW, 5, 1, 1, "F");
     }
 
