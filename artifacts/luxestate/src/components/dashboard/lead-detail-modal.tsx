@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -188,6 +188,7 @@ export function LeadDetailModal({ lead, onClose, onUpdate, onDelete }: Props) {
       }}
     >
       <DialogContent className="glass flex max-h-[92dvh] max-w-3xl flex-col overflow-hidden p-0 mx-3 sm:mx-0 w-[calc(100%-1.5rem)] sm:w-full">
+        <DialogTitle className="sr-only">Lead Details</DialogTitle>
         {/* Header */}
         <div className="flex shrink-0 items-start gap-3 border-b border-border/40 p-4 pr-12">
           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary/80 to-accent/80 text-sm font-bold text-primary-foreground">

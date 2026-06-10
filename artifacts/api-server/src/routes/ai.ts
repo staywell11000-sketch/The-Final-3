@@ -1039,31 +1039,30 @@ router.get("/admin/ai-stats", requireAuth, async (req, res) => {
 
     const [totals, byOrg, actionsThisMonth, topFeatures, boosterRevenue] = await Promise.all([
       db.execute(sql`
-        SELECT COUNT(*) as total_requests, COALESCE(SUM(total_tokens),0) as total_tokens, COALESCE(SUM(estimated_cost),0) as total_cost
+        SELECT COUNT(*) as total_requests, COALESCE(SUM(tokens_used),0) as total_tokens
         FROM ai_usage
       `),
       db.execute(sql`
         SELECT oau.organization_id, o.name as org_name, o.plan,
-               oau.actions_used, oau.actions_limit, oau.bonus_actions,
-               (oau.actions_used + oau.bonus_actions) as total_consumed
+               oau.tokens_used, oau.requests_made
         FROM organization_ai_usage oau
         LEFT JOIN organizations o ON o.id = oau.organization_id
         WHERE oau.month = ${month} AND oau.year = ${year}
-        ORDER BY total_consumed DESC
+        ORDER BY oau.tokens_used DESC
         LIMIT 20
       `),
       db.execute(sql`
-        SELECT COALESCE(SUM(actions_used),0) as total_actions_used,
-               COALESCE(SUM(bonus_actions),0) as total_bonus_remaining,
+        SELECT COALESCE(SUM(tokens_used),0) as total_tokens_used,
+               COALESCE(SUM(requests_made),0) as total_requests_made,
                COUNT(DISTINCT organization_id) as active_orgs
         FROM organization_ai_usage
         WHERE month = ${month} AND year = ${year}
       `),
       db.execute(sql`
-        SELECT feature, COUNT(*) as calls
+        SELECT operation as feature, COUNT(*) as calls
         FROM ai_usage
         WHERE created_at >= DATE_TRUNC('month', NOW())
-        GROUP BY feature ORDER BY calls DESC LIMIT 10
+        GROUP BY operation ORDER BY calls DESC LIMIT 10
       `),
       db.execute(sql`
         SELECT COALESCE(SUM(amount),0) as total_revenue, COUNT(*) as total_sales
@@ -1079,10 +1078,10 @@ router.get("/admin/ai-stats", requireAuth, async (req, res) => {
     return res.json({
       total_requests: Number(t.total_requests),
       total_tokens: Number(t.total_tokens),
-      total_cost_usd: Number(t.total_cost),
+      total_cost_usd: 0,
       this_month: {
-        actions_used: Number(am.total_actions_used),
-        bonus_remaining: Number(am.total_bonus_remaining),
+        actions_used: Number(am.total_tokens_used),
+        bonus_remaining: 0,
         active_orgs: Number(am.active_orgs),
       },
       booster_revenue: {

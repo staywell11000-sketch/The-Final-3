@@ -2,7 +2,7 @@ import { Link } from "wouter"
 import { Lock, CheckCircle2, ArrowRight, X, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { PLAN_DISPLAY, FEATURE_CONFIG, type PlanSlug } from "@/lib/plan-features"
 import { cn } from "@/lib/utils"
 
@@ -24,6 +24,7 @@ export function UpgradeModal({ open, onClose, featureKey, currentPlan }: Upgrade
   return (
     <Dialog open={open} onOpenChange={v => { if (!v) onClose() }}>
       <DialogContent className="max-w-md p-0 overflow-hidden gap-0">
+        <DialogTitle className="sr-only">Upgrade Plan</DialogTitle>
         {/* Header */}
         <div className="relative bg-gradient-to-br from-primary/10 via-background to-primary/5 px-6 pt-8 pb-6 border-b border-border/60">
           <button onClick={onClose} className="absolute right-4 top-4 h-7 w-7 rounded-full bg-muted/60 flex items-center justify-center hover:bg-muted transition-colors">

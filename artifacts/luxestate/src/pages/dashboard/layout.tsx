@@ -9,7 +9,7 @@ import { motion } from "framer-motion"
 import { Bell, Search, Clock, X, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { PWAInstallButton } from "@/components/pwa-install-button"
-import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { useAuth } from "@/lib/auth-context"
 import { useCurrentUser } from "@/lib/user-api"
 import { useSettings, useUpdateSettings } from "@/lib/settings-api"
@@ -161,6 +161,7 @@ function SearchDialog({ open, onClose }: { open: boolean; onClose: () => void })
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-lg p-0 gap-0 overflow-hidden">
+        <DialogTitle className="sr-only">Search</DialogTitle>
         <div className="flex items-center gap-3 border-b border-border/50 px-4 py-3">
           <Search className="h-4 w-4 text-muted-foreground shrink-0" />
           <input
