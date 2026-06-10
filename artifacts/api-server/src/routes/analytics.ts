@@ -286,7 +286,7 @@ router.get("/analytics/overview", requireAuth, async (req, res) => {
                COUNT(*)::text AS count
         FROM messages m
         INNER JOIN conversations c ON c.id = m.conversation_id
-        WHERE c.user_id = ${userId}::uuid
+        WHERE c.user_id = ${userId}
           AND m.created_at >= NOW() - INTERVAL '30 days'
         GROUP BY DATE_TRUNC('day', m.created_at)
         ORDER BY DATE_TRUNC('day', m.created_at) ASC
@@ -367,7 +367,7 @@ router.get("/analytics/overview", requireAuth, async (req, res) => {
         SELECT COUNT(m.*)::text AS total
         FROM messages m
         INNER JOIN conversations c ON c.id = m.conversation_id
-        WHERE c.user_id = ${userId}::uuid
+        WHERE c.user_id = ${userId}
       `);
       return parseInt(r.rows[0]?.total ?? "0", 10);
     },
