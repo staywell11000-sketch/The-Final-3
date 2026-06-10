@@ -462,4 +462,112 @@ router.get("/analytics/overview", requireAuth, async (req, res) => {
   });
 });
 
+// ── Member Performance Stats ─────────────────────────────────────────────────
+router.get("/analytics/member/:memberId", requireAuth, async (req, res) => {
+  const orgUserId = (req as any).userId as string;
+  const { memberId } = req.params;
+
+  // Verify the requester and target are in the same org
+  const orgCheck = await safeQuery(
+    "member-org-check",
+    async () => {
+      const r = await db.execute<{ org_id: string }>(sql`
+        SELECT org_id FROM users WHERE id = ${orgUserId} AND org_id IS NOT NULL LIMIT 1
+      `);
+      if (!r.rows[0]) return null;
+      const orgId = r.rows[0].org_id;
+      const m = await db.execute<{ id: string }>(sql`
+        SELECT id FROM users WHERE id = ${memberId} AND org_id = ${orgId} LIMIT 1
+      `);
+      return m.rows[0] ? orgId : null;
+    },
+    null
+  );
+
+  if (!orgCheck) {
+    return res.status(403).json({ error: "Access denied" });
+  }
+
+  const [leadStats, dealStats, activityStats, memberInfo] = await Promise.all([
+    safeQuery("member-lead-stats", async () => {
+      const r = await db.execute<{
+        total: string; won: string; lost: string; active: string;
+      }>(sql`
+        SELECT
+          COUNT(*)::text AS total,
+          COUNT(*) FILTER (WHERE status = 'won')::text AS won,
+          COUNT(*) FILTER (WHERE status = 'lost')::text AS lost,
+          COUNT(*) FILTER (WHERE status NOT IN ('won','lost'))::text AS active
+        FROM leads WHERE created_by_id = ${memberId}
+      `);
+      return r.rows[0] ?? { total: "0", won: "0", lost: "0", active: "0" };
+    }, { total: "0", won: "0", lost: "0", active: "0" }),
+
+    safeQuery("member-deal-stats", async () => {
+      const r = await db.execute<{
+        total: string; open: string; won: string; won_value: string; pipeline_value: string;
+      }>(sql`
+        SELECT
+          COUNT(*)::text AS total,
+          COUNT(*) FILTER (WHERE stage NOT IN ('won','lost'))::text AS open,
+          COUNT(*) FILTER (WHERE stage = 'won')::text AS won,
+          COALESCE(SUM(value) FILTER (WHERE stage = 'won'), 0)::text AS won_value,
+          COALESCE(SUM(value) FILTER (WHERE stage NOT IN ('won','lost')), 0)::text AS pipeline_value
+        FROM deals WHERE created_by_id = ${memberId}
+      `);
+      return r.rows[0] ?? { total: "0", open: "0", won: "0", won_value: "0", pipeline_value: "0" };
+    }, { total: "0", open: "0", won: "0", won_value: "0", pipeline_value: "0" }),
+
+    safeQuery("member-activity-stats", async () => {
+      const r = await db.execute<{ total: string; last_active: string }>(sql`
+        SELECT
+          COUNT(*)::text AS total,
+          MAX(created_at)::text AS last_active
+        FROM activities WHERE user_id = ${memberId}
+      `);
+      return r.rows[0] ?? { total: "0", last_active: null };
+    }, { total: "0", last_active: null as string | null }),
+
+    safeQuery("member-info", async () => {
+      const r = await db.execute<{
+        first_name: string; last_name: string; email: string; org_role: string; is_active: string;
+      }>(sql`
+        SELECT first_name, last_name, email, org_role, is_active::text
+        FROM users WHERE id = ${memberId} LIMIT 1
+      `);
+      return r.rows[0] ?? null;
+    }, null as any),
+  ]);
+
+  const total = parseInt(leadStats.total, 10);
+  const won = parseInt(leadStats.won, 10);
+
+  return res.json({
+    member: memberInfo ? {
+      name: `${memberInfo.first_name ?? ""} ${memberInfo.last_name ?? ""}`.trim(),
+      email: memberInfo.email,
+      role: memberInfo.org_role,
+      isActive: memberInfo.is_active === "true",
+    } : null,
+    leads: {
+      total,
+      won,
+      lost: parseInt(leadStats.lost, 10),
+      active: parseInt(leadStats.active, 10),
+      conversionRate: total > 0 ? Math.round((won / total) * 1000) / 10 : 0,
+    },
+    deals: {
+      total: parseInt(dealStats.total, 10),
+      open: parseInt(dealStats.open, 10),
+      won: parseInt(dealStats.won, 10),
+      wonValue: parseFloat(dealStats.won_value),
+      pipelineValue: parseFloat(dealStats.pipeline_value),
+    },
+    activities: {
+      total: parseInt(activityStats.total, 10),
+      lastActive: activityStats.last_active,
+    },
+  });
+});
+
 export default router;

@@ -71,9 +71,10 @@ router.post("/invitations", requireAuth, async (req: any, res) => {
       }
     }
 
-    const { name, email, orgRole = "agent" } = req.body as {
+    const { name, email, phone, orgRole = "agent" } = req.body as {
       name: string;
       email: string;
+      phone?: string;
       orgRole?: string;
     };
 
@@ -96,14 +97,16 @@ router.post("/invitations", requireAuth, async (req: any, res) => {
 
     const code = generateCode();
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    const phoneTrimmed = phone?.trim() || null;
 
-    const [inv] = await db.execute(sql`
-      INSERT INTO invitations (organization_id, email, name, org_role, invitation_code, invited_by, expires_at, created_at)
-      VALUES (${user.organization_id}, ${email.toLowerCase()}, ${name.trim()}, ${orgRole}, ${code}, ${userId}, ${expiresAt}, NOW())
+    const result = await db.execute(sql`
+      INSERT INTO invitations (organization_id, email, name, org_role, invitation_code, phone, invited_by, expires_at, created_at)
+      VALUES (${user.organization_id}, ${email.toLowerCase()}, ${name.trim()}, ${orgRole}, ${code}, ${phoneTrimmed}, ${userId}, ${expiresAt}, NOW())
       RETURNING *
     `);
 
-    logger.info({ invId: (inv as any).id, email, orgRole }, "Invitation created");
+    const inv = result.rows[0] as any;
+    logger.info({ invId: inv?.id, email, orgRole }, "Invitation created");
     return res.status(201).json({ ...inv, invitationCode: code });
   } catch (err) {
     logger.error({ err }, "Create invitation error");

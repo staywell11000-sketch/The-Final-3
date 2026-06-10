@@ -8,9 +8,10 @@ export const invitations = pgTable("invitations", {
     .references(() => organizations.id, { onDelete: "cascade" })
     .notNull(),
   email: varchar("email", { length: 255 }).notNull(),
-  name: varchar("name", { length: 255 }).notNull(),
+  name: varchar("name", { length: 255 }),
   orgRole: varchar("org_role", { length: 100 }).notNull().default("agent"),
-  invitationCode: varchar("invitation_code", { length: 20 }).notNull().unique(),
+  invitationCode: varchar("invitation_code", { length: 20 }),
+  phone: varchar("phone", { length: 50 }),
   invitedBy: varchar("invited_by", { length: 255 }).references(() => users.id, {
     onDelete: "set null",
   }),

@@ -1,15 +1,18 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { DashboardPageHeader } from "@/components/dashboard/page-header"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import {
+  Dialog, DialogContent, DialogHeader, DialogTitle,
+} from "@/components/ui/dialog"
+import {
   Users2, Plus, Shield, Phone, Mail, MoreHorizontal,
   Loader2, Trash2, X, ClipboardList, UserCheck, UserX,
   TrendingUp, Star, ChevronDown, Key, Copy, CheckCheck,
   Send, ShieldCheck, ShieldX, Settings2, Users, Clock,
-  AlertTriangle,
+  AlertTriangle, BarChart2,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import {
@@ -74,7 +77,7 @@ function fmtDate(iso: string | null | undefined) {
 
 function InviteModal({ onClose }: { onClose: () => void }) {
   const createInvite = useCreateInvitation()
-  const [form, setForm] = useState({ name: "", email: "", orgRole: "agent" })
+  const [form, setForm] = useState({ name: "", email: "", phone: "", orgRole: "agent" })
   const [result, setResult] = useState<{ invitationCode: string } | null>(null)
   const [copied, setCopied] = useState(false)
 
@@ -85,7 +88,7 @@ function InviteModal({ onClose }: { onClose: () => void }) {
       return
     }
     try {
-      const data = await createInvite.mutateAsync(form)
+      const data = await createInvite.mutateAsync({ name: form.name, email: form.email, phone: form.phone, orgRole: form.orgRole })
       setResult(data)
       toast.success("Invitation created")
     } catch (err: any) {
@@ -99,6 +102,24 @@ function InviteModal({ onClose }: { onClose: () => void }) {
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     }
+  }
+
+  const shareViaWhatsApp = () => {
+    if (!result?.invitationCode) return
+    const appUrl = window.location.origin + "/accept-invite"
+    const msg = encodeURIComponent(
+      `Hi ${form.name}! You've been invited to join our team on LuxeState CRM.\n\n` +
+      `To accept your invitation:\n` +
+      `1. Visit: ${appUrl}\n` +
+      `2. Enter your email: ${form.email}\n` +
+      `3. Enter your invitation code: *${result.invitationCode}*\n\n` +
+      `Your code expires in 7 days. Welcome to the team! 🎉`
+    )
+    const phone = form.phone.replace(/\D/g, "")
+    const waUrl = phone
+      ? `https://wa.me/${phone}?text=${msg}`
+      : `https://wa.me/?text=${msg}`
+    window.open(waUrl, "_blank")
   }
 
   return (
@@ -132,6 +153,13 @@ function InviteModal({ onClose }: { onClose: () => void }) {
                 onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
                 className={surfaceInputClass}
                 required
+              />
+              <Input
+                type="tel"
+                placeholder="Phone / WhatsApp number (optional)"
+                value={form.phone}
+                onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))}
+                className={surfaceInputClass}
               />
               <div className="relative">
                 <select
@@ -184,7 +212,15 @@ function InviteModal({ onClose }: { onClose: () => void }) {
               </p>
             </div>
 
-            <div className="flex justify-end gap-2">
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                onClick={shareViaWhatsApp}
+                className="flex-1 gap-2 border-emerald-500/40 text-emerald-600 hover:bg-emerald-500/10"
+              >
+                <Phone className="h-4 w-4" />
+                Share via WhatsApp
+              </Button>
               <Button variant="outline" onClick={onClose} className="border-border/50">Done</Button>
             </div>
           </div>
@@ -194,12 +230,134 @@ function InviteModal({ onClose }: { onClose: () => void }) {
   )
 }
 
+// ── Member Performance Modal ──────────────────────────────────────────────────
+
+const BASE_URL = import.meta.env.BASE_URL?.replace(/\/$/, "") ?? ""
+
+function MemberPerformanceModal({ member, open, onClose }: {
+  member: OrgMember | null; open: boolean; onClose: () => void
+}) {
+  const [data, setData] = useState<any>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!open || !member) return
+    setLoading(true)
+    setError(null)
+    fetch(`${BASE_URL}/api/analytics/member/${member.id}`, { credentials: "include" })
+      .then((r) => r.json())
+      .then((d) => { setData(d); setLoading(false) })
+      .catch(() => { setError("Failed to load performance data"); setLoading(false) })
+  }, [open, member])
+
+  const fmt = (n: number) =>
+    n >= 1_000_000 ? `$${(n / 1_000_000).toFixed(1)}M`
+    : n >= 1_000 ? `$${(n / 1_000).toFixed(1)}K`
+    : `$${n.toLocaleString()}`
+
+  const fmtDate = (s: string | null) => {
+    if (!s) return "Never"
+    const d = new Date(s)
+    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <BarChart2 className="h-4 w-4 text-primary" />
+            Member Performance
+          </DialogTitle>
+        </DialogHeader>
+
+        {loading && (
+          <div className="flex items-center justify-center py-10">
+            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+          </div>
+        )}
+
+        {error && (
+          <div className="rounded-lg bg-destructive/10 border border-destructive/20 px-4 py-3 text-sm text-destructive">
+            {error}
+          </div>
+        )}
+
+        {!loading && !error && data && (
+          <div className="space-y-4">
+            {/* Member info */}
+            <div className="flex items-center gap-3 rounded-xl border border-border/50 bg-secondary/10 px-4 py-3.5">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary/80 to-accent/80 text-sm font-bold text-primary-foreground">
+                {(member?.name ?? "?").slice(0, 1).toUpperCase()}
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-foreground">{member?.name}</p>
+                <p className="text-xs text-muted-foreground capitalize">{member?.orgRole} · {member?.email}</p>
+              </div>
+            </div>
+
+            {/* Lead stats */}
+            <div>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Leads</p>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { label: "Total Leads", value: data.leads.total, color: "text-foreground" },
+                  { label: "Active", value: data.leads.active, color: "text-blue-500" },
+                  { label: "Won", value: data.leads.won, color: "text-emerald-500" },
+                  { label: "Conversion", value: `${data.leads.conversionRate}%`, color: "text-primary" },
+                ].map((s) => (
+                  <div key={s.label} className="rounded-lg border border-border/40 bg-secondary/10 px-3 py-2.5">
+                    <p className="text-[10px] text-muted-foreground">{s.label}</p>
+                    <p className={cn("text-lg font-bold", s.color)}>{s.value}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Deal stats */}
+            <div>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Deals</p>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { label: "Open Deals", value: data.deals.open, color: "text-foreground" },
+                  { label: "Won Deals", value: data.deals.won, color: "text-emerald-500" },
+                  { label: "Pipeline Value", value: fmt(data.deals.pipelineValue), color: "text-blue-500" },
+                  { label: "Revenue Won", value: fmt(data.deals.wonValue), color: "text-primary" },
+                ].map((s) => (
+                  <div key={s.label} className="rounded-lg border border-border/40 bg-secondary/10 px-3 py-2.5">
+                    <p className="text-[10px] text-muted-foreground">{s.label}</p>
+                    <p className={cn("text-lg font-bold", s.color)}>{s.value}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Activities */}
+            <div className="flex items-center justify-between rounded-xl border border-border/40 bg-secondary/10 px-4 py-3">
+              <div>
+                <p className="text-xs text-muted-foreground">Total Activities</p>
+                <p className="text-lg font-bold text-foreground">{data.activities.total}</p>
+              </div>
+              <div className="text-right">
+                <p className="text-xs text-muted-foreground">Last Active</p>
+                <p className="text-sm font-medium text-foreground">{fmtDate(data.activities.lastActive)}</p>
+              </div>
+            </div>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
+  )
+}
+
 // ── Member Row ────────────────────────────────────────────────────────────────
 
 function MemberRow({ member, isCurrentUser }: { member: OrgMember; isCurrentUser: boolean }) {
   const updateStatus = useUpdateMemberStatus()
   const updateRole = useUpdateMemberRole()
   const passwordReset = usePasswordReset()
+  const [showPerf, setShowPerf] = useState(false)
 
   const cfg = roleConfig[member.orgRole as OrgRoleType] ?? roleConfig.agent
 
@@ -292,6 +450,10 @@ function MemberRow({ member, isCurrentUser }: { member: OrgMember; isCurrentUser
               </DropdownMenuItem>
             ))}
             <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => setShowPerf(true)} className="gap-2">
+              <BarChart2 className="h-3.5 w-3.5" /> View Performance
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handlePasswordReset} className="gap-2">
               <Key className="h-3.5 w-3.5" /> Reset Password
             </DropdownMenuItem>
@@ -314,6 +476,8 @@ function MemberRow({ member, isCurrentUser }: { member: OrgMember; isCurrentUser
           </DropdownMenuContent>
         </DropdownMenu>
       )}
+
+      <MemberPerformanceModal member={member} open={showPerf} onClose={() => setShowPerf(false)} />
     </motion.div>
   )
 }

@@ -1255,6 +1255,40 @@ export default function SettingsPage() {
                   </div>
                 </div>
 
+                {/* Tour Guide Restart */}
+                <div className="glass-card p-6 space-y-4">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-secondary/50">
+                      <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                    <div>
+                      <h3 className="text-base font-semibold text-foreground">Product Tour</h3>
+                      <p className="text-sm text-muted-foreground">Restart the interactive walkthrough of LuxeState CRM</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between gap-4 rounded-xl border border-border/50 bg-secondary/10 px-4 py-4">
+                    <div>
+                      <p className="text-sm font-medium text-foreground">Restart tour guide</p>
+                      <p className="text-xs text-muted-foreground">The tour will begin on your next visit to the dashboard</p>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        const uid = session?.user?.id
+                        if (uid) {
+                          localStorage.removeItem(`lxs-tour-done-${uid}`)
+                          toast.success("Tour restarted — refresh the dashboard to begin")
+                        }
+                      }}
+                      className="flex-shrink-0 gap-1.5"
+                    >
+                      <RefreshCw className="h-3 w-3" />
+                      Restart Tour
+                    </Button>
+                  </div>
+                </div>
+
                 {/* Data Export */}
                 <div className="glass-card p-6 space-y-4">
                   <div className="flex items-center gap-3">

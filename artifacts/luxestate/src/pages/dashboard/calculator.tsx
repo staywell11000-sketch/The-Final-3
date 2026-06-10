@@ -33,7 +33,6 @@ const TABS = [
   { id: "downpayment",  icon: PiggyBank,      label: "Down Payment" },
   { id: "roi",          icon: BarChart2,       label: "ROI" },
   { id: "closing",      icon: Receipt,        label: "Closing Costs" },
-  { id: "currency",     icon: ArrowLeftRight, label: "Currency" },
 ]
 
 // Currency data is fetched live — no static rates here
@@ -786,7 +785,7 @@ export default function CalculatorPage() {
           {activeTab === "downpayment" && <DownPaymentCalc />}
           {activeTab === "roi"         && <ROICalc />}
           {activeTab === "closing"     && <ClosingCostsCalc />}
-          {activeTab === "currency"    && <CurrencyCalc />}
+
         </motion.div>
       </div>
     </div>

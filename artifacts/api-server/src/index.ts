@@ -3,6 +3,7 @@ import { logger } from "./lib/logger";
 import { startWhatsAppReconciliationJob } from "./jobs/whatsappReconciliation";
 import { startMetaLeadSyncJob } from "./services/metaLeadSync";
 import { startNightlyAIAnalysisJob } from "./jobs/nightlyAIAnalysis";
+import { startPlanExpiryJob } from "./jobs/planExpiry";
 
 const rawPort = process.env["PORT"];
 
@@ -28,4 +29,5 @@ app.listen(port, (err) => {
   startWhatsAppReconciliationJob();
   startMetaLeadSyncJob();
   startNightlyAIAnalysisJob();
+  startPlanExpiryJob();
 });

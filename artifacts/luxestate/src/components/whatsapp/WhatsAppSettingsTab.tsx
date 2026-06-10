@@ -19,6 +19,7 @@ import {
 } from "@/lib/whatsapp-accounts-api"
 import { WhatsAppEmbeddedSignup } from "./WhatsAppConnect"
 import { WhatsAppAccessPanel } from "./WhatsAppAccessPanel"
+import { WhatsAppMonitoringDashboard } from "./WhatsAppMonitoringDashboard"
 import { usePlan } from "@/lib/plan-context"
 import { toast } from "sonner"
 
@@ -416,6 +417,11 @@ export function WhatsAppSettingsTab() {
           ))}
         </div>
       )}
+
+      {/* ─── Monitoring Dashboard ────────────────────── */}
+      <div className="border-t border-border/40 pt-6">
+        <WhatsAppMonitoringDashboard />
+      </div>
 
       {/* ─── Team Access Management ──────────────────── */}
       <div className="border-t border-border/40 pt-6">
