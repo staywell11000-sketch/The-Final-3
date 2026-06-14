@@ -20,8 +20,10 @@ for (const v of requiredWhatsAppVars) {
 
 const app: Express = express();
 
+const httpLogger = pinoHttp();
+
 app.use(
-  pinoHttp({
+  httpLogger({
     logger,
     serializers: {
       req(req: any) {
@@ -37,7 +39,7 @@ app.use(
         };
       },
     },
-  }),
+  })
 );
 
 app.use(
