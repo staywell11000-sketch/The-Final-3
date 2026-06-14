@@ -45,3 +45,12 @@ VITE_SUPABASE_URL = "https://alrktvtwuclofpkfvtdj.supabase.co"
 BASE_PATH = "/"
 VITE_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFscmt0dnR3dWNsb2Zwa2Z2dGRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MDIzMTQsImV4cCI6MjA5NDA3ODMxNH0.-bqKIUwwmlVq_nMO4m2HzJTQdx2JAPkB8vhOYgiySMc"
 SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFscmt0dnR3dWNsb2Zwa2Z2dGRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MDIzMTQsImV4cCI6MjA5NDA3ODMxNH0.-bqKIUwwmlVq_nMO4m2HzJTQdx2JAPkB8vhOYgiySMc"
+
+[rules]
+
+[rules.formatter]
+
+[rules.formatter.fileExtensions]
+
+[rules.formatter.fileExtensions.".ts"]
+id = "module:nodejs-24/formatter:prettier"
