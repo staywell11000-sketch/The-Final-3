@@ -33,6 +33,13 @@ import whatsappAccountsRouter from "./whatsappAccounts";
 
 const router: IRouter = Router();
 
+router.get("/", (_req, res) => {
+  res.status(200).json({
+    status: "ok",
+    service: "LuxEstate API",
+  });
+});
+
 router.use(healthRouter);
 router.use(leadsRouter);
 router.use(usersRouter);
