@@ -55,7 +55,7 @@ router.get("/appointments", requireAuth, async (req, res) => {
 });
 
 router.get("/appointments/:id", requireAuth, async (req, res) => {
-  const id = parseInt(req.params.id, 10);
+  const id = parseInt(String(req.params.id), 10);
   if (isNaN(id)) return void res.status(400).json({ error: "Invalid ID" });
   try {
     const userId = (req as any).userId as string;
@@ -111,7 +111,7 @@ router.post("/appointments", requireAuth, async (req, res) => {
 });
 
 router.patch("/appointments/:id", requireAuth, async (req, res) => {
-  const id = parseInt(req.params.id, 10);
+  const id = parseInt(String(req.params.id), 10);
   if (isNaN(id)) return void res.status(400).json({ error: "Invalid ID" });
   try {
     const userId = (req as any).userId as string;
@@ -142,7 +142,7 @@ router.patch("/appointments/:id", requireAuth, async (req, res) => {
 });
 
 router.delete("/appointments/:id", requireAuth, async (req, res) => {
-  const id = parseInt(req.params.id, 10);
+  const id = parseInt(String(req.params.id), 10);
   if (isNaN(id)) return void res.status(400).json({ error: "Invalid ID" });
   try {
     const userId = (req as any).userId as string;

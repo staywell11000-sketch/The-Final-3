@@ -90,13 +90,13 @@ router.get("/dealers/:id", requireAuth, async (req: any, res) => {
   const userId: string = req.userId;
   try {
     const id = Number(req.params.id);
-    if (isNaN(id)) return res.status(400).json({ error: "Invalid id" });
+    if (isNaN(id)) return void res.status(400).json({ error: "Invalid id" });
 
     const [row] = await db.select().from(dealers)
       .where(and(eq(dealers.id, id), eq(dealers.userId, userId)))
       .limit(1);
 
-    if (!row) return res.status(404).json({ error: "Dealer not found" });
+    if (!row) return void res.status(404).json({ error: "Dealer not found" });
     res.json(row);
   } catch (err) {
     console.error(err);
@@ -108,7 +108,7 @@ router.put("/dealers/:id", requireAuth, async (req: any, res) => {
   const userId: string = req.userId;
   try {
     const id = Number(req.params.id);
-    if (isNaN(id)) return res.status(400).json({ error: "Invalid id" });
+    if (isNaN(id)) return void res.status(400).json({ error: "Invalid id" });
 
     const body = req.body;
     const [row] = await db.update(dealers).set({
@@ -124,7 +124,7 @@ router.put("/dealers/:id", requireAuth, async (req: any, res) => {
       updatedAt: new Date(),
     }).where(and(eq(dealers.id, id), eq(dealers.userId, userId))).returning();
 
-    if (!row) return res.status(404).json({ error: "Dealer not found" });
+    if (!row) return void res.status(404).json({ error: "Dealer not found" });
     res.json(row);
   } catch (err) {
     console.error(err);
@@ -136,15 +136,15 @@ router.patch("/dealers/:id/status", requireAuth, async (req: any, res) => {
   const userId: string = req.userId;
   try {
     const id = Number(req.params.id);
-    if (isNaN(id)) return res.status(400).json({ error: "Invalid id" });
+    if (isNaN(id)) return void res.status(400).json({ error: "Invalid id" });
 
     const { status } = req.body;
-    if (!status) return res.status(400).json({ error: "status required" });
+    if (!status) return void res.status(400).json({ error: "status required" });
 
     const [row] = await db.update(dealers).set({ status, updatedAt: new Date() })
       .where(and(eq(dealers.id, id), eq(dealers.userId, userId))).returning();
 
-    if (!row) return res.status(404).json({ error: "Dealer not found" });
+    if (!row) return void res.status(404).json({ error: "Dealer not found" });
     res.json(row);
   } catch (err) {
     console.error(err);
@@ -156,7 +156,7 @@ router.delete("/dealers/:id", requireAuth, async (req: any, res) => {
   const userId: string = req.userId;
   try {
     const id = Number(req.params.id);
-    if (isNaN(id)) return res.status(400).json({ error: "Invalid id" });
+    if (isNaN(id)) return void res.status(400).json({ error: "Invalid id" });
 
     await db.delete(dealers).where(and(eq(dealers.id, id), eq(dealers.userId, userId)));
     res.status(204).send();

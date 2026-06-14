@@ -65,12 +65,12 @@ router.post("/whatsapp/webhook", async (req: any, res) => {
     const rawBody: Buffer | undefined = req.rawBody
     if (!rawBody || !verifySignature(rawBody, signature, appSecret)) {
       logger.warn("WhatsApp webhook: invalid signature")
-      return res.status(401).send("Invalid signature")
+      return void res.status(401).send("Invalid signature")
     }
   } else {
     if (process.env.NODE_ENV !== "development") {
       logger.error("FACEBOOK_APP_SECRET not set — rejecting webhook request in non-dev environment")
-      return res.status(401).send("Webhook not configured")
+      return void res.status(401).send("Webhook not configured")
     }
     logger.warn("FACEBOOK_APP_SECRET not set — skipping signature check (development mode only)")
   }

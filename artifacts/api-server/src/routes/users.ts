@@ -27,7 +27,7 @@ router.get("/users/me", requireAuth, async (req: any, res) => {
   try {
     const [user] = await db.select().from(users).where(eq(users.id, req.userId));
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return void res.status(404).json({ error: "User not found" });
     }
     res.json(user);
   } catch (err) {
@@ -56,7 +56,7 @@ router.put("/users/me", requireAuth, async (req: any, res) => {
         })
         .where(eq(users.id, req.userId))
         .returning();
-      return res.json(updated);
+      return void res.json(updated);
     }
 
     const [created] = await db

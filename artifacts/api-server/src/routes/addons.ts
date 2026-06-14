@@ -128,14 +128,14 @@ router.post("/admin/payments/:id/approve-addon", requireAuth, requireSuperAdmin,
   const actorId = (req as any).userId;
   const actorEmail = (req as any).userEmail;
   try {
-    const pr = await db.execute(sql`SELECT * FROM payment_requests WHERE id = ${parseInt(id)}`);
+    const pr = await db.execute(sql`SELECT * FROM payment_requests WHERE id = ${parseInt(String(id), 10)}`);
     if (!pr.rows.length) return res.status(404).json({ error: "Not found" });
     const request = pr.rows[0] as any;
     const addonType = request.plan.replace("addon_", "");
     const quantity = addonType === "ai_requests" ? 500 : 1000;
     await db.execute(sql`
       UPDATE payment_requests SET status = 'approved', approved_at = NOW(), approved_by = ${actorId}, updated_at = NOW()
-      WHERE id = ${parseInt(id)}
+      WHERE id = ${parseInt(String(id), 10)}
     `);
     await db.execute(sql`
       INSERT INTO organization_addons (organization_id, addon_type, quantity, quantity_remaining, purchased_at, created_at, updated_at)

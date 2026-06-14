@@ -119,7 +119,7 @@ const ownsLead = (userId: string) =>
   or(eq(leadsTable.createdById, userId), isNull(leadsTable.createdById));
 
 router.post("/ai/analyze-lead/:id", requireAuth, requireAiCredits, async (req, res) => {
-  const id = parseInt(req.params.id, 10);
+  const id = parseInt(String(req.params.id), 10);
   const userId = (req as any).userId as string;
   if (isNaN(id)) return void res.status(400).json({ error: "Invalid ID" });
 
@@ -815,7 +815,7 @@ router.post("/business-insights", requireAuth, requireAiCredits, async (req, res
     const [leadsData, dealsData, recentActivities] = await Promise.all([
       db.select().from(leadsTable).where(eq(leadsTable.createdById, userId)).limit(100),
       db.select().from(deals).where(eq((deals as any).createdById, userId)).limit(50),
-      db.select().from(activities).where(eq(activities.createdById, userId)).orderBy(desc(activities.createdAt)).limit(30),
+      db.select().from(activities).where(eq(activities.userId, userId)).orderBy(desc(activities.createdAt)).limit(30),
     ]);
 
     const recentLeads = leadsData.filter(l => l.createdAt && new Date(l.createdAt) >= since);

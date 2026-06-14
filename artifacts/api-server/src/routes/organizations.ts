@@ -81,7 +81,7 @@ router.get("/admin/organizations/:id", requireAuth, requireSuperAdmin, async (re
       FROM organizations o
       LEFT JOIN plans p ON p.slug = o.plan
       LEFT JOIN users u ON u.id = o.owner_id
-      WHERE o.id = ${parseInt(id)}
+      WHERE o.id = ${parseInt(String(id), 10)}
     `);
     if (!rows.rows.length) return res.status(404).json({ error: "Not found" });
     return res.json({ organization: rows.rows[0] });
@@ -104,11 +104,11 @@ router.patch("/admin/organizations/:id", requireAuth, requireSuperAdmin, async (
         is_suspended = COALESCE(${isSuspended ?? null}, is_suspended),
         is_internal = COALESCE(${isInternal ?? null}, is_internal),
         updated_at = NOW()
-      WHERE id = ${parseInt(id)}
+      WHERE id = ${parseInt(String(id), 10)}
     `);
     await db.execute(sql`
       INSERT INTO audit_logs (actor_id, actor_email, action, entity_type, entity_id, organization_id, meta, created_at)
-      VALUES (${actorId}, ${actorEmail}, 'org.updated', 'organization', ${id}, ${parseInt(id)}, ${JSON.stringify(req.body)}, NOW())
+      VALUES (${actorId}, ${actorEmail}, 'org.updated', 'organization', ${id}, ${parseInt(String(id), 10)}, ${JSON.stringify(req.body)}, NOW())
     `);
     return res.json({ success: true });
   } catch (err) {
@@ -131,11 +131,11 @@ router.post("/admin/organizations/:id/approve-subscription", requireAuth, requir
         subscription_status = 'active',
         subscription_end_date = ${endDate},
         updated_at = NOW()
-      WHERE id = ${parseInt(id)}
+      WHERE id = ${parseInt(String(id), 10)}
     `);
     await db.execute(sql`
       INSERT INTO audit_logs (actor_id, actor_email, action, entity_type, entity_id, organization_id, meta, created_at)
-      VALUES (${actorId}, ${actorEmail}, 'subscription.approved', 'organization', ${id}, ${parseInt(id)},
+      VALUES (${actorId}, ${actorEmail}, 'subscription.approved', 'organization', ${id}, ${parseInt(String(id), 10)},
               ${JSON.stringify({ plan, months, endDate })}, NOW())
     `);
     return res.json({ success: true, subscriptionEndDate: endDate });
@@ -149,10 +149,10 @@ router.post("/admin/organizations/:id/suspend", requireAuth, requireSuperAdmin, 
   const actorId = (req as any).userId;
   const actorEmail = (req as any).userEmail;
   try {
-    await db.execute(sql`UPDATE organizations SET is_suspended = true, updated_at = NOW() WHERE id = ${parseInt(id)}`);
+    await db.execute(sql`UPDATE organizations SET is_suspended = true, updated_at = NOW() WHERE id = ${parseInt(String(id), 10)}`);
     await db.execute(sql`
       INSERT INTO audit_logs (actor_id, actor_email, action, entity_type, entity_id, organization_id, created_at)
-      VALUES (${actorId}, ${actorEmail}, 'org.suspended', 'organization', ${id}, ${parseInt(id)}, NOW())
+      VALUES (${actorId}, ${actorEmail}, 'org.suspended', 'organization', ${id}, ${parseInt(String(id), 10)}, NOW())
     `);
     return res.json({ success: true });
   } catch (err) {
@@ -165,10 +165,10 @@ router.post("/admin/organizations/:id/unsuspend", requireAuth, requireSuperAdmin
   const actorId = (req as any).userId;
   const actorEmail = (req as any).userEmail;
   try {
-    await db.execute(sql`UPDATE organizations SET is_suspended = false, updated_at = NOW() WHERE id = ${parseInt(id)}`);
+    await db.execute(sql`UPDATE organizations SET is_suspended = false, updated_at = NOW() WHERE id = ${parseInt(String(id), 10)}`);
     await db.execute(sql`
       INSERT INTO audit_logs (actor_id, actor_email, action, entity_type, entity_id, organization_id, created_at)
-      VALUES (${actorId}, ${actorEmail}, 'org.unsuspended', 'organization', ${id}, ${parseInt(id)}, NOW())
+      VALUES (${actorId}, ${actorEmail}, 'org.unsuspended', 'organization', ${id}, ${parseInt(String(id), 10)}, NOW())
     `);
     return res.json({ success: true });
   } catch (err) {

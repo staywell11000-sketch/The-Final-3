@@ -117,6 +117,8 @@ router.get("/connected-accounts/oauth-url/:provider", requireAuth, async (req: a
     const params = new URLSearchParams({ client_key: clientKey, redirect_uri: callbackUrl(provider), scope: "user.info.basic", state, response_type: "code", code_challenge: codeChallenge, code_challenge_method: "S256" })
     return res.json({ configured: true, url: `${TIKTOK_AUTH_URL}?${params}` })
   }
+
+  return res.status(400).json({ error: "Unsupported provider" })
 })
 
 // ─── GET /api/connected-accounts/callback/:provider ──────

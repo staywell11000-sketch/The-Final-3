@@ -240,7 +240,7 @@ export async function processLeadGenWebhook(
       userId:  account.user_id,
       type:    "lead",
       title:   "New Lead via Facebook",
-      message: `${row.name}${row.phone ? ` · ${row.phone}` : ""}${row.campaign ? ` · ${row.campaign}` : ""}`,
+      body: `${row.name}${row.phone ? ` · ${row.phone}` : ""}${row.campaign ? ` · ${row.campaign}` : ""}`,
     })
   } catch (err) {
     logger.warn({ err }, "Facebook webhook: failed to create notification (non-fatal)")

@@ -1,0 +1,81 @@
+You are a senior TypeScript monorepo engineer.
+
+Your task is to make this entire repository build successfully and deploy successfully.
+
+Current situation:
+
+* The project previously failed on pino-http imports and routing issues.
+* Those issues have already been addressed.
+* The build now reaches TypeScript validation and fails with approximately 40 TypeScript errors.
+* Deployment must succeed on Vercel.
+
+Rules:
+
+1. DO NOT explain the errors.
+2. DO NOT ask me questions.
+3. DO NOT stop after fixing only some errors.
+4. DO NOT disable TypeScript.
+5. DO NOT use // @ts-ignore.
+6. DO NOT change business functionality unless absolutely necessary.
+7. DO NOT remove features.
+8. Fix the code properly.
+9. Continue until the repository reaches zero TypeScript errors.
+10. After every batch of fixes, run typecheck/build again and continue fixing remaining errors.
+
+Tasks:
+
+A) Fix all "string | string[]" type errors by properly handling Express query parameters.
+
+B) Fix all "Not all code paths return a value" errors by ensuring every route and middleware returns correctly.
+
+C) Fix all Drizzle ORM schema mismatches:
+
+* createdById errors
+* dealerId errors
+* missing columns
+* incorrect table typings
+* incorrect select/insert mappings
+
+D) Fix all notification-related typing issues:
+
+* CreateNotificationParams mismatches
+* message field mismatches
+* userId field mismatches
+
+E) Fix object storage typing issues:
+
+* signed_url property errors
+* unknown type assertions
+* Supabase storage response typing
+
+F) Fix any remaining Express 5 typing issues.
+
+G) Fix any workspace package typing issues involving:
+
+* @workspace/db
+* @workspace/api-zod
+* generated types
+* route exports
+
+H) Fix tsconfig/project-reference issues only if required, but do not weaken type safety.
+
+Process:
+
+1. Run full workspace typecheck.
+2. Collect all errors.
+3. Fix errors systematically.
+4. Run typecheck again.
+5. Repeat until there are zero TypeScript errors.
+6. Run the production build.
+7. Ensure the build succeeds.
+8. Ensure no deployment-blocking errors remain.
+
+Deliverables:
+
+* Apply all code changes directly.
+* Show every modified file.
+* Show the final typecheck result.
+* Show the final build result.
+* Confirm whether the repository is deployment-ready.
+
+Do not stop until the repository builds successfully with zero TypeScript errors.

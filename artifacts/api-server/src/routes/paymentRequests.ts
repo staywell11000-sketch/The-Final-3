@@ -90,13 +90,13 @@ router.post("/admin/payments/:id/approve", requireAuth, requireSuperAdmin, async
   const actorEmail = (req as any).userEmail;
   const { months = 1 } = req.body;
   try {
-    const pr = await db.execute(sql`SELECT * FROM payment_requests WHERE id = ${parseInt(id)}`);
+    const pr = await db.execute(sql`SELECT * FROM payment_requests WHERE id = ${parseInt(String(id), 10)}`);
     if (!pr.rows.length) return res.status(404).json({ error: "Not found" });
     const request = pr.rows[0] as any;
 
     await db.execute(sql`
       UPDATE payment_requests SET status = 'approved', approved_at = NOW(), approved_by = ${actorId}, updated_at = NOW()
-      WHERE id = ${parseInt(id)}
+      WHERE id = ${parseInt(String(id), 10)}
     `);
 
     // AI Booster purchase — add bonus_actions instead of changing plan
@@ -142,12 +142,12 @@ router.post("/admin/payments/:id/reject", requireAuth, requireSuperAdmin, async 
   const actorEmail = (req as any).userEmail;
   const { reason } = req.body;
   try {
-    const pr = await db.execute(sql`SELECT * FROM payment_requests WHERE id = ${parseInt(id)}`);
+    const pr = await db.execute(sql`SELECT * FROM payment_requests WHERE id = ${parseInt(String(id), 10)}`);
     if (!pr.rows.length) return res.status(404).json({ error: "Not found" });
     const request = pr.rows[0] as any;
     await db.execute(sql`
       UPDATE payment_requests SET status = 'rejected', rejection_reason = ${reason ?? null}, updated_at = NOW()
-      WHERE id = ${parseInt(id)}
+      WHERE id = ${parseInt(String(id), 10)}
     `);
     await db.execute(sql`
       INSERT INTO audit_logs (actor_id, actor_email, action, entity_type, entity_id, organization_id, meta, created_at)

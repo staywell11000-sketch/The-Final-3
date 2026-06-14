@@ -47,7 +47,7 @@ router.patch("/admin/plans/:id", requireAuth, requireSuperAdmin, async (req, res
         features = COALESCE(${features ? JSON.stringify(features) : null}::jsonb, features),
         is_active = COALESCE(${isActive ?? null}, is_active),
         updated_at = NOW()
-      WHERE id = ${parseInt(id)}
+      WHERE id = ${parseInt(String(id), 10)}
     `);
     return res.json({ success: true });
   } catch {

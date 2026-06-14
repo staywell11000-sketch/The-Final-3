@@ -88,8 +88,8 @@ async function executeAction(
           userId,
           type:    (config.notificationType as string) || "automation",
           title:   interpolate((config.title as string) || "Automation Alert", ctx),
-          message,
-          isRead:  false,
+          body:    message,
+          read:    false,
           metadata: { automationAction: true, leadId: ctx.leadId },
         });
         return { type, result: `Notification sent: ${message}` };
