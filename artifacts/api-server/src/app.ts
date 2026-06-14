@@ -1,6 +1,6 @@
 import express, { type Express, type Response } from "express";
 import cors from "cors";
-import pinoHttp = require("pino-http");
+import pinoHttp from "pino-http";
 import router from "./routes";
 import { logger } from "./lib/logger";
 
@@ -21,7 +21,7 @@ for (const v of requiredWhatsAppVars) {
 const app: Express = express();
 
 app.use(
-  pinoHttp({
+  (pinoHttp as any)({
     logger,
     serializers: {
       req(req: any) {
