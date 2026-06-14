@@ -1,0 +1,68 @@
+src/lib/objectStorage.ts(265,11): error TS2339: Property 'signed_url' does not exist on type 'unknown'.
+src/middlewares/requireAuth.ts(10,23): error TS7030: Not all code paths return a value.
+src/routes/addons.ts(131,90): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+src/routes/addons.ts(138,29): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+src/routes/ai.ts(122,23): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+src/routes/ai.ts(818,56): error TS2339: Property 'createdById' does not exist on type 'PgTableWithColumns<{ name: "activities"; schema: undefined; columns: { id: PgColumn<{ name: "id"; tableName: "activities"; dataType: "number"; columnType: "PgSerial"; data: number; driverParam: number; notNull: true; hasDefault: true; ... 6 more ...; generated: undefined; }, {}, {}>; ... 13 more ...; updatedAt: PgCo...'.
+src/routes/appointments.ts(58,23): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+src/routes/appointments.ts(114,23): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+src/routes/appointments.ts(145,23): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+src/routes/connectedAccounts.ts(85,68): error TS7030: Not all code paths return a value.
+src/routes/dealers.ts(89,41): error TS7030: Not all code paths return a value.
+src/routes/dealers.ts(107,41): error TS7030: Not all code paths return a value.
+src/routes/dealers.ts(135,50): error TS7030: Not all code paths return a value.
+src/routes/dealers.ts(155,44): error TS7030: Not all code paths return a value.
+src/routes/deals.ts(65,23): error TS2345: Argument of type '(row: { id: number; notes: string | null; tags: string[] | null; dealerId: number | null; createdById: string | null; createdAt: Date; updatedAt: Date; leadId: number | null; ... 11 more ...; lostReason: string | null; } & { ...; }) => { ...; }' is not assignable to parameter of type '(value: { id: number; title: string; leadId: number | null; propertyId: number | null; assignedToId: string | null; createdById: string | null; stage: string; value: string | null; commission: string | null; ... 10 more ...; leadName: string | null; }, index: number, array: { ...; }[]) => { ...; }'.
+  Types of parameters 'row' and 'value' are incompatible.
+    Type '{ id: number; title: string; leadId: number | null; propertyId: number | null; assignedToId: string | null; createdById: string | null; stage: string; value: string | null; commission: string | null; ... 10 more ...; leadName: string | null; }' is not assignable to type '{ id: number; notes: string | null; tags: string[] | null; dealerId: number | null; createdById: string | null; createdAt: Date; updatedAt: Date; leadId: number | null; title: string; ... 10 more ...; lostReason: string | null; } & { ...; }'.
+      Property 'dealerId' is missing in type '{ id: number; title: string; leadId: number | null; propertyId: number | null; assignedToId: string | null; createdById: string | null; stage: string; value: string | null; commission: string | null; ... 10 more ...; leadName: string | null; }' but required in type '{ id: number; notes: string | null; tags: string[] | null; dealerId: number | null; createdById: string | null; createdAt: Date; updatedAt: Date; leadId: number | null; title: string; ... 10 more ...; lostReason: string | null; }'.
+src/routes/deals.ts(106,27): error TS2345: Argument of type '{ id: number; title: string; leadId: number | null; propertyId: number | null; assignedToId: string | null; createdById: string | null; stage: string; value: string | null; commission: string | null; ... 10 more ...; leadName: string | null; }' is not assignable to parameter of type '{ id: number; notes: string | null; tags: string[] | null; dealerId: number | null; createdById: string | null; createdAt: Date; updatedAt: Date; leadId: number | null; title: string; ... 10 more ...; lostReason: string | null; } & { ...; }'.
+  Property 'dealerId' is missing in type '{ id: number; title: string; leadId: number | null; propertyId: number | null; assignedToId: string | null; createdById: string | null; stage: string; value: string | null; commission: string | null; ... 10 more ...; leadName: string | null; }' but required in type '{ id: number; notes: string | null; tags: string[] | null; dealerId: number | null; createdById: string | null; createdAt: Date; updatedAt: Date; leadId: number | null; title: string; ... 10 more ...; lostReason: string | null; }'.
+src/routes/organizations.ts(84,31): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+src/routes/organizations.ts(107,29): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+src/routes/organizations.ts(111,91): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+src/routes/organizations.ts(134,29): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+src/routes/organizations.ts(138,101): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+src/routes/organizations.ts(152,113): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+src/routes/organizations.ts(155,93): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+src/routes/organizations.ts(168,114): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+src/routes/organizations.ts(171,95): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+src/routes/paymentRequests.ts(93,90): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+src/routes/paymentRequests.ts(99,29): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+src/routes/paymentRequests.ts(145,90): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+src/routes/paymentRequests.ts(150,29): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+src/routes/plans.ts(50,29): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+src/routes/properties.ts(122,44): error TS7030: Not all code paths return a value.
+src/routes/properties.ts(140,44): error TS7030: Not all code paths return a value.
+src/routes/properties.ts(185,53): error TS7030: Not all code paths return a value.
+src/routes/properties.ts(208,46): error TS7030: Not all code paths return a value.
+src/routes/properties.ts(281,47): error TS7030: Not all code paths return a value.
+src/routes/users.ts(26,38): error TS7030: Not all code paths return a value.
+src/routes/users.ts(38,38): error TS7030: Not all code paths return a value.
+src/routes/whatsapp.ts(60,34): error TS7030: Not all code paths return a value.
+src/services/automationEngine.ts(87,40): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(value: { type: string | SQL<unknown> | Placeholder<string, any>; userId: string | SQL<unknown> | Placeholder<string, any>; title: string | SQL<unknown> | Placeholder<...>; ... 7 more ...; readAt?: SQL<...> | ... 3 more ... | undefined; }): PgInsertBase<...>', gave the following error.
+    Object literal may only specify known properties, and 'message' does not exist in type '{ type: string | SQL<unknown> | Placeholder<string, any>; userId: string | SQL<unknown> | Placeholder<string, any>; title: string | SQL<unknown> | Placeholder<string, any>; ... 7 more ...; readAt?: SQL<...> | ... 3 more ... | undefined; }'.
+  Overload 2 of 2, '(values: { type: string | SQL<unknown> | Placeholder<string, any>; userId: string | SQL<unknown> | Placeholder<string, any>; title: string | SQL<unknown> | Placeholder<...>; ... 7 more ...; readAt?: SQL<...> | ... 3 more ... | undefined; }[]): PgInsertBase<...>', gave the following error.
+    Object literal may only specify known properties, and 'userId' does not exist in type '{ type: string | SQL<unknown> | Placeholder<string, any>; userId: string | SQL<unknown> | Placeholder<string, any>; title: string | SQL<unknown> | Placeholder<string, any>; ... 7 more ...; readAt?: SQL<...> | ... 3 more ... | undefined; }[]'.
+src/services/facebookLeadWebhook.ts(243,7): error TS2353: Object literal may only specify known properties, and 'message' does not exist in type 'CreateNotificationParams'.
