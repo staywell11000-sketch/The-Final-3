@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 You are working on an existing real-estate CRM application built with:
 
 * Vite frontend (luxestate)
@@ -424,3 +425,431 @@ Provide:
 8. Migration instructions
 
 Do not leave placeholders. Complete the implementation using the existing project architecture.
+=======
+You are working on an existing real-estate CRM application built with:
+
+* Vite frontend (luxestate)
+* Express/TypeScript API server
+* Supabase
+* Meta WhatsApp Cloud API integration
+* Facebook/Instagram Lead Ads integration
+
+Your task is to extend the existing CRM into a production-ready multi-tenant SaaS CRM with subscription management, payment approval workflows, organization management, and admin controls.
+
+IMPORTANT:
+
+* Do not break any existing functionality.
+* Preserve all existing WhatsApp integrations.
+* Preserve all existing Meta lead syncing functionality.
+* Preserve all existing user authentication.
+* Use the existing codebase architecture and naming conventions.
+* Add database migrations and types as needed.
+* Ask me which email address/account should become the permanent Super Admin account before implementing access restrictions.
+* Ask me which pricing values I want if they differ from the defaults below.
+
+==================================================
+MULTI-TENANT SAAS ARCHITECTURE
+==============================
+
+Convert the CRM into a true multi-tenant SaaS.
+
+Create an organizations system.
+
+Each organization should have:
+
+* id
+* name
+* owner_id
+* plan
+* subscription_status
+* subscription_end_date
+* trial_end_date
+* is_internal
+* created_at
+* updated_at
+
+Every CRM record must belong to an organization.
+
+This includes:
+
+* leads
+* contacts
+* conversations
+* WhatsApp accounts
+* connected accounts
+* appointments
+* activities
+* deals
+* documents
+* analytics
+
+Users must only see data belonging to their organization.
+
+==================================================
+SUPER ADMIN ACCOUNT
+===================
+
+Before implementation, ask:
+
+"Which email address should be the permanent Super Admin account?"
+
+That account must:
+
+* Never require a subscription
+* Never lose access
+* Bypass subscription checks
+* Access all organizations
+* Access all payment requests
+* Access all system settings
+* View SaaS analytics
+
+Store this as:
+
+role = super_admin
+
+The organization associated with this account should have:
+
+is_internal = true
+
+Internal organizations must bypass all subscription restrictions.
+
+==================================================
+SUBSCRIPTION PLANS
+==================
+
+Create the following default plans.
+
+Starter
+
+* Rs. 5,000/month
+
+Professional
+
+* Rs. 10,000/month
+
+Agency
+
+* Rs. 20,000/month
+
+Store plans in a dedicated plans table.
+
+Allow future plan editing from the admin dashboard.
+
+==================================================
+FREE TRIAL SYSTEM
+=================
+
+New organizations receive:
+
+* 14-day free trial
+
+Store:
+
+trial_end_date
+
+After trial expiration:
+
+subscription_status = expired
+
+Restrict CRM access.
+
+Show:
+
+"Your subscription has expired. Please renew to continue using the CRM."
+
+==================================================
+SUBSCRIPTION ENFORCEMENT
+========================
+
+Before allowing CRM access:
+
+Check:
+
+* active subscription
+  OR
+* active trial
+  OR
+* internal organization
+
+If none apply:
+
+Block access.
+
+Do not delete data.
+
+Allow access only to:
+
+* billing page
+* payment submission page
+* support page
+
+==================================================
+PAYMENT REQUEST SYSTEM
+======================
+
+Create table:
+
+payment_requests
+
+Fields:
+
+* id
+* organization_id
+* amount
+* plan
+* screenshot_url
+* notes
+* status
+* submitted_at
+* approved_at
+* approved_by
+
+Statuses:
+
+* pending
+* approved
+* rejected
+
+==================================================
+CUSTOMER BILLING PAGE
+=====================
+
+Create a Billing page.
+
+Display:
+
+Current plan
+Subscription status
+Expiry date
+Trial status
+
+Display payment instructions:
+
+Bank Transfer
+JazzCash
+Easypaisa
+
+Use configurable settings.
+
+Allow uploading payment screenshots.
+
+Allow adding payment notes.
+
+Submission creates a payment request.
+
+==================================================
+ADMIN PAYMENT APPROVAL DASHBOARD
+================================
+
+Create a Super Admin dashboard.
+
+Menu:
+
+* Organizations
+* Payments
+* Subscriptions
+* Users
+* System Analytics
+* Plans
+* Settings
+
+Payments page must show:
+
+Organization Name
+Amount
+Plan
+Screenshot
+Submission Date
+Status
+
+Actions:
+
+Approve
+Reject
+
+==================================================
+APPROVE PAYMENT ACTION
+======================
+
+When approving:
+
+Set:
+
+subscription_status = active
+
+Calculate:
+
+subscription_end_date = today + 30 days
+
+Store:
+
+approved_at
+approved_by
+
+Create audit log.
+
+==================================================
+REJECT PAYMENT ACTION
+=====================
+
+Allow entering rejection reason.
+
+Notify organization owner.
+
+==================================================
+ORGANIZATION MANAGEMENT
+=======================
+
+Admin can:
+
+* View all organizations
+* Activate subscriptions
+* Suspend organizations
+* Extend subscriptions
+* Change plans
+* View organization usage
+
+==================================================
+WHATSAPP INTEGRATION
+====================
+
+Keep all existing WhatsApp functionality.
+
+Current functionality must continue:
+
+* Incoming webhook
+* Outgoing messages
+* Conversations
+* Contact creation
+* Message status updates
+
+Associate all WhatsApp accounts with organizations.
+
+Ensure WhatsApp messages never cross organizations.
+
+==================================================
+FACEBOOK & INSTAGRAM LEADS
+==========================
+
+Keep existing Meta Lead Ads integration.
+
+Current functionality:
+
+* Facebook leads
+* Instagram leads
+* Campaign names
+* Ad set names
+* Ad names
+
+Ensure leads are stored inside the correct organization.
+
+==================================================
+REAL-TIME LEAD IMPORT
+=====================
+
+Replace the current 15-minute polling model.
+
+Implement Meta Lead Ads webhooks.
+
+Create:
+
+GET /api/facebook/webhook
+POST /api/facebook/webhook
+
+Requirements:
+
+* Verify Meta webhook
+* Receive leadgen events instantly
+* Fetch lead details from Meta Graph API
+* Reuse existing lead mapping logic
+* Create CRM leads immediately
+* Associate leads with the correct organization
+
+Lead appearance target:
+
+Less than 10 seconds after form submission.
+
+Keep the existing polling system as a fallback mechanism.
+
+==================================================
+AUTOMATIC WHATSAPP RESPONSE
+===========================
+
+Optional organization setting:
+
+Auto WhatsApp Welcome Message
+
+When enabled:
+
+After a new Facebook lead arrives:
+
+Send:
+
+"Assalam-o-Alaikum. Thank you for your interest. One of our consultants will contact you shortly."
+
+Use existing WhatsApp infrastructure.
+
+==================================================
+DESKTOP APP READINESS
+=====================
+
+Refactor where necessary to support future:
+
+* Electron
+  or
+* Tauri
+
+desktop applications.
+
+Do not implement desktop packaging yet.
+
+Just ensure:
+
+* APIs are clean
+* Authentication supports desktop clients
+* Multi-tenant architecture remains compatible
+
+==================================================
+AUDIT LOGGING
+=============
+
+Create audit logs for:
+
+* Payment approvals
+* Payment rejections
+* Subscription changes
+* Organization changes
+* Plan changes
+* Admin actions
+
+==================================================
+SECURITY
+========
+
+Prevent:
+
+* Cross-organization data access
+* Access to other organizations' WhatsApp accounts
+* Access to other organizations' Facebook integrations
+
+Enforce organization ownership throughout the application.
+
+==================================================
+FINAL REQUIREMENT
+=================
+
+After implementation:
+
+Provide:
+
+1. Database schema changes
+2. New environment variables required
+3. New API routes added
+4. Admin login credentials setup instructions
+5. Subscription workflow documentation
+6. Facebook webhook setup instructions
+7. Testing checklist
+8. Migration instructions
+
+Do not leave placeholders. Complete the implementation using the existing project architecture.
+>>>>>>> 17c38ff (Initial CRM commit)

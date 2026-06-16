@@ -1,0 +1,7 @@
+{
+  "name": "@workspace/_deprecated-integrations",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Deprecated — use @workspace/integrations-openai-ai-server or @workspace/integrations-openai-ai-react instead",
+  "type": "module"
+}

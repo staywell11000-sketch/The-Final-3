@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ==================================================
 AI CREDIT SYSTEM AND ADD-ON PACKS
 =================================
@@ -253,3 +254,260 @@ SUPER ADMIN EXEMPTION
 Super Admin bypasses all AI limits.
 
 # Super Admin can use unlimited AI features.
+=======
+==================================================
+AI CREDIT SYSTEM AND ADD-ON PACKS
+=================================
+
+IMPORTANT
+
+OpenAI API billing remains centralized under the CRM owner's OpenAI account.
+
+Customers do NOT receive individual OpenAI accounts.
+
+Customers purchase CRM AI usage allowances.
+
+The system must track and enforce usage internally.
+
+==================================================
+AI REQUEST ALLOCATION
+=====================
+
+Starter Plan
+
+Included:
+
+* 100 AI Requests per Month
+
+---
+
+Professional Plan
+
+Included:
+
+* 1,000 AI Requests per Month
+
+---
+
+Agency Plan
+
+Included:
+
+* 5,000 AI Requests per Month
+
+==================================================
+AI ADD-ON PACKS
+===============
+
+Create purchasable add-ons.
+
+Default Add-On:
+
+Extra AI Pack
+
+Price:
+Rs. 2,000
+
+Includes:
+
++500 AI Requests
+
+==================================================
+DATABASE
+========
+
+Create table:
+
+organization_addons
+
+Fields:
+
+* id
+* organization_id
+* addon_type
+* quantity
+* quantity_remaining
+* purchased_at
+* expires_at
+* created_at
+* updated_at
+
+Supported addon_type values:
+
+* ai_requests
+* leads
+* storage
+* whatsapp_accounts
+
+==================================================
+AI USAGE CALCULATION
+====================
+
+Available AI Requests
+
+=
+
+Plan Included Requests
+
+*
+
+Remaining AI Add-On Requests
+
+When an AI action executes:
+
+1. Deduct from included plan allowance first
+2. Then deduct from purchased add-ons
+3. Log usage
+
+==================================================
+AI LIMIT REACHED
+================
+
+When no AI requests remain:
+
+Block all AI functionality.
+
+Display:
+
+"You have reached your monthly AI limit."
+
+Provide actions:
+
+* Upgrade Plan
+* Purchase Additional AI Requests
+
+==================================================
+PURCHASE AI REQUESTS
+====================
+
+Create Billing Page section:
+
+AI Add-On Store
+
+Available Pack:
+
+Extra AI Pack
+
+Price:
+Rs. 2,000
+
+Provides:
+
++500 AI Requests
+
+Customers submit payment using the existing payment approval workflow.
+
+==================================================
+ADMIN APPROVAL
+==============
+
+When Super Admin approves an AI Add-On payment:
+
+Automatically:
+
+* Create addon record
+* Add 500 AI Requests
+* Update organization allowance
+
+==================================================
+AI FEATURES USING CREDITS
+=========================
+
+Every AI-powered feature must consume AI requests.
+
+Examples:
+
+* AI Lead Summary
+* AI Lead Scoring
+* AI Recommendations
+* AI Follow-Up Suggestions
+* AI Chatbot
+* AI Analytics Summary
+* AI Deal Insights
+
+Each execution must consume usage.
+
+==================================================
+AI SUMMARY NOTIFICATION RESTRICTIONS
+====================================
+
+Starter:
+
+* Daily
+* Weekly
+
+Professional:
+
+* Hourly
+* Every 6 Hours
+* Daily
+* Weekly
+
+Agency:
+
+* Instant
+* Hourly
+* Every 6 Hours
+* Daily
+* Weekly
+
+==================================================
+AI COST TRACKING
+================
+
+Create table:
+
+ai_usage
+
+Fields:
+
+* id
+* organization_id
+* user_id
+* feature
+* model
+* prompt_tokens
+* completion_tokens
+* total_tokens
+* estimated_cost
+* created_at
+
+Track every OpenAI API call.
+
+==================================================
+ADMIN AI ANALYTICS
+==================
+
+Super Admin Dashboard must show:
+
+* Total AI Requests Used
+* Total Tokens Consumed
+* Estimated OpenAI Cost
+* Cost Per Organization
+* Most Expensive Organizations
+* AI Usage Trends
+
+==================================================
+MONTHLY RESET
+=============
+
+On monthly billing reset:
+
+Reset:
+
+* Included AI Requests
+
+Do NOT reset:
+
+* Purchased AI Add-On Requests
+
+Purchased AI Add-On Requests remain available until consumed or expired.
+
+==================================================
+SUPER ADMIN EXEMPTION
+=====================
+
+Super Admin bypasses all AI limits.
+
+# Super Admin can use unlimited AI features.
+>>>>>>> 17c38ff (Initial CRM commit)

@@ -2,7 +2,10 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
+<<<<<<< HEAD
 import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
+=======
+>>>>>>> 17c38ff (Initial CRM commit)
 import { VitePWA } from "vite-plugin-pwa";
 
 const rawPort = process.env.PORT;
@@ -15,7 +18,17 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss({ optimize: false }),
+<<<<<<< HEAD
     runtimeErrorOverlay(),
+=======
+    ...(process.env.NODE_ENV !== "production" && process.env.REPL_ID !== undefined
+      ? [
+          await import("@replit/vite-plugin-runtime-error-modal").then((m) =>
+            m.default(),
+          ),
+        ]
+      : []),
+>>>>>>> 17c38ff (Initial CRM commit)
     VitePWA({
       registerType: "autoUpdate",
       includeAssets: [

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ==================================================
 UPDATED SAAS PLAN MATRIX
 ==================================================
@@ -198,4 +199,206 @@ All restrictions must be enforced server-side so future:
 - Android apps
 - iOS apps
 
+=======
+==================================================
+UPDATED SAAS PLAN MATRIX
+==================================================
+
+IMPORTANT:
+
+Before implementation, ask me whether I want to use the default pricing below or custom pricing.
+
+The CRM currently includes:
+
+- Leads
+- Lead Sources
+- Properties
+- Dealers
+- Messages
+- Analytics
+- AI Intelligence
+- Automations
+- Team Management
+- Deals Pipeline
+- Documents
+- Financial Calculator
+- Calendar & Appointments
+- WhatsApp Cloud API Integration
+- Facebook Lead Ads Integration
+- Instagram Lead Ads Integration
+
+Create a feature-based subscription system.
+
+--------------------------------------------------
+STARTER PLAN
+--------------------------------------------------
+
+Default Price:
+Rs. 9,999/month
+
+Included Features:
+
+- Leads
+- Lead Sources
+- Properties
+- Dealers
+- Messages
+- Calendar
+- Documents
+- Financial Calculator
+- Basic Analytics
+
+Limits:
+
+- 1 User
+- 1 WhatsApp Number
+- 1 Facebook Page
+- 500 Leads per Month
+- 2 GB Storage
+
+Not Included:
+
+- Team Management
+- AI Intelligence
+- Automations
+- Advanced Reporting
+
+--------------------------------------------------
+PROFESSIONAL PLAN
+--------------------------------------------------
+
+Default Price:
+Rs. 19,999/month
+
+Includes everything in Starter plus:
+
+- Team Management
+- Deals Pipeline
+- Lead Assignment
+- Facebook Lead Ads Sync
+- Instagram Lead Ads Sync
+- Advanced Analytics
+- Multi-Agent Access
+
+Limits:
+
+- 5 Users
+- 3 WhatsApp Numbers
+- 3 Facebook Pages
+- 5,000 Leads per Month
+- 20 GB Storage
+
+Not Included:
+
+- AI Intelligence
+- Advanced Automations
+
+--------------------------------------------------
+AGENCY PLAN
+--------------------------------------------------
+
+Default Price:
+Rs. 39,999/month
+
+Includes everything in Professional plus:
+
+- AI Intelligence
+- Lead Scoring
+- AI Recommendations
+- Smart Follow-Ups
+- WhatsApp Automations
+- Auto Lead Assignment
+- Advanced Reporting
+- Priority Support
+
+Limits:
+
+- Unlimited Users
+- Unlimited WhatsApp Numbers
+- Unlimited Facebook Pages
+- 100 GB Storage
+
+==================================================
+FEATURE GATING
+==================================================
+
+Implement centralized feature gating.
+
+Organizations should only access features included in their plan.
+
+Examples:
+
+Starter:
+- Cannot access Team page
+- Cannot access AI Intelligence
+- Cannot access Automations
+
+Professional:
+- Can access Team
+- Cannot access AI Intelligence
+- Cannot access Advanced Automations
+
+Agency:
+- Full access
+
+Unauthorized feature access should display:
+
+"This feature is not included in your current plan. Upgrade your subscription to continue."
+
+==================================================
+USAGE LIMIT ENFORCEMENT
+==================================================
+
+Track and enforce:
+
+- User count
+- Lead count
+- Storage usage
+- WhatsApp account count
+- Facebook account count
+
+Display usage statistics on the Billing page.
+
+Display warnings when approaching limits.
+
+Prevent exceeding limits unless the organization upgrades.
+
+==================================================
+ORGANIZATION USAGE DASHBOARD
+==================================================
+
+Create usage tracking for each organization.
+
+Track:
+
+- Total Leads
+- Total Messages
+- Active Team Members
+- Active WhatsApp Accounts
+- Active Facebook Accounts
+- Storage Usage
+- Subscription Utilization %
+
+Show usage inside:
+
+Billing Page
+Admin Dashboard
+Organization Details Page
+
+==================================================
+FUTURE MOBILE AND DESKTOP APP COMPATIBILITY
+==================================================
+
+Ensure all subscription checks, organization checks, permissions, and feature gates are API-driven.
+
+Do not rely solely on frontend restrictions.
+
+All restrictions must be enforced server-side so future:
+
+- Electron apps
+- Tauri apps
+- Android apps
+- iOS apps
+
+>>>>>>> 17c38ff (Initial CRM commit)
 inherit the same security model automatically.

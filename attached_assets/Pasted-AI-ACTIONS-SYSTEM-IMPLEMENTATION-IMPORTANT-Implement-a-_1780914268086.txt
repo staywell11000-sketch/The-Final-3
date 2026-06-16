@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 AI ACTIONS SYSTEM IMPLEMENTATION
 
 IMPORTANT
@@ -369,4 +370,377 @@ Provide:
 4. New API routes
 5. Admin controls added
 6. Testing checklist
+=======
+AI ACTIONS SYSTEM IMPLEMENTATION
+
+IMPORTANT
+
+Implement a production-ready AI Actions system.
+
+Users must NEVER see OpenAI, models, tokens, API usage, or technical details.
+
+The CRM should present AI usage as simple "AI Actions".
+
+The CRM owner (me) pays OpenAI.
+
+Customers purchase AI Actions through CRM plans and add-ons.
+
+==================================================
+CORE CONCEPT
+==================================================
+
+AI usage must be tracked internally.
+
+Users see:
+
+AI Actions Remaining
+
+NOT:
+
+OpenAI Credits
+Tokens
+API Requests
+Model Names
+
+==================================================
+PLAN AI ALLOWANCES
+==================================================
+
+FREE
+
+Included AI Actions:
+0
+
+AI Features:
+Locked
+
+Display:
+"Upgrade your plan to unlock AI features."
+
+==================================================
+
+STARTER
+
+Included AI Actions:
+300 per month
+
+Features:
+
+✓ AI Lead Summaries
+✓ AI Reply Suggestions
+
+Locked:
+
+✗ AI Chatbot
+✗ AI Intelligence Suite
+✗ AI Automation
+
+==================================================
+
+PROFESSIONAL
+
+Included AI Actions:
+1,500 per month
+
+Features:
+
+✓ AI Lead Summaries
+✓ AI Reply Suggestions
+✓ AI Chatbot
+
+Locked:
+
+✗ AI Intelligence Suite
+✗ AI Automation
+
+==================================================
+
+AGENCY
+
+Included AI Actions:
+10,000 per month
+
+Features:
+
+✓ AI Lead Summaries
+✓ AI Reply Suggestions
+✓ AI Chatbot
+✓ AI Intelligence Suite
+✓ AI Automation
+
+==================================================
+AI ACTION COSTS
+==================================================
+
+Lead Summary:
+1 Action
+
+Reply Suggestion:
+1 Action
+
+AI Chat Message:
+2 Actions
+
+Lead Analysis:
+3 Actions
+
+Market Analysis:
+5 Actions
+
+Pipeline Forecast:
+10 Actions
+
+Bulk Analysis:
+10 Actions
+
+Automation AI Task:
+5 Actions
+
+Make these configurable in admin settings.
+
+==================================================
+AI USAGE TRACKING
+==================================================
+
+Create table:
+
+organization_ai_usage
+
+Fields:
+
+id
+organization_id
+month
+year
+actions_used
+actions_limit
+bonus_actions
+created_at
+updated_at
+
+==================================================
+AVAILABLE ACTIONS
+==================================================
+
+Available Actions =
+
+actions_limit
++
+bonus_actions
+-
+actions_used
+
+==================================================
+ACTION CONSUMPTION
+==================================================
+
+Before every AI request:
+
+Check remaining actions.
+
+If sufficient:
+
+Consume actions
+Execute AI request
+
+If insufficient:
+
+Block request
+
+Display:
+
+"You have used all included AI Actions."
+
+Buttons:
+
+Upgrade Plan
+Buy AI Booster
+
+==================================================
+AI BOOSTER STORE
+==================================================
+
+Create AI Booster products.
+
+AI Booster 500
+
+Price:
+Rs. 2,000
+
+Adds:
+500 AI Actions
+
+==================================================
+
+AI Booster 2,000
+
+Price:
+Rs. 6,000
+
+Adds:
+2,000 AI Actions
+
+==================================================
+
+AI Booster 5,000
+
+Price:
+Rs. 12,000
+
+Adds:
+5,000 AI Actions
+
+==================================================
+BOOSTER PURCHASE FLOW
+==================================================
+
+Purchasing a booster:
+
+Adds actions to:
+
+bonus_actions
+
+without affecting monthly plan allowance.
+
+==================================================
+MONTHLY RESET
+==================================================
+
+Every month:
+
+Reset:
+
+actions_used = 0
+
+Do NOT remove:
+
+bonus_actions
+
+Bonus actions remain until consumed.
+
+==================================================
+FEATURE LOCKING
+==================================================
+
+If plan does not include feature:
+
+Show lock state.
+
+Message:
+
+"Upgrade to [Required Plan] to access this feature."
+
+Examples:
+
+Starter user clicks AI Chatbot:
+
+"Upgrade to Professional to unlock AI Chatbot."
+
+Professional user clicks AI Intelligence:
+
+"Upgrade to Agency to unlock AI Intelligence Suite."
+
+==================================================
+AI DASHBOARD WIDGET
+==================================================
+
+Add AI Usage widget.
+
+Display:
+
+AI Actions Remaining
+Actions Used
+Actions Included
+Bonus Actions
+Current Plan
+
+Progress bar
+
+==================================================
+ADMIN ANALYTICS
+==================================================
+
+Super Admin can view:
+
+Top AI Usage Organizations
+Monthly AI Consumption
+AI Revenue
+Booster Sales
+Most Used AI Features
+
+==================================================
+OPENAI INTEGRATION
+==================================================
+
+Keep OpenAI completely hidden.
+
+Users must never see:
+
+GPT
+OpenAI
+Tokens
+Model Names
+API Usage
+
+Only show:
+
+AI Assistant
+AI Actions
+
+==================================================
+MODEL MANAGEMENT
+==================================================
+
+Create backend configuration.
+
+Different features may use different models.
+
+Users must never select models.
+
+Only Super Admin can configure model assignments.
+
+==================================================
+ERROR HANDLING
+==================================================
+
+Replace generic errors.
+
+Examples:
+
+"AI Actions exhausted."
+
+"AI feature not included in your plan."
+
+"AI service temporarily unavailable."
+
+Never display raw OpenAI errors.
+
+==================================================
+FINAL REQUIREMENT
+==================================================
+
+Implement this system throughout the CRM.
+
+Audit all existing AI features.
+
+Connect all AI requests to the AI Actions system.
+
+Ensure:
+
+- No feature bypasses AI Action tracking.
+- Plan restrictions work correctly.
+- Booster purchases work correctly.
+- Monthly resets work correctly.
+- Existing AI functionality remains operational.
+- Super Admin bypasses AI limits for testing purposes.
+
+Provide:
+
+1. Database changes
+2. Migrations
+3. Files modified
+4. New API routes
+5. Admin controls added
+6. Testing checklist
+>>>>>>> 17c38ff (Initial CRM commit)
 7. Confirmation that every AI feature is connected to the AI Actions system

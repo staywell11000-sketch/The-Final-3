@@ -130,10 +130,17 @@ router.get("/properties/:id", requireAuth, async (req: any, res) => {
       .limit(1);
 
     if (!row) return void res.status(404).json({ error: "Property not found" });
+<<<<<<< HEAD
     res.json(row);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to get property" });
+=======
+    return res.json(row);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Failed to get property" });
+>>>>>>> 17c38ff (Initial CRM commit)
   }
 });
 
@@ -175,10 +182,17 @@ router.put("/properties/:id", requireAuth, async (req: any, res) => {
     }).where(and(eq(properties.id, id), eq(properties.listedById, userId))).returning();
 
     if (!row) return void res.status(404).json({ error: "Property not found" });
+<<<<<<< HEAD
     res.json(row);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to update property" });
+=======
+    return res.json(row);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Failed to update property" });
+>>>>>>> 17c38ff (Initial CRM commit)
   }
 });
 
@@ -197,10 +211,17 @@ router.patch("/properties/:id/status", requireAuth, async (req: any, res) => {
       .returning();
 
     if (!row) return void res.status(404).json({ error: "Property not found" });
+<<<<<<< HEAD
     res.json(row);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to update status" });
+=======
+    return res.json(row);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Failed to update status" });
+>>>>>>> 17c38ff (Initial CRM commit)
   }
 });
 
@@ -271,10 +292,17 @@ router.post("/properties/bulk", requireAuth, async (req: any, res) => {
       }
     }
 
+<<<<<<< HEAD
     res.json(results);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Bulk import failed" });
+=======
+    return res.json(results);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Bulk import failed" });
+>>>>>>> 17c38ff (Initial CRM commit)
   }
 });
 
@@ -285,10 +313,17 @@ router.delete("/properties/:id", requireAuth, async (req: any, res) => {
     if (isNaN(id)) return void res.status(400).json({ error: "Invalid id" });
 
     await db.delete(properties).where(and(eq(properties.id, id), eq(properties.listedById, userId)));
+<<<<<<< HEAD
     res.status(204).send();
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to delete property" });
+=======
+    return res.status(204).send();
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Failed to delete property" });
+>>>>>>> 17c38ff (Initial CRM commit)
   }
 });
 

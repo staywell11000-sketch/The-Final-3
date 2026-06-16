@@ -97,10 +97,17 @@ router.get("/dealers/:id", requireAuth, async (req: any, res) => {
       .limit(1);
 
     if (!row) return void res.status(404).json({ error: "Dealer not found" });
+<<<<<<< HEAD
     res.json(row);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to get dealer" });
+=======
+    return res.json(row);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Failed to get dealer" });
+>>>>>>> 17c38ff (Initial CRM commit)
   }
 });
 
@@ -125,10 +132,17 @@ router.put("/dealers/:id", requireAuth, async (req: any, res) => {
     }).where(and(eq(dealers.id, id), eq(dealers.userId, userId))).returning();
 
     if (!row) return void res.status(404).json({ error: "Dealer not found" });
+<<<<<<< HEAD
     res.json(row);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to update dealer" });
+=======
+    return res.json(row);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Failed to update dealer" });
+>>>>>>> 17c38ff (Initial CRM commit)
   }
 });
 
@@ -145,10 +159,17 @@ router.patch("/dealers/:id/status", requireAuth, async (req: any, res) => {
       .where(and(eq(dealers.id, id), eq(dealers.userId, userId))).returning();
 
     if (!row) return void res.status(404).json({ error: "Dealer not found" });
+<<<<<<< HEAD
     res.json(row);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to update status" });
+=======
+    return res.json(row);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Failed to update status" });
+>>>>>>> 17c38ff (Initial CRM commit)
   }
 });
 
@@ -159,10 +180,17 @@ router.delete("/dealers/:id", requireAuth, async (req: any, res) => {
     if (isNaN(id)) return void res.status(400).json({ error: "Invalid id" });
 
     await db.delete(dealers).where(and(eq(dealers.id, id), eq(dealers.userId, userId)));
+<<<<<<< HEAD
     res.status(204).send();
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to delete dealer" });
+=======
+    return res.status(204).send();
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Failed to delete dealer" });
+>>>>>>> 17c38ff (Initial CRM commit)
   }
 });
 

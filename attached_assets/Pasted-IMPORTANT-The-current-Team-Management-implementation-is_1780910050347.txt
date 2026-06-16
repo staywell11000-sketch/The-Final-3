@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 IMPORTANT
 
 The current Team Management implementation is incorrect.
@@ -270,4 +271,278 @@ NOT
 Employee
 → owns CRM
 
+=======
+IMPORTANT
+
+The current Team Management implementation is incorrect.
+
+It appears every account is being treated as an employee account.
+
+This is NOT the intended SaaS architecture.
+
+Do not continue building on the current employee-first model.
+
+Refactor the system to follow the architecture below.
+
+==================================================
+CORRECT ACCOUNT STRUCTURE
+==================================================
+
+When a person signs up for the CRM:
+
+They become:
+
+Organization Owner
+
+NOT Employee.
+
+Flow:
+
+User Registers
+↓
+Organization Created
+↓
+User Becomes Organization Owner
+↓
+User Gets Full CRM Access
+↓
+User Can Invite Employees
+
+==================================================
+ORGANIZATION OWNER
+==================================================
+
+The person who purchases the CRM plan is:
+
+Organization Owner
+
+Permissions:
+
+- Full CRM Access
+- Billing Access
+- Subscription Access
+- Team Management
+- Employee Management
+- WhatsApp Connections
+- Facebook Connections
+- Settings Access
+- Permission Management
+
+Owner should never be treated as an employee.
+
+Owner is the top-level account inside the organization.
+
+==================================================
+EMPLOYEE SYSTEM
+==================================================
+
+Employees must only exist inside an organization.
+
+Employees do NOT create organizations.
+
+Employees do NOT purchase subscriptions.
+
+Employees do NOT own CRM accounts.
+
+Employees belong to an existing organization.
+
+Structure:
+
+Organization
+ ├── Owner
+ ├── Manager
+ ├── Sales Agent
+ ├── Marketing User
+ └── Custom Roles
+
+==================================================
+EMPLOYEE CREATION
+==================================================
+
+Owner clicks:
+
+Team
+→ Add Employee
+
+Owner enters:
+
+- Full Name
+- Email
+- Position
+- Role
+- Permissions
+
+System creates invitation.
+
+Employee receives:
+
+- Invite Email
+OR
+- Invite Code
+
+Employee joins the existing organization.
+
+Employee should never create a new organization.
+
+==================================================
+SIGNUP FLOW
+==================================================
+
+Public Signup Page:
+
+Create Organization
+
+Fields:
+
+- Business Name
+- Owner Name
+- Email
+- Password
+
+Create:
+
+Organization
+Owner Account
+
+Only.
+
+==================================================
+EMPLOYEE LOGIN
+==================================================
+
+Employee Login:
+
+Email
+Password
+
+System determines:
+
+organization_id
+
+Loads only that organization's CRM.
+
+==================================================
+PLAN LIMITS
+==================================================
+
+Employee limits are based on subscription.
+
+Free:
+
+1 User Total
+
+Starter:
+
+1 User Total
+
+Professional:
+
+5 Users Total
+
+Agency:
+
+Unlimited Users
+
+When limit reached:
+
+Display:
+
+"You have reached the maximum users included in your plan."
+
+Buttons:
+
+Upgrade Plan
+
+Buy User Add-On
+
+==================================================
+PERMISSIONS
+==================================================
+
+Owner controls:
+
+- Pages
+- Features
+- Actions
+- Visibility
+
+Examples:
+
+Can View Leads
+Can Edit Leads
+Can Delete Leads
+Can View Analytics
+Can Manage Team
+Can View Deals
+Can View Messages
+
+Hide unauthorized pages.
+
+Protect APIs as well.
+
+==================================================
+DATABASE STRUCTURE
+==================================================
+
+Users table should support:
+
+id
+organization_id
+role
+is_owner
+is_active
+
+Owner:
+
+is_owner = true
+
+Employees:
+
+is_owner = false
+
+==================================================
+DATA ISOLATION
+==================================================
+
+All users inside the organization share:
+
+- Leads
+- Deals
+- Messages
+- Properties
+- Documents
+
+based on permissions.
+
+Organizations remain isolated from each other.
+
+==================================================
+MIGRATION
+==================================================
+
+If existing users were mistakenly converted into employees:
+
+Migrate them back into Organization Owners.
+
+Do not lose data.
+
+Do not create duplicate organizations.
+
+Provide migration plan before execution.
+
+==================================================
+FINAL REQUIREMENT
+==================================================
+
+Refactor Team Management to use:
+
+Organization Owner
+→ manages Employees
+
+NOT
+
+Employee
+→ owns CRM
+
+>>>>>>> 17c38ff (Initial CRM commit)
 This CRM must behave like a professional SaaS CRM platform.

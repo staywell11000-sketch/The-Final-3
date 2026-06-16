@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 SMART AI MODEL ROUTING SYSTEM
 
 IMPORTANT
@@ -262,4 +263,270 @@ Provide:
 6. Fallback strategy
 7. Testing checklist
 
+=======
+SMART AI MODEL ROUTING SYSTEM
+
+IMPORTANT
+
+Implement a production-ready AI Routing Layer.
+
+The CRM must automatically choose the most suitable AI model for each feature.
+
+Users must NEVER see:
+
+- OpenAI
+- GPT
+- Models
+- Tokens
+- API Keys
+- AI Providers
+
+Only display:
+
+AI Assistant
+
+==================================================
+GOAL
+==================================================
+
+The system must intelligently balance:
+
+- Cost
+- Speed
+- Quality
+- Reliability
+
+without requiring user intervention.
+
+==================================================
+NO USER MODEL SELECTION
+==================================================
+
+Remove any possibility for users to choose:
+
+- GPT Models
+- AI Providers
+- AI Versions
+
+Users simply use CRM features.
+
+The backend decides automatically.
+
+==================================================
+AI ROUTING LAYER
+==================================================
+
+Create:
+
+AIService
+
+AIModelRouter
+
+AIFeatureRegistry
+
+The AIModelRouter should decide which model to use based on:
+
+Feature Type
+Complexity
+Message Length
+Context Size
+Expected Quality
+
+==================================================
+FEATURE CLASSIFICATION
+==================================================
+
+CLASS A
+
+Low Cost Tasks
+
+Examples:
+
+- Lead Summary
+- Reply Suggestion
+- Follow-up Generator
+- Property Description Generator
+- Short Message Generation
+
+Requirements:
+
+Fast
+Cheap
+
+==================================================
+
+CLASS B
+
+Medium Intelligence Tasks
+
+Examples:
+
+- Lead Analysis
+- Deal Analysis
+- Lead Qualification
+- Market Commentary
+- Opportunity Detection
+
+Requirements:
+
+Balanced Cost and Quality
+
+==================================================
+
+CLASS C
+
+High Intelligence Tasks
+
+Examples:
+
+- AI Chatbot
+- AI Intelligence Dashboard
+- Business Insights
+- Pipeline Forecasting
+- Strategic Recommendations
+- Advanced Analytics
+
+Requirements:
+
+Highest Quality
+
+==================================================
+ADMIN CONFIGURATION
+==================================================
+
+Create AI Settings page.
+
+Super Admin can configure:
+
+- Provider
+- Model Assignments
+- Cost Controls
+- Fallback Models
+
+Normal users cannot access these settings.
+
+==================================================
+FALLBACK SYSTEM
+==================================================
+
+If a preferred model fails:
+
+Automatically use fallback model.
+
+Do not break user experience.
+
+Log failure.
+
+==================================================
+COST PROTECTION
+==================================================
+
+Implement safeguards.
+
+Prevent:
+
+- Excessively long prompts
+- Excessively large datasets
+- Infinite loops
+- Recursive AI requests
+
+Limit context automatically.
+
+==================================================
+PROMPT OPTIMIZATION
+==================================================
+
+Create reusable prompt templates.
+
+Avoid sending unnecessary CRM data.
+
+Send only required context.
+
+Reduce AI costs.
+
+==================================================
+AI RESPONSE CACHING
+==================================================
+
+Cache safe responses where appropriate.
+
+Examples:
+
+- Property descriptions
+- Market summaries
+- Generated templates
+
+Reduce repeated API costs.
+
+==================================================
+OBSERVABILITY
+==================================================
+
+Track:
+
+Feature Name
+Organization
+Response Time
+Estimated Cost
+AI Actions Consumed
+Errors
+
+Create admin analytics.
+
+==================================================
+SUPER ADMIN CONTROLS
+==================================================
+
+Super Admin dashboard should display:
+
+- AI Requests
+- AI Costs
+- AI Usage by Organization
+- Most Expensive Features
+- Most Used Features
+- Error Rates
+
+==================================================
+FUTURE PROVIDER SUPPORT
+==================================================
+
+Design architecture so future providers can be added.
+
+Examples:
+
+- OpenAI
+- Anthropic
+- Google
+- OpenRouter
+
+without changing CRM business logic.
+
+==================================================
+FINAL REQUIREMENT
+==================================================
+
+Audit every AI feature currently in the CRM.
+
+Connect every feature to the AI Routing Layer.
+
+Ensure:
+
+- Users never select models.
+- Backend automatically chooses the best model.
+- Cost is optimized.
+- Quality remains high.
+- Existing AI functionality continues working.
+- AI Actions system remains fully integrated.
+
+Provide:
+
+1. Architecture changes
+2. New services created
+3. Files modified
+4. AI routing logic
+5. Cost optimization measures
+6. Fallback strategy
+7. Testing checklist
+
+>>>>>>> 17c38ff (Initial CRM commit)
 The final system must be production-ready and require zero model-selection decisions from end users.

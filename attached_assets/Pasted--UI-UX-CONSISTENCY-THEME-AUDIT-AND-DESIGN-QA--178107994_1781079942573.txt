@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ====================================================
 UI/UX CONSISTENCY, THEME AUDIT AND DESIGN QA
 ============================================
@@ -106,3 +107,113 @@ Design inspiration:
 Final Result:
 
 The CRM should feel polished, professional, visually consistent, easy to understand, and ready for paying customers.
+=======
+====================================================
+UI/UX CONSISTENCY, THEME AUDIT AND DESIGN QA
+============================================
+
+Perform a complete UI and visual audit across the entire CRM.
+
+Review every page, component, modal, popup, table, card, form, button, badge, notification, chart, sidebar, navigation item, and settings screen.
+
+Identify and fix:
+
+* Poor color choices
+* Inconsistent colors
+* Low contrast text
+* Hard-to-read text
+* Invisible buttons
+* Poor hover states
+* Broken dark mode
+* Broken light mode
+* Inconsistent spacing
+* Inconsistent typography
+* Poor alignment
+* Cluttered layouts
+* Overlapping elements
+* Poor mobile responsiveness
+* Accessibility issues
+* Unprofessional visual appearance
+
+Verify every theme.
+
+For every available theme:
+
+* Test every page
+* Test every modal
+* Test every dropdown
+* Test every table
+* Test every chart
+* Test every button
+* Test every notification
+* Test every settings page
+
+Ensure:
+
+* Text is readable
+* Buttons are visible
+* Icons are visible
+* Charts are readable
+* Cards are visually balanced
+* Forms are easy to use
+* Colors remain professional
+
+Review all button states:
+
+* Default
+* Hover
+* Active
+* Disabled
+* Loading
+
+Ensure all states are visually clear.
+
+Review all notifications:
+
+* Success
+* Error
+* Warning
+* Information
+
+Ensure colors are intuitive and consistent.
+
+Review all dashboards:
+
+* Overview
+* Leads
+* Deals
+* Properties
+* Messages
+* Teams
+* Analytics
+* AI Intelligence
+* Automations
+* Billing
+* Settings
+* Super Admin
+
+Improve visual hierarchy.
+
+Reduce clutter.
+
+Improve spacing.
+
+Improve readability.
+
+Improve navigation flow.
+
+Ensure the CRM feels modern, premium, trustworthy, and enterprise-ready.
+
+Design inspiration:
+
+* HubSpot
+* Salesforce
+* Attio
+* Linear
+* Notion
+* Stripe Dashboard
+
+Final Result:
+
+The CRM should feel polished, professional, visually consistent, easy to understand, and ready for paying customers.
+>>>>>>> 17c38ff (Initial CRM commit)

@@ -1,6 +1,10 @@
 import { Router } from "express"
 import { requireAuth } from "../middlewares/requireAuth"
+<<<<<<< HEAD
 import { db, whatsappAccounts, userWhatsappPermissions } from "@workspace/db"
+=======
+import { db, whatsappAccounts, userWhatsappPermissions, conversationWaAccounts } from "@workspace/db"
+>>>>>>> 17c38ff (Initial CRM commit)
 import { eq, and, sql } from "drizzle-orm"
 import { logger } from "../lib/logger"
 
@@ -146,7 +150,10 @@ router.get("/whatsapp/accounts/limit", requireAuth, async (req: any, res) => {
 
 router.get("/whatsapp/conversation-accounts", requireAuth, async (req: any, res) => {
   try {
+<<<<<<< HEAD
     const { conversationWaAccounts } = await import("@workspace/db")
+=======
+>>>>>>> 17c38ff (Initial CRM commit)
     const org = await getOrgForUser(req.userId)
     if (!org) return res.json({ map: {} })
 

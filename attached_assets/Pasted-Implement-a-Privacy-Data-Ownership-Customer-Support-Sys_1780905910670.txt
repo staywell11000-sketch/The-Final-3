@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Implement a Privacy, Data Ownership & Customer Support System.
 
 OBJECTIVE
@@ -205,3 +206,212 @@ Do not break existing functionality.
 Maintain organization isolation throughout the system.
 
 Ensure all support communications remain associated with the correct organization and are inaccessible to other organizations.
+=======
+Implement a Privacy, Data Ownership & Customer Support System.
+
+OBJECTIVE
+
+Organizations must trust that their data is private while also having an easy way to contact support whenever they need assistance.
+
+SUPER ADMIN RESTRICTIONS
+
+Super Admin can view:
+
+* Organizations
+* Subscription Status
+* Payment Requests
+* User Counts
+* Storage Usage
+* AI Usage
+* WhatsApp Usage
+* Lead Counts
+
+Super Admin CANNOT view:
+
+* Lead Names
+* Lead Phone Numbers
+* Lead Emails
+* Lead Notes
+* Conversations
+* WhatsApp Messages
+* Documents
+* Deals
+* Internal Organization Data
+
+unless support access is granted.
+
+SUPPORT ACCESS SYSTEM
+
+Create organization setting:
+
+support_access_enabled
+
+Default:
+
+false
+
+Only Organization Admin can enable it.
+
+When enabled:
+
+Super Admin may temporarily access organization data for troubleshooting and support purposes.
+
+Audit all support access.
+
+Store:
+
+organization_id
+enabled_by
+enabled_at
+disabled_at
+
+PRIVACY PAGE
+
+Create:
+
+Settings → Privacy & Security
+
+Display:
+
+Data Ownership
+Support Access
+Data Export
+Data Deletion Policy
+
+DATA EXPORT
+
+Allow Organization Admin to export:
+
+Leads
+Deals
+Properties
+Contacts
+Documents Metadata
+
+AUDIT LOGGING
+
+Log:
+
+Support Access Enabled
+Support Access Disabled
+Data Exports
+Privacy Changes
+
+CUSTOMER SUPPORT SYSTEM
+
+Create a built-in support system that allows organizations to easily contact CRM support.
+
+SUPPORT CHAT WIDGET
+
+Add a floating support chat button in the bottom-right corner of the CRM.
+
+Requirements:
+
+* Visible on all authenticated CRM pages
+* Modern and responsive design
+* Expandable chat window
+* Minimize and close functionality
+* Unread message indicators
+* Real-time updates if possible
+
+Users can:
+
+* Send support messages
+* Describe issues
+* Ask questions
+* Request assistance
+* Receive replies from support
+
+SUPPORT CENTER PAGE
+
+Create:
+
+Settings → Support
+
+Display:
+
+* Contact Support
+* Open Tickets
+* Ticket History
+* Support Status
+* Frequently Asked Questions
+
+SUPPORT TICKETS
+
+Create:
+
+support_tickets
+
+Fields:
+
+* id
+* organization_id
+* user_id
+* subject
+* message
+* status
+* priority
+* created_at
+* updated_at
+* resolved_at
+
+Statuses:
+
+* Open
+* In Progress
+* Waiting for Customer
+* Resolved
+* Closed
+
+SUPPORT MESSAGES
+
+Create:
+
+support_messages
+
+Fields:
+
+* id
+* ticket_id
+* sender_id
+* sender_type
+* message
+* created_at
+
+Allow threaded conversations between customers and support.
+
+SUPER ADMIN SUPPORT PANEL
+
+Create a support management section for Super Admin.
+
+Super Admin can:
+
+* View all support tickets
+* Reply to customers
+* Change ticket status
+* Mark tickets as resolved
+* View organization information
+* Request temporary support access if needed
+
+PRIVACY PROTECTION
+
+Support staff must not automatically gain access to organization data.
+
+If troubleshooting requires data access:
+
+* Organization Admin must enable Support Access
+* All access must be logged
+* Access history must be visible to the organization
+
+TRUST MESSAGING
+
+Display throughout onboarding, subscription pages, privacy pages, and support pages:
+
+"Your business data remains private. CRM administrators cannot access your leads, conversations, documents, or customer information unless you explicitly enable support access."
+
+Do not break existing functionality.
+
+Maintain organization isolation throughout the system.
+
+Ensure all support communications remain associated with the correct organization and are inaccessible to other organizations.
+>>>>>>> 17c38ff (Initial CRM commit)

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ==================================================
 LOCKED FEATURE SYSTEM
 =====================
@@ -162,3 +163,169 @@ Track:
 Display these metrics inside the Super Admin Dashboard.
 
 # This data will be used to identify which features drive the most upgrades.
+=======
+==================================================
+LOCKED FEATURE SYSTEM
+=====================
+
+IMPORTANT
+
+Do not hide unavailable features.
+
+Locked features must remain visible throughout the CRM.
+
+The purpose is to encourage upgrades.
+
+==================================================
+LOCKED FEATURE UI
+=================
+
+If a feature is unavailable for the current plan:
+
+Display it in navigation.
+
+Add:
+
+Lock Icon
+
+When clicked:
+
+Show upgrade page.
+
+Example:
+
+Feature Locked
+
+Upgrade to Professional Plan to access Team Management.
+
+[Upgrade Plan]
+
+==================================================
+FEATURE UPGRADE MODALS
+======================
+
+Create reusable upgrade modal.
+
+Display:
+
+* Feature Name
+* Current Plan
+* Required Plan
+* Benefits
+* Upgrade Button
+
+==================================================
+FREE PLAN
+=========
+
+Price:
+
+Rs. 0
+
+Included:
+
+* Dashboard
+* Leads
+* Properties
+* Dealers
+* Calendar
+
+Limits:
+
+* 1 User
+* 50 Total Leads
+* 500MB Storage
+* No AI Requests
+
+Locked Features:
+
+* WhatsApp Integration
+* Facebook Lead Ads
+* Instagram Lead Ads
+* Documents
+* Analytics
+* Team Management
+* AI Intelligence
+* Automations
+* Advanced Reporting
+
+==================================================
+PLAN LOCKING MATRIX
+===================
+
+Starter Unlocks:
+
+* WhatsApp Integration
+* Facebook Lead Ads
+* Instagram Lead Ads
+* Documents
+* Analytics
+
+Professional Unlocks:
+
+* Team Management
+* Deals Pipeline
+* Lead Assignment
+* Multi-Agent Features
+
+Agency Unlocks:
+
+* AI Intelligence
+* AI Chatbot
+* AI Summaries
+* AI Lead Scoring
+* Automations
+* Advanced Reporting
+
+==================================================
+BACKEND SECURITY
+================
+
+Even if a user manually accesses a URL:
+
+Example:
+
+/team
+/ai
+/automations
+
+The backend must verify plan access.
+
+Return:
+
+HTTP 403
+
+Message:
+
+"This feature is not included in your current subscription plan."
+
+==================================================
+UPGRADE CALLS TO ACTION
+=======================
+
+Every locked feature page should contain:
+
+Current Plan
+
+Required Plan
+
+Feature Benefits
+
+Upgrade Button
+
+Link to Billing Page
+
+==================================================
+ANALYTICS
+=========
+
+Track:
+
+* Locked Feature Clicks
+* Upgrade Button Clicks
+* Upgrade Conversions
+
+Display these metrics inside the Super Admin Dashboard.
+
+# This data will be used to identify which features drive the most upgrades.
+>>>>>>> 17c38ff (Initial CRM commit)

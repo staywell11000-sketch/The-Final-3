@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ==================================================
 AI & AUTOMATION PRODUCT STRUCTURE
 =================================
@@ -360,4 +361,368 @@ Free
 → Professional
 → Agency
 
+=======
+==================================================
+AI & AUTOMATION PRODUCT STRUCTURE
+=================================
+
+IMPORTANT
+
+AI Intelligence and Automations are separate modules.
+
+AI Intelligence provides:
+
+* Analysis
+* Recommendations
+* Insights
+* Summaries
+
+Automations provide:
+
+* Actions
+* Scheduled Tasks
+* Trigger-Based Workflows
+* Follow-Up Sequences
+
+Do not mix these modules.
+
+==================================================
+AI INTELLIGENCE
+===============
+
+The AI Intelligence module is responsible for helping users understand their business and make better decisions.
+
+AI Intelligence Features:
+
+1. AI Lead Scoring
+
+* Hot Lead
+* Warm Lead
+* Cold Lead
+
+Analyze:
+
+* Budget
+* Engagement
+* Messages
+* Activity
+* Deal Stage
+
+---
+
+2. AI Lead Summaries
+
+Generate concise lead summaries.
+
+Examples:
+
+* Budget
+* Interests
+* Property Requirements
+* Conversation Summary
+* Recommended Action
+
+---
+
+3. AI Reply Suggestions
+
+Inside WhatsApp conversations:
+
+Generate:
+
+* Suggested Reply 1
+* Suggested Reply 2
+* Suggested Reply 3
+
+Allow:
+
+* Copy
+* Edit
+* Send
+
+---
+
+4. AI Deal Insights
+
+Analyze:
+
+* Conversion Probability
+* Deal Risk
+* Opportunity Strength
+* Follow-Up Priorities
+
+---
+
+5. AI Business Insights
+
+Generate:
+
+* Daily Business Summary
+* Weekly Business Summary
+* Monthly Business Summary
+
+Examples:
+
+* Leads Received
+* Deals Closed
+* Top Agent
+* Top Campaign
+* Conversion Trends
+
+---
+
+6. AI Risk Detection
+
+Identify:
+
+* Uncontacted Leads
+* Cold Leads
+* Stalled Deals
+* Missed Opportunities
+
+---
+
+7. AI Property Matching
+
+Match:
+
+* Lead Requirements
+* Budget
+* Location
+* Plot Size
+
+with available properties.
+
+---
+
+8. AI Analytics
+
+Display:
+
+* AI Usage
+* Cost Tracking
+* Requests Used
+* Token Usage
+* Most Used AI Features
+
+==================================================
+AUTOMATIONS
+===========
+
+Automations are responsible for performing actions automatically.
+
+==================================================
+AUTOMATION FEATURES
+===================
+
+1. Lead Assignment
+
+Trigger:
+
+New Lead Created
+
+Actions:
+
+* Assign Agent
+* Notify Agent
+
+---
+
+2. WhatsApp Welcome Messages
+
+Trigger:
+
+New Facebook Lead
+
+Actions:
+
+* Send Approved WhatsApp Template
+
+---
+
+3. Follow-Up Workflows
+
+Trigger Examples:
+
+* No Response After 24 Hours
+* No Response After 3 Days
+* Site Visit Scheduled
+* Deal Stage Changed
+
+Actions:
+
+* Generate AI Follow-Up
+* Send WhatsApp Message
+* Create Task
+* Notify Agent
+
+---
+
+4. Appointment Reminders
+
+Trigger:
+
+Appointment Upcoming
+
+Actions:
+
+* WhatsApp Reminder
+* Email Reminder
+* CRM Notification
+
+---
+
+5. Lead Nurturing Campaigns
+
+Examples:
+
+* New Lead Sequence
+* Buyer Sequence
+* Seller Sequence
+* Investor Sequence
+
+---
+
+6. Re-Engagement Campaigns
+
+Target:
+
+Inactive Leads
+
+Actions:
+
+* WhatsApp Follow-Up
+* Email Follow-Up
+* Task Creation
+
+---
+
+7. Workflow Builder
+
+Allow users to create workflows using:
+
+Triggers
+
+Conditions
+
+Actions
+
+Examples:
+
+IF Lead Source = Facebook
+
+THEN Send Welcome Message
+
+IF Lead Not Contacted For 24 Hours
+
+THEN Notify Agent
+
+==================================================
+PLAN ACCESS MATRIX
+==================
+
+FREE PLAN
+
+Access:
+
+* No AI
+* No Automations
+
+Display all AI and Automation features as locked.
+
+Show:
+
+"Upgrade to unlock AI and Automation features."
+
+---
+
+STARTER PLAN
+
+Access:
+
+* WhatsApp Integration
+* Facebook Lead Ads
+* Instagram Lead Ads
+* Documents
+* Analytics
+
+No AI Features
+
+No Automations
+
+Display locked upgrade prompts.
+
+---
+
+PROFESSIONAL PLAN
+
+Access:
+
+* AI Lead Summaries
+* AI Reply Suggestions
+* Team Management
+* Lead Assignment
+* Multi-Agent Features
+* Advanced Analytics
+
+No AI Chatbot
+
+No AI Automations
+
+No Workflow Builder
+
+Display locked upgrade prompts for Agency features.
+
+---
+
+AGENCY PLAN
+
+Full Access
+
+Includes:
+
+* AI Lead Scoring
+* AI Lead Summaries
+* AI Reply Suggestions
+* AI Deal Insights
+* AI Business Insights
+* AI Risk Detection
+* AI Property Matching
+* AI Analytics
+* AI Chatbot
+* Workflow Builder
+* AI Automations
+* Follow-Up Automations
+* Lead Nurturing
+* Re-Engagement Campaigns
+* Appointment Automations
+
+==================================================
+UPGRADE STRATEGY
+================
+
+Professional Plan is designed to introduce users to AI.
+
+Professional users should experience:
+
+* AI Summaries
+* AI Reply Suggestions
+
+These features are expected to drive upgrades from Starter.
+
+Agency Plan should contain the most advanced and expensive AI capabilities:
+
+* AI Chatbot
+* AI Automations
+* Workflow Builder
+* Advanced Intelligence
+
+This creates a natural upgrade path:
+
+Free
+→ Starter
+→ Professional
+→ Agency
+
+>>>>>>> 17c38ff (Initial CRM commit)
 # while maximizing conversion rates and controlling AI costs.

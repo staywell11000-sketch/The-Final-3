@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 CRM TOUR GUIDE REDESIGN
 
 IMPORTANT
@@ -279,3 +280,286 @@ Provide:
 7. Testing checklist
 
 The final result should feel comparable to top-tier SaaS products and be suitable for a paid CRM platform.
+=======
+CRM TOUR GUIDE REDESIGN
+
+IMPORTANT
+
+The current CRM tour guide experience is poor and not production quality.
+
+Problems:
+
+* Background overlay is ugly.
+* Highlight positioning is incorrect.
+* Tour popups point to the wrong elements.
+* Highlight boxes do not properly follow the UI.
+* Tour feels like a basic developer tool instead of a polished SaaS onboarding experience.
+* Tour does not feel premium.
+* Tour does not feel modern.
+* Tour does not guide users naturally.
+
+I want a complete redesign.
+
+==================================================
+GOAL
+====
+
+Create a world-class onboarding experience similar to:
+
+* HubSpot
+* Notion
+* Linear
+* Stripe
+* Slack
+* Framer
+* ClickUp
+
+The experience should feel premium, modern, intelligent, and smooth.
+
+==================================================
+VISUAL DESIGN
+=============
+
+Replace the current tour UI.
+
+Requirements:
+
+* Beautiful glassmorphism card
+* Smooth animations
+* Modern shadows
+* Rounded corners
+* Premium typography
+* Responsive design
+* Professional spacing
+
+The tour card should feel like a product worth thousands of dollars.
+
+==================================================
+BACKGROUND OVERLAY
+==================
+
+Current implementation is bad.
+
+Replace with:
+
+* Elegant dark overlay
+* Slight blur effect
+* Focused spotlight effect
+* Smooth fade transitions
+
+The rest of the application should fade into the background while the highlighted area remains perfectly visible.
+
+==================================================
+SMART ELEMENT HIGHLIGHTING
+==========================
+
+Current highlighting is inaccurate.
+
+Implement intelligent element targeting.
+
+Requirements:
+
+* Highlight exactly the selected component
+* Auto-recalculate positions on resize
+* Auto-recalculate positions on sidebar expand/collapse
+* Auto-recalculate positions on mobile
+* Auto-scroll to hidden elements
+* Never point to the wrong area
+
+The highlighted section should always be perfectly aligned.
+
+==================================================
+SPOTLIGHT EFFECT
+================
+
+Create a spotlight effect around the highlighted element.
+
+Requirements:
+
+* Soft glow
+* Smooth border animation
+* Pulse effect
+* Professional appearance
+
+The spotlight should naturally draw the user's attention.
+
+==================================================
+TOUR CARD POSITIONING
+=====================
+
+The explanation card must intelligently position itself.
+
+Rules:
+
+* Never cover the highlighted element
+* Never go off-screen
+* Automatically reposition when needed
+* Work on all screen sizes
+
+==================================================
+ANIMATIONS
+==========
+
+Add premium animations.
+
+Examples:
+
+* Fade In
+* Slide Up
+* Scale In
+* Smooth transitions
+
+Animation timing:
+
+200–350ms
+
+No jarring movements.
+
+==================================================
+WELCOME SCREEN
+==============
+
+Before the tour begins:
+
+Show a beautiful welcome screen.
+
+Example:
+
+"Welcome to LuxEstate CRM"
+
+"Let's take a quick 60-second tour to help you get started."
+
+Buttons:
+
+Start Tour
+Skip Tour
+
+==================================================
+TOUR FLOW
+=========
+
+Suggested order:
+
+1. Dashboard
+2. Leads
+3. Messages
+4. Properties
+5. Deals
+6. Calendar
+7. Analytics
+8. Team
+9. Settings
+
+Keep explanations concise.
+
+Each step should explain:
+
+* What this page does
+* Why it matters
+* What value it provides
+
+==================================================
+PROGRESS INDICATOR
+==================
+
+Show:
+
+Step 1 of 9
+Step 2 of 9
+
+Progress bar
+
+Users should always know how much remains.
+
+==================================================
+TOUR CONTROLS
+=============
+
+Buttons:
+
+Previous
+Next
+Skip
+Finish
+
+Keyboard support:
+
+Arrow Keys
+Escape
+
+==================================================
+FIRST LOGIN EXPERIENCE
+======================
+
+Tour should only appear:
+
+* After onboarding
+* On first login
+
+Store:
+
+tour_completed
+tour_completed_at
+
+Never show again unless manually restarted.
+
+==================================================
+HELP MENU
+=========
+
+Add:
+
+Help
+→ Product Tour
+
+Users can replay the tour anytime.
+
+==================================================
+ACCESSIBILITY
+=============
+
+Support:
+
+* Keyboard navigation
+* Screen readers
+* Reduced motion mode
+* Mobile devices
+* Tablets
+
+==================================================
+PERFORMANCE
+===========
+
+Tour must remain smooth.
+
+Avoid:
+
+* Layout shifts
+* UI flickering
+* Repeated DOM calculations
+* Lag
+
+==================================================
+FINAL REQUIREMENT
+=================
+
+Audit the current implementation.
+
+Replace the existing tour system completely if necessary.
+
+Do not patch the current version.
+
+Build a premium SaaS onboarding experience from scratch.
+
+Provide:
+
+1. Files modified
+2. Components created
+3. Tour architecture
+4. Animation system
+5. Highlighting system
+6. Mobile support details
+7. Testing checklist
+
+The final result should feel comparable to top-tier SaaS products and be suitable for a paid CRM platform.
+>>>>>>> 17c38ff (Initial CRM commit)

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 IMPORTANT
 
 DO NOT build a new Facebook integration.
@@ -178,3 +179,185 @@ After implementation provide:
 Do not rebuild existing Facebook functionality.
 Only upgrade it to support real-time lead delivery.
 ===================================================
+=======
+IMPORTANT
+
+DO NOT build a new Facebook integration.
+
+The CRM already contains:
+
+* Connected Accounts
+* Facebook account connection flow
+* Meta access token storage
+* Meta Lead Ads polling sync
+* runMetaLeadSync()
+* syncMetaLeadsForAccount()
+* mapMetaLeadToRow()
+* Existing lead insertion logic
+
+Reuse all existing functionality.
+
+==================================================
+OBJECTIVE
+=========
+
+Upgrade the existing Facebook Lead Ads integration.
+
+Current:
+
+Lead Form
+→ Polling Every 15 Minutes
+→ Lead Appears
+
+New:
+
+Lead Form
+→ Facebook Webhook
+→ Lead Appears Instantly
+
+Keep polling as a backup.
+
+==================================================
+NEW ROUTES
+==========
+
+Create:
+
+GET /api/facebook/webhook
+
+POST /api/facebook/webhook
+
+==================================================
+WEBHOOK VERIFICATION
+====================
+
+Use:
+
+FACEBOOK_WEBHOOK_VERIFY_TOKEN
+
+Return:
+
+hub.challenge
+
+when verification succeeds.
+
+==================================================
+LEADGEN EVENTS
+==============
+
+Process only:
+
+field = leadgen
+
+Ignore all other webhook events.
+
+==================================================
+REUSE EXISTING FACEBOOK CONNECTIONS
+===================================
+
+DO NOT create:
+
+* New Facebook OAuth flows
+* New Facebook connection tables
+* New token storage
+
+Use the existing:
+
+connected_accounts
+
+records.
+
+==================================================
+REUSE EXISTING LEAD LOGIC
+=========================
+
+Do not duplicate:
+
+mapMetaLeadToRow()
+
+Do not duplicate:
+
+lead insertion logic
+
+Do not duplicate:
+
+organization mapping logic
+
+Instead:
+
+Fetch lead details
+↓
+Pass into existing mapping
+↓
+Pass into existing creation flow
+
+==================================================
+REAL-TIME IMPORT
+================
+
+When a leadgen webhook arrives:
+
+1. Extract leadgen_id
+2. Fetch lead details from Graph API
+3. Reuse existing mapping logic
+4. Reuse existing insert logic
+5. Create lead immediately
+
+Target:
+
+Lead visible within 10 seconds.
+
+==================================================
+WHATSAPP AUTOMATION
+===================
+
+After lead creation:
+
+If enabled:
+
+Send existing WhatsApp welcome template.
+
+Reuse existing WhatsApp services.
+
+==================================================
+NOTIFICATIONS
+=============
+
+After lead creation:
+
+Trigger existing lead assignment.
+
+Trigger existing notifications.
+
+==================================================
+BACKUP SYSTEM
+=============
+
+Keep:
+
+runMetaLeadSync()
+
+Keep:
+
+startMetaLeadSyncJob()
+
+Webhook = Primary
+
+Polling = Backup
+
+==================================================
+DOCUMENTATION
+=============
+
+After implementation provide:
+
+1. New routes
+2. New services
+3. Required environment variables
+4. Meta webhook setup instructions
+5. Testing instructions
+
+Do not rebuild existing Facebook functionality.
+Only upgrade it to support real-time lead delivery.
+===================================================
+>>>>>>> 17c38ff (Initial CRM commit)

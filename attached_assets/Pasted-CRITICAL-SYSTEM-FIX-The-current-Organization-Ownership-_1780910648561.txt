@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 CRITICAL SYSTEM FIX
 
 The current Organization, Ownership, Employee, Team Management, Permission, and Account Access implementation is behaving incorrectly.
@@ -262,3 +263,269 @@ Provide:
 Do not stop after identifying issues.
 
 Fully repair the implementation and leave the system in a stable production-ready state.
+=======
+CRITICAL SYSTEM FIX
+
+The current Organization, Ownership, Employee, Team Management, Permission, and Account Access implementation is behaving incorrectly.
+
+I have experienced cases where logging into an account results in only a few pages being visible and messages such as:
+
+"Admin has not granted you access."
+
+This should never happen incorrectly.
+
+I want a COMPLETE audit and repair of the entire account hierarchy, organization ownership system, permissions system, onboarding system, team management system, navigation visibility system, and role assignment system.
+
+==================================================
+EXPECTED FINAL BEHAVIOR
+=======================
+
+This CRM must function exactly like a professional SaaS CRM.
+
+Examples:
+
+• HubSpot
+• Salesforce
+• Zoho CRM
+• GoHighLevel
+
+==================================================
+ACCOUNT TYPES
+=============
+
+There are ONLY three valid account types:
+
+1. Super Admin
+2. Organization Owner
+3. Employee
+
+==================================================
+SUPER ADMIN
+===========
+
+Super Admin:
+
+• Can access SaaS controls
+• Can access billing controls
+• Can access organizations
+• Can access subscriptions
+• Can access plans
+• Can access platform analytics
+
+Super Admin bypasses restrictions.
+
+==================================================
+ORGANIZATION OWNER
+==================
+
+Organization Owner is the customer who owns the CRM.
+
+Owner must always have:
+
+• Full CRM access
+• Full organization access
+• Team management access
+• Billing access
+• Subscription access
+• Settings access
+• WhatsApp access
+• Facebook access
+• Lead access
+• Deal access
+• Property access
+• Analytics access
+
+subject only to plan restrictions.
+
+Owner must NEVER require permission assignments from another user.
+
+Owner must NEVER see:
+
+"Admin has not granted you access."
+
+==================================================
+EMPLOYEES
+=========
+
+Employees exist ONLY inside an organization.
+
+Employees are created ONLY by Organization Owners.
+
+Employees may have limited permissions.
+
+Only Employees should ever see:
+
+"Admin has not granted you access."
+
+==================================================
+PUBLIC ACCOUNTS
+===============
+
+Audit every user account.
+
+Determine:
+
+• organization_id
+• role
+• is_owner
+• permissions
+
+Find all inconsistencies.
+
+==================================================
+AUTOMATIC REPAIR
+================
+
+Identify accounts that were incorrectly converted into employees.
+
+Identify accounts that should actually be Organization Owners.
+
+Repair ownership relationships automatically.
+
+Do not lose any data.
+
+Do not create duplicate organizations.
+
+==================================================
+ORGANIZATION VALIDATION
+=======================
+
+Every non-super-admin user must belong to exactly one organization.
+
+Repair missing organization links.
+
+Repair invalid organization links.
+
+==================================================
+ROLE VALIDATION
+===============
+
+Validate:
+
+• super_admin
+• owner
+• employee
+
+Remove invalid legacy roles.
+
+Create migration if necessary.
+
+==================================================
+PERMISSION VALIDATION
+=====================
+
+Audit permission system.
+
+Verify:
+
+Navigation visibility
+Page access
+API access
+Role access
+
+Repair any mismatches.
+
+==================================================
+NAVIGATION REPAIR
+=================
+
+Organization Owners should automatically see all CRM sections permitted by their plan.
+
+Do not require manual permission assignment.
+
+Only Employees should have restricted menus.
+
+==================================================
+PLAN VALIDATION
+===============
+
+Verify that plan restrictions are not being confused with permission restrictions.
+
+If a feature is unavailable because of the plan:
+
+Show:
+
+"Upgrade your plan to access this feature."
+
+If a feature is unavailable because of permissions:
+
+Show:
+
+"Your administrator has not granted access."
+
+These messages must never be mixed.
+
+==================================================
+TEAM MANAGEMENT VALIDATION
+==========================
+
+Verify:
+
+Owner
+→ creates employees
+
+Employees must never own organizations.
+
+Employees must never manage subscriptions.
+
+Employees must never become organization owners accidentally.
+
+==================================================
+ONBOARDING VALIDATION
+=====================
+
+Verify onboarding logic.
+
+Ensure:
+
+Organization Owners receive full CRM access.
+
+Employees receive assigned permissions only.
+
+==================================================
+DATABASE AUDIT
+==============
+
+Audit:
+
+users
+organizations
+roles
+permissions
+role_permissions
+team_members
+subscriptions
+
+Repair inconsistencies.
+
+==================================================
+SECURITY VALIDATION
+===================
+
+Verify:
+
+Cross-organization access protection
+
+while ensuring legitimate owners are not accidentally blocked from their own CRM.
+
+==================================================
+FINAL DELIVERABLE
+=================
+
+Provide:
+
+1. Root causes found
+2. Files modified
+3. Database changes
+4. Migrations executed
+5. Users repaired
+6. Organizations repaired
+7. Permission issues fixed
+8. Navigation issues fixed
+9. Confirmation that Owners always receive full access
+10. Confirmation that Employees only receive assigned access
+
+Do not stop after identifying issues.
+
+Fully repair the implementation and leave the system in a stable production-ready state.
+>>>>>>> 17c38ff (Initial CRM commit)

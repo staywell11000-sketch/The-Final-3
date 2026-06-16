@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 CRITICAL SAAS ARCHITECTURE BUG
 
 STOP adding new features.
@@ -339,3 +340,346 @@ Provide:
 Do not provide assumptions.
 
 Audit and repair the actual implementation.
+=======
+CRITICAL SAAS ARCHITECTURE BUG
+
+STOP adding new features.
+
+Do not continue implementing plans, AI, billing, or team management until this issue is resolved.
+
+The current implementation is fundamentally incorrect.
+
+Current behavior:
+
+When a new account is created or a user accesses the CRM for the first time, the system treats the account as an Employee.
+
+This is incorrect.
+
+The default behavior must be:
+
+New Account
+↓
+Create Organization
+↓
+Create Organization Owner
+↓
+Assign Selected Plan
+↓
+Grant Access Based on Plan
+↓
+Launch Onboarding
+
+NOT
+
+New Account
+↓
+Employee
+
+Super Admin
+
+↓
+
+Organization Owner
+
+↓
+
+Employees
+
+Organization Owners create Employees.
+
+Employees do NOT create Organizations.
+
+Employees should only exist through invitations.
+
+Audit:
+
+* Authentication
+* Registration
+* Login
+* User creation
+* Organization creation
+* Team management
+* Role assignment
+* Permission assignment
+* Navigation visibility
+* Plan assignment logic
+* Feature access logic
+
+Find the exact code path that is assigning employee permissions.
+
+Fix it.
+
+Organization Owner must automatically receive ownership privileges.
+
+However, feature access must be determined by the selected subscription plan.
+
+Owners must NEVER receive:
+
+"Admin has not granted you access."
+
+Owners should always have administrative control over their organization, team, billing, and settings, while CRM feature availability is controlled by the active plan.
+
+After registration, the user must select a plan.
+
+The selected plan determines which modules and features are available.
+
+Access:
+
+* Dashboard
+* Basic Leads
+* Basic Contacts
+
+Restricted:
+
+* WhatsApp
+* AI Features
+* Properties
+* Deals
+* Analytics
+* Documents
+* Team Management
+* Advanced Automations
+* Advanced Reports
+
+Display upgrade prompts for locked features.
+
+Access:
+
+* Dashboard
+* Leads
+* Contacts
+* Properties
+* Calendar
+* Basic Reports
+* Documents
+
+Restricted:
+
+* AI Chatbot
+* Advanced Analytics
+* Team Management
+* Advanced Automations
+
+Access:
+
+* Dashboard
+* Leads
+* Contacts
+* Properties
+* Deals
+* Calendar
+* Documents
+* Team Management
+* WhatsApp Integration
+* AI Chatbot
+* Advanced Reports
+
+Restricted:
+
+* AI Intelligence Suite
+* Advanced Automation Engine
+
+Access:
+
+* All CRM Modules
+* Leads
+* Contacts
+* Properties
+* Deals
+* Dealers
+* Documents
+* Calendar
+* Team Management
+* WhatsApp
+* Analytics
+* AI Features
+* AI Intelligence Suite
+* AI Automation
+* Advanced Reporting
+* Agency Tools
+
+No feature restrictions.
+
+Every module must validate:
+
+1. User Role
+2. Organization Plan
+3. Feature Permission
+
+Example:
+
+Owner + Starter Plan
+
+Can access:
+
+* Leads
+* Properties
+* Calendar
+
+Cannot access:
+
+* AI Chatbot
+* Agency Features
+
+Example:
+
+Owner + Agency Plan
+
+Can access everything.
+
+Example:
+
+Employee + Agency Plan
+
+Can only access modules granted by Owner permissions.
+
+Employees can only be created through:
+
+Team
+→ Add Employee
+
+or
+
+Invite Employee
+
+Only employees should receive restricted permissions.
+
+Employee permissions must always inherit from:
+
+1. Organization Plan
+2. Owner-Assigned Permissions
+
+Employees can never access features unavailable in the organization's plan.
+
+Current behavior:
+
+Users are not being shown onboarding questions.
+
+The onboarding process appears to be skipped entirely.
+
+When a user enters the CRM for the FIRST TIME ONLY:
+
+Show onboarding wizard.
+
+Questions:
+
+1. What type of business are you?
+
+   * Real Estate Agency
+   * Property Dealer
+   * Developer
+   * Builder
+   * Other
+
+2. Company Name
+
+3. Team Size
+
+   * Just Me
+   * 2–5
+   * 6–20
+   * 21+
+
+4. Primary Goal
+
+   * Manage Leads
+   * WhatsApp Sales
+   * Property Management
+   * Team Management
+   * Full CRM
+
+5. How did you hear about us?
+
+6. Do you want a quick CRM tour?
+
+   * Yes
+   * No
+
+7. Which plan would you like to start with?
+
+   * Free
+   * Starter
+   * Professional
+   * Agency
+
+Store:
+
+onboarding_completed
+
+onboarding_completed_at
+
+organization profile information
+
+selected_plan
+
+selected_plan_at
+
+Show onboarding ONLY once.
+
+After completion:
+
+Never show again.
+
+If user selects:
+
+Yes
+
+Launch guided walkthrough.
+
+Highlight:
+
+Dashboard
+Leads
+Messages
+Properties
+Analytics
+Settings
+
+Keep tour short.
+
+Allow:
+
+Skip Tour
+
+Mark completed.
+
+Never show again.
+
+Audit all existing users.
+
+Identify:
+
+* Owners incorrectly marked as employees
+* Missing organizations
+* Missing permissions
+* Missing onboarding status
+* Missing plan assignments
+* Incorrect feature access
+
+Repair automatically.
+
+Do not lose data.
+
+Do not create duplicate organizations.
+
+Provide:
+
+1. Root cause of employee assignment bug
+2. Root cause of onboarding failure
+3. Root cause of incorrect plan access assignment
+4. Files modified
+5. Database changes
+6. Migration plan
+7. Confirmation that new users become Organization Owners
+8. Confirmation that Employees only come from invitations
+9. Confirmation that onboarding appears only on first login
+10. Confirmation that onboarding data is stored correctly
+11. Confirmation that selected plans are stored correctly
+12. Confirmation that feature access is controlled by plan
+13. Confirmation that employee permissions respect plan restrictions
+14. Confirmation that the CRM tour works correctly
+
+Do not provide assumptions.
+
+Audit and repair the actual implementation.
+>>>>>>> 17c38ff (Initial CRM commit)

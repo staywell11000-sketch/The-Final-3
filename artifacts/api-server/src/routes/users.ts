@@ -29,9 +29,15 @@ router.get("/users/me", requireAuth, async (req: any, res) => {
     if (!user) {
       return void res.status(404).json({ error: "User not found" });
     }
+<<<<<<< HEAD
     res.json(user);
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch user" });
+=======
+    return res.json(user);
+  } catch (err) {
+    return res.status(500).json({ error: "Failed to fetch user" });
+>>>>>>> 17c38ff (Initial CRM commit)
   }
 });
 
@@ -73,9 +79,15 @@ router.put("/users/me", requireAuth, async (req: any, res) => {
         onboarded: onboarded ?? false,
       })
       .returning();
+<<<<<<< HEAD
     res.status(201).json(created);
   } catch (err) {
     res.status(500).json({ error: "Failed to save user" });
+=======
+    return res.status(201).json(created);
+  } catch (err) {
+    return res.status(500).json({ error: "Failed to save user" });
+>>>>>>> 17c38ff (Initial CRM commit)
   }
 });
 

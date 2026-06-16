@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Good, I now have a thorough understanding of the codebase. Let me map out exactly what each task requires before building.
 
 Here's the full plan across all 10 items:
@@ -33,4 +34,41 @@ Execution order:
 
 Backend changes (storage upload route, document preview proxy, AI chat route, appointments migration) — in parallel
 Frontend changes (all UI fixes, new features) — in parallel after backend is ready
+=======
+Good, I now have a thorough understanding of the codebase. Let me map out exactly what each task requires before building.
+
+Here's the full plan across all 10 items:
+
+1 — Lead source integration
+Every source (Facebook, Instagram, TikTok, WhatsApp, Google Ads, LinkedIn, Referral, Email, Cold Call, Website, Manual) will get proper display labels, colour-coded badges, platform icons, and full filtering in the leads table. Google Ads and LinkedIn will be added as proper integration cards in the Integrations page (same style as Meta, clearly marked as connectable). The add-lead modal and import modal will list all sources.
+
+2 — Property cover image upload
+The property form calls /api/storage/uploads/request-url which doesn't exist in the api-server yet — that's why it silently fails. I'll add that route (mirroring the documents upload flow) so image uploads work end-to-end.
+
+3 — Real agents from Supabase, remove mock team
+The team_members DB table and API already exist and are real. The problem is that hardcoded mock agent arrays are used in agent-selection dropdowns throughout the CRM (property form, lead form, import modal, etc.) instead of calling GET /api/team-members. I'll replace every hardcoded agent list with a live useTeamMembers() hook call, and remove any mock team data.
+
+4 — Property ownership Next button
+The footer exists in code but is being clipped — the same overflow bug that affected it before the previous fix. I'll audit and ensure the ownership tab's scroll container has the right flex constraints so the footer is always visible.
+
+5 — AI chatbox in AI Intelligence
+A new "Chat" tab will appear on the AI Intelligence page. The backend gets a new /api/ai/chat route that receives conversation history, pulls the user's current leads/deals/team data from the DB, and calls GPT-4o-mini in streaming mode. The frontend renders a full chat UI with message bubbles, a text input, and real-time streaming output.
+
+6 — Document preview (Chrome blocks)
+Instead of putting a third-party signed URL directly into an <iframe> (blocked by Supabase's X-Frame-Options), I'll add a /api/documents/:id/preview proxy route on the API server that fetches the file and streams it back with Content-Disposition: inline headers. The frontend will use this proxy URL in the iframe instead.
+
+7 — Appointment "All Day" + notifications
+I'll add an allDay boolean column to the appointments table (with a migration), add "All Day" as a duration option (hides the time picker), and update the calendar display. For notifications: a global hook in the dashboard layout polls appointments every minute and fires a toast when an appointment starts now (within a ±2 min window); for All Day appointments it fires once on first page load of the day.
+
+8 — Required onboarding fields
+Business name, phone number, office address, team size, and position will be marked as required in the canProceed guard — the Continue button stays disabled and a helper text appears until they're filled.
+
+9 & 10 — Notification settings buttons + onboarding button fixes
+I'll fix the broken/unresponsive toggle buttons in notification settings (state sync issue between master toggle and sub-toggles) and any broken Continue/Next buttons in onboarding steps.
+
+Execution order:
+
+Backend changes (storage upload route, document preview proxy, AI chat route, appointments migration) — in parallel
+Frontend changes (all UI fixes, new features) — in parallel after backend is ready
+>>>>>>> 17c38ff (Initial CRM commit)
 Final wiring + test

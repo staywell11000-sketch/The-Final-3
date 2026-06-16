@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ==================================================
 FACEBOOK LEAD ADS REAL-TIME WEBHOOK INTEGRATION
 ===============================================
@@ -376,3 +377,383 @@ After implementation provide:
 Do not leave placeholders.
 
 # Implement using the existing project architecture and existing Meta Lead Ads integration.
+=======
+==================================================
+FACEBOOK LEAD ADS REAL-TIME WEBHOOK INTEGRATION
+===============================================
+
+IMPORTANT
+
+This project already contains:
+
+* Meta Lead Ads integration
+* Meta Lead Sync service
+* Existing lead mapping logic
+* Existing lead insertion logic
+* Existing connected_accounts architecture
+* Existing multi-tenant SaaS architecture
+
+DO NOT REBUILD THESE FEATURES.
+
+Reuse existing code wherever possible.
+
+Specifically reuse:
+
+* mapMetaLeadToRow()
+* syncMetaLeadsForAccount()
+* existing lead insertion logic
+* existing organization mapping logic
+
+==================================================
+OBJECTIVE
+=========
+
+Replace the current polling-based lead import system with real-time Facebook Lead Ads webhooks.
+
+Current system:
+
+Facebook Lead Ads
+→ 15 Minute Polling
+→ CRM Lead Creation
+
+New system:
+
+Facebook Lead Form
+→ Facebook Webhook
+→ CRM Receives Event
+→ CRM Fetches Lead Details
+→ CRM Creates Lead
+→ Lead Appears In CRM Within Seconds
+
+Target:
+
+Lead should appear within 10 seconds of form submission.
+
+Keep the existing polling system as a fallback.
+
+==================================================
+ENVIRONMENT VARIABLES
+=====================
+
+Add support for:
+
+FACEBOOK_WEBHOOK_VERIFY_TOKEN=
+META_APP_ID=
+META_APP_SECRET=
+
+Validate these on startup.
+
+Log warnings if missing.
+
+==================================================
+NEW ROUTES
+==========
+
+Create:
+
+GET /api/facebook/webhook
+
+POST /api/facebook/webhook
+
+Register routes using existing architecture.
+
+==================================================
+WEBHOOK VERIFICATION
+====================
+
+GET /api/facebook/webhook
+
+Handle Meta verification requests.
+
+Meta will send:
+
+hub.mode
+hub.verify_token
+hub.challenge
+
+Logic:
+
+If verify token matches:
+
+FACEBOOK_WEBHOOK_VERIFY_TOKEN
+
+Return:
+
+hub.challenge
+
+Otherwise:
+
+403 Forbidden
+
+==================================================
+WEBHOOK EVENT HANDLER
+=====================
+
+POST /api/facebook/webhook
+
+Accept webhook payloads.
+
+Handle:
+
+object = "page"
+
+Process:
+
+entry[]
+changes[]
+
+Only process:
+
+field = "leadgen"
+
+Ignore unrelated events.
+
+==================================================
+LEAD EVENT PROCESSING
+=====================
+
+When a leadgen event is received:
+
+Extract:
+
+leadgen_id
+page_id
+
+Create dedicated service:
+
+processLeadGenWebhook()
+
+==================================================
+ORGANIZATION MAPPING
+====================
+
+Determine which organization owns the lead.
+
+Use existing connected_accounts architecture.
+
+Support:
+
+organization_id
+page_id
+ad_account_id
+
+Lead must always be associated with the correct organization.
+
+Prevent cross-organization access.
+
+==================================================
+LEAD RETRIEVAL SERVICE
+======================
+
+Create service:
+
+fetchMetaLeadDetails()
+
+Input:
+
+leadgen_id
+
+Call Meta Graph API:
+
+GET /{leadgen_id}
+
+Request:
+
+id
+created_time
+field_data
+campaign_name
+adset_name
+ad_name
+ad_id
+
+Use stored account access token.
+
+==================================================
+LEAD CREATION
+=============
+
+DO NOT create new lead mapping logic.
+
+Reuse:
+
+mapMetaLeadToRow()
+
+DO NOT create new insertion logic.
+
+Reuse:
+
+existing lead creation flow.
+
+Ensure:
+
+* externalId stored
+* campaign stored
+* ad set stored
+* ad stored
+* organization stored
+
+==================================================
+DUPLICATE PROTECTION
+====================
+
+Prevent duplicate lead creation.
+
+Before inserting:
+
+Check:
+
+externalId
+
+If lead already exists:
+
+Skip creation.
+
+==================================================
+WHATSAPP INTEGRATION
+====================
+
+After successful lead creation:
+
+Check organization settings.
+
+If:
+
+auto_whatsapp_welcome_enabled = true
+
+Send existing approved WhatsApp template.
+
+Default:
+
+Assalam-o-Alaikum.
+
+Thank you for your interest.
+
+One of our consultants will contact you shortly.
+
+Reuse existing WhatsApp infrastructure.
+
+Do not duplicate WhatsApp code.
+
+==================================================
+LEAD ASSIGNMENT
+===============
+
+After lead creation:
+
+Trigger existing lead assignment workflow.
+
+Support:
+
+* Round Robin
+* Least Busy Agent
+* Team Queue
+* Manual Assignment
+
+Store:
+
+assigned_user_id
+assigned_at
+
+==================================================
+AGENT NOTIFICATIONS
+===================
+
+Immediately notify assigned agent.
+
+Channels:
+
+* In-App
+* Email
+* WhatsApp
+
+Notification should include:
+
+Lead Name
+Phone
+Campaign
+Lead Source
+
+==================================================
+AUDIT LOGGING
+=============
+
+Create audit logs for:
+
+Webhook Received
+Lead Retrieved
+Lead Created
+Lead Assigned
+WhatsApp Welcome Sent
+
+==================================================
+ERROR HANDLING
+==============
+
+Handle:
+
+Invalid Payload
+Missing Lead ID
+Missing Page ID
+Missing Organization
+Graph API Errors
+Token Expiration
+Database Errors
+
+Never crash the server.
+
+Log all failures.
+
+==================================================
+POLLING FALLBACK
+================
+
+DO NOT REMOVE:
+
+runMetaLeadSync()
+
+DO NOT REMOVE:
+
+startMetaLeadSyncJob()
+
+Maintain:
+
+Webhook = Primary
+Polling = Backup
+
+If webhook fails:
+
+Polling should still recover missed leads.
+
+==================================================
+TESTING
+=======
+
+Create tests for:
+
+Webhook Verification
+Leadgen Event Processing
+Lead Retrieval
+Lead Creation
+Duplicate Prevention
+Organization Mapping
+WhatsApp Trigger
+Notification Trigger
+
+==================================================
+DOCUMENTATION
+=============
+
+After implementation provide:
+
+1. New Routes
+2. New Services
+3. Environment Variables
+4. Facebook Dashboard Configuration Steps
+5. Deployment Steps
+6. Testing Instructions
+
+Do not leave placeholders.
+
+# Implement using the existing project architecture and existing Meta Lead Ads integration.
+>>>>>>> 17c38ff (Initial CRM commit)

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Create onboarding flow for first login only.
 
 Show once per user.
@@ -124,4 +125,132 @@ Automatically sync notification preferences with the Settings → Notifications 
 
 Automatically sync appearance preferences with the Settings → Appearance section.
 
+=======
+Create onboarding flow for first login only.
+
+Show once per user.
+
+Questions:
+
+What is your company name?
+
+What is your business logo?
+
+Allow logo upload.
+
+What is your business type?
+
+Real Estate Agency
+Property Dealer
+Builder/Developer
+Broker
+Other
+
+How many agents do you have?
+
+What is your primary lead source?
+
+Facebook Ads
+Instagram Ads
+WhatsApp
+Referrals
+Property Portals
+Other
+
+What is your role?
+
+Owner
+Manager
+Agent
+
+Upload your profile photo.
+
+What is your full name?
+
+What is your position in the company?
+
+Owner
+CEO
+Director
+Manager
+Sales Agent
+Marketing Manager
+Other
+
+What are you mainly using the CRM for?
+
+Lead Management
+Sales Pipeline
+WhatsApp Management
+Agency Management
+All of the Above
+
+Appearance Preferences
+
+Choose your preferred CRM appearance:
+
+Light
+Dark
+Midnight
+Corporate Blue
+Emerald
+Gold
+Modern Gray
+
+Notification Preferences
+
+Configure your notifications during onboarding.
+
+Allow users to choose:
+
+Dashboard Notifications
+Email Notifications
+WhatsApp Notifications
+
+Notification Frequency:
+
+Instant
+Daily Summary
+Every 3 Days
+Weekly
+Bi-Weekly
+Monthly
+
+Notification Categories:
+
+New Leads
+Lead Activity
+Deal Updates
+Missed Follow-Ups
+Pipeline Changes
+AI Recommendations
+System Updates
+
+Business Information
+
+Business Name
+Business Logo
+Business Phone Number
+Business Email
+Business Address
+Website (Optional)
+
+User Information
+
+Full Name
+Profile Photo
+Position
+Phone Number
+
+Display uploaded user profile photo, user name, and position throughout the CRM where applicable.
+
+Display business logo and business name throughout the CRM where applicable.
+
+Store all onboarding responses.
+
+Automatically sync notification preferences with the Settings → Notifications section.
+
+Automatically sync appearance preferences with the Settings → Appearance section.
+
+>>>>>>> 17c38ff (Initial CRM commit)
 Never show onboarding again once completed unless manually restarted by the organization admin or super admin.

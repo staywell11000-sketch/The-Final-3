@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ==================================================
 SUPER ADMIN SAAS OPERATIONS DASHBOARD
 ==================================================
@@ -190,4 +191,198 @@ Migrate existing users safely into the new organization-based structure.
 
 Create migration scripts where required.
 
+=======
+==================================================
+SUPER ADMIN SAAS OPERATIONS DASHBOARD
+==================================================
+
+Create a dedicated SaaS Administration Dashboard completely separate from the CRM.
+
+Only users with:
+
+role = super_admin
+
+may access it.
+
+This dashboard must not be visible to normal CRM users.
+
+==================================================
+SUPER ADMIN OVERVIEW
+==================================================
+
+Create dashboard metrics:
+
+- Total Organizations
+- Active Organizations
+- Trial Organizations
+- Expired Organizations
+- Suspended Organizations
+- Total Users
+- Monthly Revenue
+- Annual Revenue
+- Pending Payments
+- Approved Payments
+- Rejected Payments
+- Active WhatsApp Integrations
+- Active Facebook Integrations
+- Total Leads Imported
+
+==================================================
+ORGANIZATIONS MODULE
+==================================================
+
+Admin can:
+
+- View all organizations
+- Search organizations
+- Filter organizations
+- View subscription details
+- View usage statistics
+- View connected WhatsApp accounts
+- View connected Facebook accounts
+- View team members
+- View organization activity
+
+Actions:
+
+- Activate organization
+- Suspend organization
+- Extend subscription
+- Change plan
+- Mark organization internal
+- Delete organization (soft delete only)
+
+==================================================
+PAYMENTS MODULE
+==================================================
+
+Show:
+
+- Organization Name
+- Plan
+- Amount
+- Screenshot
+- Notes
+- Submitted Date
+- Status
+
+Actions:
+
+- Approve
+- Reject
+- View Audit History
+
+==================================================
+SUBSCRIPTIONS MODULE
+==================================================
+
+Admin can:
+
+- View all subscriptions
+- Filter by status
+- Extend subscriptions
+- Expire subscriptions
+- Upgrade plans
+- Downgrade plans
+- Grant complimentary months
+
+==================================================
+PLANS MODULE
+==================================================
+
+Plans must be editable.
+
+Admin can:
+
+- Create plan
+- Edit plan
+- Disable plan
+- Change pricing
+- Change feature access
+- Change limits
+
+Changes should affect future renewals while preserving historical billing records.
+
+==================================================
+USERS MODULE
+==================================================
+
+Admin can:
+
+- View all users
+- Search users
+- View organization membership
+- Suspend users
+- Reactivate users
+- Reset passwords
+- Transfer organization ownership
+
+==================================================
+AUDIT LOGS MODULE
+==================================================
+
+Create a complete audit log viewer.
+
+Track:
+
+- Subscription changes
+- Plan changes
+- Payment approvals
+- Payment rejections
+- Organization modifications
+- User management actions
+- WhatsApp integration changes
+- Facebook integration changes
+- Super Admin actions
+
+==================================================
+SUPER ADMIN IMPERSONATION
+==================================================
+
+Allow Super Admin to impersonate an organization owner.
+
+Purpose:
+
+- Support
+- Troubleshooting
+- Training
+
+Requirements:
+
+- Log every impersonation
+- Store start/end timestamps
+- Store acting admin
+- Store target organization
+
+==================================================
+SUPER ADMIN EXEMPTION
+==================================================
+
+The permanent Super Admin account must:
+
+- Never require payment
+- Never require subscription renewal
+- Never lose access
+- Never hit usage limits
+- Never be suspended
+- Never be blocked by feature gating
+
+All SaaS restrictions must be bypassed for the Super Admin account.
+
+==================================================
+IMPLEMENTATION SAFETY
+==================================================
+
+Do not break:
+
+- Existing WhatsApp Cloud API functionality
+- Existing Meta Lead Ads functionality
+- Existing CRM features
+- Existing authentication
+
+Migrate existing users safely into the new organization-based structure.
+
+Create migration scripts where required.
+
+>>>>>>> 17c38ff (Initial CRM commit)
 Preserve all existing CRM data.

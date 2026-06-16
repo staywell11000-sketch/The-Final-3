@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 You are working on an existing real-estate CRM application built with:
 
 • Vite frontend (luxestate)
@@ -756,4 +757,764 @@ Complete implementation using the existing project architecture.
 
 Do not leave placeholders.
 
+=======
+You are working on an existing real-estate CRM application built with:
+
+• Vite frontend (luxestate)
+• Express/TypeScript API server
+• Supabase
+• Meta WhatsApp Cloud API integration
+• Facebook/Instagram Lead Ads integration
+
+Your task is to extend the existing CRM into a production-ready multi-tenant SaaS CRM with subscription management, payment approval workflows, organization management, admin controls, AI usage controls, CRM calling, add-on purchases, feature locking, and usage-based billing.
+
+IMPORTANT:
+
+• Do not break any existing functionality.
+• Preserve all existing WhatsApp integrations.
+• Preserve all existing Meta lead syncing functionality.
+• Preserve all existing user authentication.
+• Use the existing codebase architecture and naming conventions.
+• Add database migrations and types as needed.
+• Ask me which email address/account should become the permanent Super Admin account before implementing access restrictions.
+• Ask me to confirm Twilio/Vonage provider selection before implementing CRM calling.
+• Ask me to confirm payment account details before implementing billing instructions.
+
+==================================================
+MULTI-TENANT SAAS ARCHITECTURE
+==================================================
+
+Convert the CRM into a true multi-tenant SaaS.
+
+Create an organizations system.
+
+Each organization should have:
+
+• id
+• name
+• owner_id
+• plan
+• subscription_status
+• subscription_end_date
+• trial_end_date
+• is_internal
+• created_at
+• updated_at
+
+Every CRM record must belong to an organization.
+
+This includes:
+
+• leads
+• contacts
+• conversations
+• WhatsApp accounts
+• connected accounts
+• appointments
+• activities
+• deals
+• documents
+• analytics
+• notifications
+• AI usage
+• call records
+
+Users must only see data belonging to their organization.
+
+==================================================
+SUPER ADMIN ACCOUNT
+==================================================
+
+Before implementation ask:
+
+"Which email address should become the permanent Super Admin account?"
+
+That account must:
+
+• Never require subscription
+• Never lose access
+• Bypass all plan restrictions
+• Bypass all AI limits
+• Bypass all calling limits
+• Access all organizations
+• Access all payments
+• Access all billing
+• Access all system settings
+• Access SaaS analytics
+
+Store:
+
+role = super_admin
+
+Organization:
+
+is_internal = true
+
+Internal organizations bypass all restrictions.
+
+==================================================
+FREE TRIAL SYSTEM
+==================================================
+
+New organizations receive:
+
+• 14-day free trial
+
+Store:
+
+trial_end_date
+
+After trial expiry:
+
+subscription_status = expired
+
+Restrict CRM access.
+
+Allow access only to:
+
+• Billing
+• Payment Submission
+• Subscription Information
+• Support
+
+Display:
+
+"Your subscription has expired. Please renew to continue using the CRM."
+
+==================================================
+PLANS TABLE
+==================================================
+
+Create a plans table.
+
+Admin can edit plans later.
+
+==================================================
+FINAL PLAN STRUCTURE
+==================================================
+
+FREE PLAN
+
+Price:
+
+Rs. 0/month
+
+Limits:
+
+• 1 User
+• 100 Leads/month
+• 1 WhatsApp Number
+• 1 Facebook Page
+• 500 MB Storage
+• 50 AI Actions/month
+• No CRM Calling
+
+Included Features:
+
+• Lead Management
+• Properties
+• Dealers
+• Messages
+• Calendar
+• Basic Documents
+• Basic Settings
+
+Locked Features:
+
+• Analytics
+• Advanced Analytics
+• AI Intelligence
+• AI Lead Summaries
+• AI Reply Suggestions
+• AI Chatbot
+• AI Forecasting
+• AI Workflow Builder
+• Automations
+• Team Management
+• Deals Pipeline
+• CRM Calling
+• Advanced Documents
+• Facebook/Instagram Advanced Sync
+
+Show:
+
+🔒 Upgrade to Starter or higher to unlock this feature.
+
+==================================================
+
+STARTER PLAN
+
+Price:
+
+Rs. 9,999/month
+
+Limits:
+
+• 1 User
+• 500 Leads/month
+• 1 WhatsApp Number
+• 1 Facebook Page
+• 2 GB Storage
+• 300 AI Actions/month
+
+Included:
+
+• Everything in Free
+• Facebook Lead Ads
+• Instagram Lead Ads
+• WhatsApp Inbox
+• Basic Analytics
+• Calendar
+• Lead Source Tracking
+• Documents
+
+Locked:
+
+• Team Management
+• Deals Pipeline
+• Advanced Analytics
+• AI Intelligence
+• AI Chatbot
+• AI Workflow Builder
+• CRM Calling
+
+Show:
+
+🔒 Upgrade to Professional to unlock this feature.
+
+==================================================
+
+PROFESSIONAL PLAN
+
+Price:
+
+Rs. 19,999/month
+
+Limits:
+
+• 5 Users
+• 5,000 Leads/month
+• 3 WhatsApp Numbers
+• 3 Facebook Pages
+• 20 GB Storage
+• 1,000 AI Actions/month
+• 100 CRM Calling Minutes/month
+
+Included:
+
+• Everything in Starter
+• Team Management
+• Deals Pipeline
+• Advanced Analytics
+• AI Lead Summaries
+• AI Reply Suggestions
+• Facebook/Instagram Sync
+• Advanced Documents
+
+Locked:
+
+• AI Chatbot
+• AI Workflow Builder
+• AI Intelligence Suite
+• AI Forecasting
+• Advanced AI Automation
+
+Show:
+
+🔒 Upgrade to Agency to unlock this feature.
+
+==================================================
+
+AGENCY PLAN
+
+Price:
+
+Rs. 25,000/month
+
+Limits:
+
+• Unlimited Users
+• Unlimited Leads
+• Unlimited WhatsApp Numbers
+• Unlimited Facebook Pages
+• 100 GB Storage
+• 5,000 AI Actions/month
+• 500 CRM Calling Minutes/month
+
+Included:
+
+• Everything in Professional
+• AI Intelligence Suite
+• AI Chatbot
+• AI Workflow Builder
+• AI Forecasting
+• AI Sentiment Analysis
+• Bulk AI Analysis
+• Advanced Automations
+• Priority Support
+
+==================================================
+FEATURE LOCKING SYSTEM
+==================================================
+
+Create a centralized feature access middleware.
+
+Each feature should have:
+
+• feature_key
+• minimum_plan
+
+If user attempts access:
+
+Show locked screen.
+
+Display:
+
+🔒 This feature is not included in your current plan.
+
+Upgrade to:
+[Required Plan]
+
+Button:
+
+Upgrade Plan
+
+Apply to:
+
+• Analytics
+• AI Intelligence
+• Automations
+• Team
+• Deals
+• Calling
+• Advanced Documents
+• Advanced Reports
+
+==================================================
+AI USAGE SYSTEM
+==================================================
+
+IMPORTANT:
+
+Do NOT use OpenAI credits.
+
+Create:
+
+organization_ai_usage
+
+Track:
+
+• organization_id
+• month
+• actions_used
+• actions_limit
+
+Examples:
+
+Lead Summary = 1 Action
+
+Reply Suggestion = 1 Action
+
+AI Chat = 1 Action
+
+Pipeline Analysis = 5 Actions
+
+Bulk Analysis = 10 Actions
+
+Every AI request must consume actions.
+
+When exhausted:
+
+Display:
+
+You have used all included AI Actions.
+
+[Upgrade Plan]
+
+or
+
+[Buy AI Add-On]
+
+==================================================
+AI ADD-ON STORE
+==================================================
+
+Create Add-On Store.
+
+Products:
+
+AI Booster 500
+
+Rs. 2,000
+
+Adds:
+
+500 AI Actions
+
+--------------------
+
+AI Booster 2000
+
+Rs. 6,000
+
+Adds:
+
+2,000 AI Actions
+
+--------------------
+
+AI Booster 5000
+
+Rs. 12,000
+
+Adds:
+
+5,000 AI Actions
+
+==================================================
+CRM CALLING SYSTEM
+==================================================
+
+Implement CRM Calling.
+
+Use Twilio or Vonage.
+
+Workflow:
+
+Lead
+↓
+Call Button
+↓
+CRM Initiates Call
+↓
+Agent Phone Rings
+↓
+Lead Phone Rings
+↓
+Calls Are Bridged
+
+Agent may:
+
+• Use mobile phone
+• Use CRM interface
+• Use headset
+
+Store:
+
+• Duration
+• Recording URL
+• Notes
+• Outcome
+• Agent
+• Lead
+• Date
+
+==================================================
+CALL LIMITS
+==================================================
+
+Professional:
+
+100 Minutes/month
+
+Agency:
+
+500 Minutes/month
+
+==================================================
+CALLING ADD-ONS
+==================================================
+
+100 Minutes
+
+Rs. 1,500
+
+--------------------
+
+500 Minutes
+
+Rs. 5,000
+
+--------------------
+
+1000 Minutes
+
+Rs. 8,500
+
+When exhausted:
+
+Display:
+
+You have reached your included calling minutes.
+
+[Upgrade Plan]
+
+or
+
+[Buy More Minutes]
+
+==================================================
+AI SUMMARY NOTIFICATION SYSTEM
+==================================================
+
+Create:
+
+Settings
+→ Notifications
+→ AI Summary Preferences
+
+Allow:
+
+• Disabled
+• Daily
+• Every 3 Days
+• Weekly
+• Bi-Weekly
+• Monthly
+
+Delivery Methods:
+
+• Dashboard
+• Email
+• WhatsApp
+
+Include:
+
+• New Leads
+• Lead Activity
+• Deal Updates
+• Missed Follow-Ups
+• Pipeline Changes
+• AI Recommendations
+
+Automatically schedule summaries.
+
+==================================================
+PAYMENT REQUEST SYSTEM
+==================================================
+
+Create:
+
+payment_requests
+
+Fields:
+
+• id
+• organization_id
+• amount
+• plan
+• screenshot_url
+• notes
+• status
+• submitted_at
+• approved_at
+• approved_by
+
+Statuses:
+
+• pending
+• approved
+• rejected
+
+==================================================
+CUSTOMER BILLING PAGE
+==================================================
+
+Display:
+
+• Current Plan
+• Subscription Status
+• Expiry Date
+• Trial Status
+• AI Actions Used
+• AI Actions Remaining
+• Calling Minutes Used
+• Calling Minutes Remaining
+• Storage Used
+• Users Used
+• Leads Used
+
+Allow:
+
+• Upload Payment Screenshot
+• Add Notes
+• Submit Payment
+
+Create payment request.
+
+==================================================
+ADMIN DASHBOARD
+==================================================
+
+Create:
+
+Super Admin Dashboard
+
+Menu:
+
+• Organizations
+• Payments
+• Subscriptions
+• Users
+• Plans
+• SaaS Analytics
+• Settings
+
+==================================================
+PAYMENT APPROVAL
+==================================================
+
+Approve:
+
+• Activate subscription
+• Extend 30 days
+• Store approved_at
+• Store approved_by
+• Create audit log
+
+Reject:
+
+• Enter rejection reason
+• Notify organization owner
+• Create audit log
+
+==================================================
+ORGANIZATION MANAGEMENT
+==================================================
+
+Admin can:
+
+• View Organizations
+• Suspend Organizations
+• Extend Subscriptions
+• Change Plans
+• Reset Usage
+• View AI Usage
+• View Call Usage
+• View Storage Usage
+
+==================================================
+WHATSAPP INTEGRATION
+==================================================
+
+DO NOT BREAK EXISTING FUNCTIONALITY.
+
+Preserve:
+
+• Incoming webhook
+• Outgoing messages
+• Conversations
+• Contacts
+• Message statuses
+
+Associate all WhatsApp accounts with organizations.
+
+Prevent cross-organization access.
+
+==================================================
+FACEBOOK & INSTAGRAM LEADS
+==================================================
+
+DO NOT REBUILD EXISTING INTEGRATION.
+
+Reuse:
+
+• connected_accounts
+• runMetaLeadSync()
+• syncMetaLeadsForAccount()
+• mapMetaLeadToRow()
+
+==================================================
+REAL-TIME META WEBHOOKS
+==================================================
+
+Create:
+
+GET /api/facebook/webhook
+
+POST /api/facebook/webhook
+
+Implement:
+
+• Verification
+• leadgen events
+• Lead fetching
+• Existing mapping logic
+• Existing insertion logic
+
+Target:
+
+Lead visible within 10 seconds.
+
+Keep polling as fallback.
+
+==================================================
+AUTOMATIC WHATSAPP RESPONSE
+==================================================
+
+Optional organization setting:
+
+Auto Welcome Message
+
+Message:
+
+Assalam-o-Alaikum. Thank you for your interest. One of our consultants will contact you shortly.
+
+Use existing WhatsApp infrastructure.
+
+==================================================
+AUDIT LOGGING
+==================================================
+
+Track:
+
+• Payment approvals
+• Payment rejections
+• Subscription changes
+• Organization changes
+• Plan changes
+• Admin actions
+• AI purchases
+• Calling purchases
+
+==================================================
+DESKTOP APP READINESS
+==================================================
+
+Prepare architecture for:
+
+• Electron
+• Tauri
+
+Do not package yet.
+
+Ensure:
+
+• APIs remain clean
+• Authentication works with desktop apps
+• Multi-tenant architecture remains compatible
+
+==================================================
+FINAL DELIVERABLES
+==================================================
+
+After implementation provide:
+
+1. Database schema changes
+2. Migration files
+3. New environment variables
+4. New API routes
+5. Super Admin setup instructions
+6. Facebook webhook setup guide
+7. CRM Calling setup guide
+8. Subscription workflow documentation
+9. Add-On workflow documentation
+10. Testing checklist
+11. Deployment instructions
+
+Complete implementation using the existing project architecture.
+
+Do not leave placeholders.
+
+>>>>>>> 17c38ff (Initial CRM commit)
 Do not remove or break existing CRM functionality.

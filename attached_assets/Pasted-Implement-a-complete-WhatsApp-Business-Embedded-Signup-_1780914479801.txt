@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Implement a complete WhatsApp Business Embedded Signup Flow inside the CRM.
 
 IMPORTANT
@@ -291,4 +292,299 @@ Provide:
 
 Do not use mock implementations.
 
+=======
+Implement a complete WhatsApp Business Embedded Signup Flow inside the CRM.
+
+IMPORTANT
+
+Do not break existing WhatsApp functionality.
+
+Reuse existing:
+
+- WhatsApp webhooks
+- Message sending
+- Message receiving
+- Conversation system
+- Contacts system
+- Connected accounts system
+
+==================================================
+OBJECTIVE
+==================================================
+
+Inside:
+
+Messages
+→ WhatsApp
+
+Users should see:
+
+[ Connect WhatsApp Business Account ]
+
+When clicked:
+
+Launch Meta Embedded Signup.
+
+==================================================
+USER FLOW
+==================================================
+
+Step 1
+
+User clicks:
+
+Connect WhatsApp Business Account
+
+==================================================
+
+Step 2
+
+Open Meta Embedded Signup popup.
+
+Use:
+
+Facebook Login for Business
+
+==================================================
+
+Step 3
+
+User logs into Facebook.
+
+==================================================
+
+Step 4
+
+User selects:
+
+Business Portfolio
+
+==================================================
+
+Step 5
+
+User selects:
+
+WhatsApp Business Account
+
+OR
+
+Creates a new WhatsApp Business Account.
+
+==================================================
+
+Step 6
+
+User selects:
+
+Phone Number
+
+OR
+
+Creates a new phone number.
+
+==================================================
+
+Step 7
+
+User grants permissions.
+
+==================================================
+
+Step 8
+
+CRM receives:
+
+- WABA ID
+- Phone Number ID
+- Business ID
+- Access Token
+- Business Name
+- Phone Number
+
+==================================================
+CONNECTED ACCOUNT STORAGE
+==================================================
+
+Store inside connected_accounts.
+
+Fields:
+
+provider = whatsapp
+
+metadata:
+
+{
+  "waba_id": "",
+  "phone_number_id": "",
+  "business_id": "",
+  "phone_number": "",
+  "business_name": ""
+}
+
+Store organization_id.
+
+==================================================
+ORGANIZATION ISOLATION
+==================================================
+
+Every WhatsApp account must belong to exactly one organization.
+
+Prevent cross-organization access.
+
+Users must only see their own WhatsApp accounts.
+
+==================================================
+WEBHOOK CONFIGURATION
+==================================================
+
+After successful connection:
+
+Automatically display:
+
+Webhook Status
+
+Show:
+
+Connected
+Disconnected
+Pending Verification
+
+Display:
+
+Webhook URL
+
+Verify Token
+
+For organization reference.
+
+==================================================
+WHATSAPP SETTINGS PAGE
+==================================================
+
+Create:
+
+Settings
+→ WhatsApp
+
+Display:
+
+Business Name
+Phone Number
+Connection Status
+WABA ID
+
+Actions:
+
+Reconnect
+Disconnect
+Sync Templates
+Refresh Account Data
+
+==================================================
+MESSAGE PAGE INTEGRATION
+==================================================
+
+Inside Messages page:
+
+If no WhatsApp account connected:
+
+Display:
+
+Connect WhatsApp Business Account
+
+If connected:
+
+Display:
+
+Connected Number
+Connection Status
+
+Allow:
+
+Send Messages
+Receive Messages
+View Conversations
+
+==================================================
+TEMPLATE SYNC
+==================================================
+
+Create:
+
+Sync Templates
+
+Fetch approved templates from Meta.
+
+Store locally.
+
+Display:
+
+Template Name
+Language
+Category
+Status
+
+==================================================
+HEALTH CHECK
+==================================================
+
+Create WhatsApp connection health checker.
+
+Verify:
+
+Access Token
+Phone Number ID
+Webhook Status
+
+Display warnings if broken.
+
+==================================================
+ONBOARDING
+==================================================
+
+During first-time onboarding:
+
+Ask:
+
+Do you want to connect WhatsApp now?
+
+Options:
+
+Connect Now
+Skip For Later
+
+==================================================
+SUPER ADMIN
+==================================================
+
+Super Admin can see:
+
+Number of connected WhatsApp accounts
+
+But cannot see:
+
+Messages
+Conversations
+Customer data
+
+Unless Support Access is enabled.
+
+==================================================
+FINAL DELIVERABLE
+==================================================
+
+Provide:
+
+1. Database changes
+2. API routes
+3. Frontend pages
+4. Embedded Signup implementation
+5. Meta App configuration instructions
+6. Environment variables required
+7. Testing instructions
+
+Do not use mock implementations.
+
+>>>>>>> 17c38ff (Initial CRM commit)
 Implement production-ready Meta Embedded Signup using the existing architecture.

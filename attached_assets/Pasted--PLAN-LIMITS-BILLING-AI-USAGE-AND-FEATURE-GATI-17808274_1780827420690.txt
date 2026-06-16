@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ==================================================
 PLAN LIMITS, BILLING, AI USAGE, AND FEATURE GATING
 ==================================================
@@ -422,3 +423,429 @@ Create automated tests for:
 * Super Admin bypass
 
 # No implementation should be considered complete unless all tests pass.
+=======
+==================================================
+PLAN LIMITS, BILLING, AI USAGE, AND FEATURE GATING
+==================================================
+
+IMPORTANT
+
+Implement a centralized subscription system.
+
+Do NOT implement plan restrictions only in the frontend.
+
+All restrictions must be enforced:
+
+1. Database Layer
+2. API Layer
+3. Business Logic Layer
+4. Frontend Layer
+
+Frontend restrictions are only for user experience.
+
+Backend restrictions are mandatory.
+
+==================================================
+PLAN CONFIGURATION TABLE
+========================
+
+Create table:
+
+plans
+
+Fields:
+
+* id
+* name
+* monthly_price
+* max_users
+* max_leads_per_month
+* max_storage_gb
+* max_whatsapp_accounts
+* max_facebook_accounts
+* max_ai_requests_per_month
+* allow_team_management
+* allow_ai_features
+* allow_automations
+* allow_advanced_reporting
+* allow_priority_support
+* created_at
+* updated_at
+
+==================================================
+DEFAULT PLANS
+=============
+
+Starter
+
+Price:
+Rs. 9,999/month
+
+Limits:
+
+* max_users = 1
+* max_leads_per_month = 500
+* max_storage_gb = 2
+* max_whatsapp_accounts = 1
+* max_facebook_accounts = 1
+* max_ai_requests_per_month = 100
+
+Features:
+
+* Team Management = false
+* AI Features = false
+* Automations = false
+* Advanced Reporting = false
+
+---
+
+Professional
+
+Price:
+Rs. 19,999/month
+
+Limits:
+
+* max_users = 5
+* max_leads_per_month = 5000
+* max_storage_gb = 20
+* max_whatsapp_accounts = 3
+* max_facebook_accounts = 3
+* max_ai_requests_per_month = 1000
+
+Features:
+
+* Team Management = true
+* AI Features = false
+* Automations = false
+* Advanced Reporting = true
+
+---
+
+Agency
+
+Price:
+Rs. 39,999/month
+
+Limits:
+
+* max_users = unlimited
+* max_leads_per_month = 20000
+* max_storage_gb = 100
+* max_whatsapp_accounts = unlimited
+* max_facebook_accounts = unlimited
+* max_ai_requests_per_month = 5000
+
+Features:
+
+* Team Management = true
+* AI Features = true
+* Automations = true
+* Advanced Reporting = true
+
+==================================================
+ORGANIZATION USAGE TRACKING
+===========================
+
+Create table:
+
+organization_usage
+
+Fields:
+
+* organization_id
+* current_month
+* leads_used
+* ai_requests_used
+* storage_used_bytes
+* users_used
+* whatsapp_accounts_used
+* facebook_accounts_used
+* updated_at
+
+Automatically update usage counters whenever:
+
+* Lead created
+* Lead imported
+* User created
+* File uploaded
+* WhatsApp account connected
+* Facebook account connected
+* AI request executed
+
+==================================================
+CENTRALIZED PLAN VALIDATION SERVICE
+===================================
+
+Create:
+
+PlanValidationService
+
+Functions:
+
+* canCreateLead()
+* canCreateUser()
+* canUseAI()
+* canUploadDocument()
+* canConnectWhatsApp()
+* canConnectFacebook()
+* canAccessTeamManagement()
+* canAccessAutomations()
+* canAccessAdvancedReporting()
+
+All routes must call this service.
+
+Never duplicate plan validation logic.
+
+==================================================
+LEAD LIMIT ENFORCEMENT
+======================
+
+Before creating a lead:
+
+Check:
+
+organization_usage.leads_used
+
+against
+
+plan.max_leads_per_month
+
+If limit reached:
+
+Return:
+
+HTTP 403
+
+Message:
+
+"Monthly lead limit reached. Upgrade your plan to continue."
+
+==================================================
+USER LIMIT ENFORCEMENT
+======================
+
+Before inviting a user:
+
+Check:
+
+users_used
+
+against
+
+max_users
+
+If limit exceeded:
+
+Block creation.
+
+==================================================
+WHATSAPP LIMIT ENFORCEMENT
+==========================
+
+Before connecting WhatsApp:
+
+Check:
+
+whatsapp_accounts_used
+
+against
+
+max_whatsapp_accounts
+
+If exceeded:
+
+Block connection.
+
+==================================================
+FACEBOOK LIMIT ENFORCEMENT
+==========================
+
+Before connecting Facebook:
+
+Check:
+
+facebook_accounts_used
+
+against
+
+max_facebook_accounts
+
+If exceeded:
+
+Block connection.
+
+==================================================
+DOCUMENT STORAGE LIMIT ENFORCEMENT
+==================================
+
+Before uploading files:
+
+Calculate:
+
+current_storage + upload_size
+
+If greater than:
+
+max_storage_gb
+
+Reject upload.
+
+==================================================
+AI USAGE TRACKING
+=================
+
+Create table:
+
+ai_usage
+
+Fields:
+
+* id
+* organization_id
+* user_id
+* feature
+* model
+* prompt_tokens
+* completion_tokens
+* total_tokens
+* estimated_cost
+* created_at
+
+Every AI action must be logged.
+
+==================================================
+AI REQUEST LIMIT ENFORCEMENT
+============================
+
+Before any AI request:
+
+Check:
+
+ai_requests_used
+
+against
+
+max_ai_requests_per_month
+
+If exceeded:
+
+Return:
+
+"Monthly AI limit reached. Purchase an AI add-on or upgrade your plan."
+
+==================================================
+MONTHLY USAGE RESET
+===================
+
+Create scheduled job.
+
+Runs automatically on first day of each month.
+
+Reset:
+
+* leads_used
+* ai_requests_used
+
+Do NOT reset:
+
+* storage
+* connected accounts
+* users
+
+==================================================
+FEATURE GATING
+==============
+
+Hide restricted features in the UI.
+
+Also block API access.
+
+Examples:
+
+Starter:
+
+* No Team Management
+* No AI
+* No Automations
+
+Professional:
+
+* Team Management allowed
+* No AI
+* No Automations
+
+Agency:
+
+* Full access
+
+==================================================
+AI SUMMARY FREQUENCY RESTRICTIONS
+=================================
+
+Starter:
+
+Allowed:
+
+* Daily
+* Weekly
+
+Professional:
+
+Allowed:
+
+* Hourly
+* Every 6 Hours
+* Daily
+* Weekly
+
+Agency:
+
+Allowed:
+
+* Instant
+* Hourly
+* Every 6 Hours
+* Daily
+* Weekly
+
+Validate both frontend and backend.
+
+==================================================
+SUPER ADMIN EXEMPTION
+=====================
+
+role = super_admin
+
+Must bypass:
+
+* Subscription checks
+* Usage limits
+* Lead limits
+* AI limits
+* Storage limits
+* WhatsApp limits
+* Facebook limits
+* Feature gating
+
+Super Admin must never be blocked.
+
+==================================================
+TESTING REQUIREMENTS
+====================
+
+Create automated tests for:
+
+* Lead limits
+* User limits
+* AI limits
+* Storage limits
+* WhatsApp limits
+* Facebook limits
+* Feature gating
+* Subscription expiry
+* Trial expiry
+* Super Admin bypass
+
+# No implementation should be considered complete unless all tests pass.
+>>>>>>> 17c38ff (Initial CRM commit)
