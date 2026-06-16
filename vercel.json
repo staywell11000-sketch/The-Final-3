@@ -1,5 +1,4 @@
 {
-  "framework": "vite",
   "buildCommand": "pnpm --filter @workspace/luxestate run build",
   "outputDirectory": "artifacts/luxestate/dist",
   "installCommand": "pnpm install",
