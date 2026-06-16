@@ -77,12 +77,6 @@
     "zod": "catalog:"
   },
   "dependencies": {
-<<<<<<< HEAD
-    "@supabase/supabase-js": "^2.106.2",
-    "@types/papaparse": "^5.5.2",
-    "html2canvas": "^1.4.1",
-    "jspdf": "^4.2.1",
-=======
     "@rollup/rollup-win32-x64-msvc": "^4.62.0",
     "@supabase/supabase-js": "^2.106.2",
     "@tailwindcss/oxide-win32-x64-msvc": "^4.3.1",
@@ -90,7 +84,6 @@
     "html2canvas": "^1.4.1",
     "jspdf": "^4.2.1",
     "lightningcss-win32-x64-msvc": "^1.32.0",
->>>>>>> 17c38ff (Initial CRM commit)
     "papaparse": "^5.5.3",
     "xlsx": "^0.18.5"
   }
