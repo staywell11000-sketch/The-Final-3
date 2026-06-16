@@ -142,7 +142,7 @@ export default defineConfig({
   },
   root: path.resolve(import.meta.dirname),
   build: {
-    outDir: "dist/public",
+    outDir: "dist",
     emptyOutDir: true,
     chunkSizeWarningLimit: 3000,
     rollupOptions: {
