@@ -1,6 +1,6 @@
 {
   "framework": "vite",
-  "buildCommand": "pnpm --filter @workspace/luxestate run build",
+  "buildCommand": "pnpm --filter @workspace/api-server run build && pnpm --filter @workspace/luxestate run build",
   "installCommand": "pnpm install",
   "rewrites": [
     { "source": "/(.*)", "destination": "/" }
