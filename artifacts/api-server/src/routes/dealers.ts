@@ -97,17 +97,10 @@ router.get("/dealers/:id", requireAuth, async (req: any, res) => {
       .limit(1);
 
     if (!row) return void res.status(404).json({ error: "Dealer not found" });
-<<<<<<< HEAD
-    res.json(row);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to get dealer" });
-=======
     return res.json(row);
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: "Failed to get dealer" });
->>>>>>> 17c38ff (Initial CRM commit)
   }
 });
 

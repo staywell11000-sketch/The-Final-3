@@ -1,10 +1,6 @@
 import { Router } from "express"
 import { requireAuth } from "../middlewares/requireAuth"
-<<<<<<< HEAD
-import { db, whatsappAccounts, userWhatsappPermissions } from "@workspace/db"
-=======
 import { db, whatsappAccounts, userWhatsappPermissions, conversationWaAccounts } from "@workspace/db"
->>>>>>> 17c38ff (Initial CRM commit)
 import { eq, and, sql } from "drizzle-orm"
 import { logger } from "../lib/logger"
 
