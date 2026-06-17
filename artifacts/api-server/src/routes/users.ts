@@ -73,15 +73,9 @@ router.put("/users/me", requireAuth, async (req: any, res) => {
         onboarded: onboarded ?? false,
       })
       .returning();
-<<<<<<< HEAD
-    res.status(201).json(created);
-  } catch (err) {
-    res.status(500).json({ error: "Failed to save user" });
-=======
     return res.status(201).json(created);
   } catch (err) {
     return res.status(500).json({ error: "Failed to save user" });
->>>>>>> 17c38ff (Initial CRM commit)
   }
 });
 
