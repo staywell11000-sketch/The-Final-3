@@ -1,9 +1,9 @@
 ﻿import { type Request } from "express";
 
 export function getStringQuery(req: Request, param: string): string | undefined {
-  const val = req.query[param];
+  const val = req.query[param] as string | string[] | undefined;
   if (Array.isArray(val)) return val[0];
-  return val as string | undefined;
+  return val;
 }
 
 export function getRequiredStringQuery(req: Request, param: string): string {

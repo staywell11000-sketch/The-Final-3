@@ -377,7 +377,7 @@ Return ONLY JSON: {"score":<0-100>,"urgencyScore":<0-100>,"aiSummary":"<2-3 sent
     }),
   });
 
-  const data = await response.json();
+  const data = await response.json() as { choices?: { message?: { content?: string } }[] };
   const content = data.choices?.[0]?.message?.content ?? "{}";
   const analysis = JSON.parse(content) as {
     score: number;
@@ -428,10 +428,10 @@ router.get("/whatsapp-reconciliation", async (_req: Request, res: Response) => {
       )
     );
 
-    res.status(200).json({ message: "WhatsApp reconciliation completed" });
+    return void res.status(200).json({ message: "WhatsApp reconciliation completed" });
   } catch (err) {
     logger.error({ err }, "WhatsApp reconciliation failed");
-    res.status(500).json({ error: "Reconciliation failed" });
+    return void res.status(500).json({ error: "Reconciliation failed" });
   }
 });
 
@@ -476,10 +476,10 @@ router.get("/meta-lead-sync", async (_req: Request, res: Response) => {
       logger.info({ leadsInserted }, "Meta lead sync: run complete");
     }
 
-    res.status(200).json({ message: "Meta lead sync completed", leadsInserted });
+    return void res.status(200).json({ message: "Meta lead sync completed", leadsInserted });
   } catch (err) {
     logger.error({ err }, "Meta lead sync failed");
-    res.status(500).json({ error: "Meta lead sync failed" });
+    return void res.status(500).json({ error: "Meta lead sync failed" });
   }
 });
 
