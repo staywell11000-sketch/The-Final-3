@@ -10,24 +10,6 @@
       "maxDuration": 10
     }
   },
-  "crons": [
-    {
-      "path": "/api/cron/whatsapp-reconciliation",
-      "schedule": "*/10 * * * *"
-    },
-    {
-      "path": "/api/cron/meta-lead-sync",
-      "schedule": "*/15 * * * *"
-    },
-    {
-      "path": "/api/cron/nightly-ai-analysis",
-      "schedule": "0 2 * * *"
-    },
-    {
-      "path": "/api/cron/plan-expiry",
-      "schedule": "0 0 * * *"
-    }
-  ],
   "rewrites": [
     { "source": "/(.*)", "destination": "/" }
   ]
