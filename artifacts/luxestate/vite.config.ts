@@ -8,6 +8,7 @@ const rawPort = process.env.PORT;
 const port = rawPort && !Number.isNaN(Number(rawPort)) ? Number(rawPort) : 3000;
 
 const basePath = process.env.BASE_PATH ?? "/";
+const isVercel = !!process.env.VERCEL;
 
 export default defineConfig({
   base: basePath,
@@ -21,104 +22,108 @@ export default defineConfig({
           ),
         ]
       : []),
-    VitePWA({
-      registerType: "autoUpdate",
-      includeAssets: [
-        "favicon.svg",
-        "logo.svg",
-        "robots.txt",
-        "pwa-*.png",
-      ],
-      manifest: {
-        name: "LuxeState CRM",
-        short_name: "LuxeState",
-        description:
-          "Premium real estate CRM — manage leads, deals, properties, and analytics from any device.",
-        theme_color: "#C4841A",
-        background_color: "#0f0f0f",
-        display: "standalone",
-        orientation: "portrait-primary",
-        scope: basePath,
-        start_url: basePath,
-        categories: ["business", "productivity"],
-        icons: [
-          {
-            src: "pwa-72x72.png",
-            sizes: "72x72",
-            type: "image/png",
-          },
-          {
-            src: "pwa-96x96.png",
-            sizes: "96x96",
-            type: "image/png",
-          },
-          {
-            src: "pwa-128x128.png",
-            sizes: "128x128",
-            type: "image/png",
-          },
-          {
-            src: "pwa-144x144.png",
-            sizes: "144x144",
-            type: "image/png",
-          },
-          {
-            src: "pwa-152x152.png",
-            sizes: "152x152",
-            type: "image/png",
-          },
-          {
-            src: "pwa-192x192.png",
-            sizes: "192x192",
-            type: "image/png",
-          },
-          {
-            src: "pwa-384x384.png",
-            sizes: "384x384",
-            type: "image/png",
-          },
-          {
-            src: "pwa-512x512.png",
-            sizes: "512x512",
-            type: "image/png",
-          },
-          {
-            src: "pwa-maskable-512x512.png",
-            sizes: "512x512",
-            type: "image/png",
-            purpose: "maskable",
-          },
-        ],
-      },
-      workbox: {
-        globPatterns: ["**/*.{js,css,html,ico,png,svg,woff,woff2}"],
-        navigateFallback: null,
-        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
-        runtimeCaching: [
-          {
-            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-            handler: "CacheFirst",
-            options: {
-              cacheName: "google-fonts-cache",
-              expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 },
-              cacheableResponse: { statuses: [0, 200] },
+    ...(isVercel
+      ? []
+      : [
+          VitePWA({
+            registerType: "autoUpdate",
+            includeAssets: [
+              "favicon.svg",
+              "logo.svg",
+              "robots.txt",
+              "pwa-*.png",
+            ],
+            manifest: {
+              name: "LuxeState CRM",
+              short_name: "LuxeState",
+              description:
+                "Premium real estate CRM — manage leads, deals, properties, and analytics from any device.",
+              theme_color: "#C4841A",
+              background_color: "#0f0f0f",
+              display: "standalone",
+              orientation: "portrait-primary",
+              scope: basePath,
+              start_url: basePath,
+              categories: ["business", "productivity"],
+              icons: [
+                {
+                  src: "pwa-72x72.png",
+                  sizes: "72x72",
+                  type: "image/png",
+                },
+                {
+                  src: "pwa-96x96.png",
+                  sizes: "96x96",
+                  type: "image/png",
+                },
+                {
+                  src: "pwa-128x128.png",
+                  sizes: "128x128",
+                  type: "image/png",
+                },
+                {
+                  src: "pwa-144x144.png",
+                  sizes: "144x144",
+                  type: "image/png",
+                },
+                {
+                  src: "pwa-152x152.png",
+                  sizes: "152x152",
+                  type: "image/png",
+                },
+                {
+                  src: "pwa-192x192.png",
+                  sizes: "192x192",
+                  type: "image/png",
+                },
+                {
+                  src: "pwa-384x384.png",
+                  sizes: "384x384",
+                  type: "image/png",
+                },
+                {
+                  src: "pwa-512x512.png",
+                  sizes: "512x512",
+                  type: "image/png",
+                },
+                {
+                  src: "pwa-maskable-512x512.png",
+                  sizes: "512x512",
+                  type: "image/png",
+                  purpose: "maskable",
+                },
+              ],
             },
-          },
-          {
-            urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-            handler: "CacheFirst",
-            options: {
-              cacheName: "gstatic-fonts-cache",
-              expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 },
-              cacheableResponse: { statuses: [0, 200] },
+            workbox: {
+              globPatterns: ["**/*.{js,css,html,ico,png,svg,woff,woff2}"],
+              navigateFallback: null,
+              maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
+              runtimeCaching: [
+                {
+                  urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+                  handler: "CacheFirst",
+                  options: {
+                    cacheName: "google-fonts-cache",
+                    expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 },
+                    cacheableResponse: { statuses: [0, 200] },
+                  },
+                },
+                {
+                  urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
+                  handler: "CacheFirst",
+                  options: {
+                    cacheName: "gstatic-fonts-cache",
+                    expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 },
+                    cacheableResponse: { statuses: [0, 200] },
+                  },
+                },
+              ],
             },
-          },
-        ],
-      },
-      devOptions: {
-        enabled: false,
-      },
-    }),
+            devOptions: {
+              enabled: false,
+            },
+          }),
+        ]),
     ...(process.env.NODE_ENV !== "production" &&
     process.env.REPL_ID !== undefined
       ? [

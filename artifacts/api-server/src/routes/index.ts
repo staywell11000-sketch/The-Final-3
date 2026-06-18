@@ -30,6 +30,7 @@ import supportRouter from "./support";
 import privacyRouter from "./privacy";
 import onboardingRouter from "./onboarding";
 import whatsappAccountsRouter from "./whatsappAccounts";
+import cronRouter from "./cron";
 
 const router = Router();
 
@@ -71,5 +72,6 @@ router.use(supportRouter);
 router.use(privacyRouter);
 router.use(onboardingRouter);
 router.use(whatsappAccountsRouter);
+router.use("/cron", cronRouter);
 
 export default router;

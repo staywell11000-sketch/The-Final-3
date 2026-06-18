@@ -84,7 +84,9 @@ router.get("/connected-accounts", requireAuth, async (req: any, res) => {
 
 router.get("/connected-accounts/oauth-url/:provider", requireAuth, async (req: any, res) => {
   const provider = req.params.provider as Provider
-  if (!VALID_PROVIDERS.includes(provider)) return res.status(400).json({ error: "Invalid provider" })
+  if (!VALID_PROVIDERS.includes(provider)) {
+    return res.status(400).json({ error: "Invalid provider" })
+  }
 
   const returnUrl = (req.query.returnUrl as string) || getApiBaseUrl()
 

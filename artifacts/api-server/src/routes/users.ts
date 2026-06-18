@@ -29,9 +29,9 @@ router.get("/users/me", requireAuth, async (req: any, res) => {
     if (!user) {
       return void res.status(404).json({ error: "User not found" });
     }
-    return res.json(user);
+    return void res.json(user);
   } catch (err) {
-    return res.status(500).json({ error: "Failed to fetch user" });
+    return void res.status(500).json({ error: "Failed to fetch user" });
   }
 });
 
@@ -73,9 +73,9 @@ router.put("/users/me", requireAuth, async (req: any, res) => {
         onboarded: onboarded ?? false,
       })
       .returning();
-    return res.status(201).json(created);
+    return void res.status(201).json(created);
   } catch (err) {
-    return res.status(500).json({ error: "Failed to save user" });
+    return void res.status(500).json({ error: "Failed to save user" });
   }
 });
 

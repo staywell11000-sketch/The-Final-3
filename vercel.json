@@ -1,7 +1,33 @@
 {
-  "framework": "vite",
-  "buildCommand": "pnpm --filter @workspace/api-server run build && pnpm --filter @workspace/luxestate run build",
+  "framework": null,
+  "buildCommand": "VERCEL=1 pnpm run build",
   "installCommand": "pnpm install",
+  "regions": ["iad1"],
+  "functions": {
+    "api/**/*.mjs": {
+      "runtime": "nodejs22.x",
+      "memory": 512,
+      "maxDuration": 10
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/cron/whatsapp-reconciliation",
+      "schedule": "*/10 * * * *"
+    },
+    {
+      "path": "/api/cron/meta-lead-sync",
+      "schedule": "*/15 * * * *"
+    },
+    {
+      "path": "/api/cron/nightly-ai-analysis",
+      "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/cron/plan-expiry",
+      "schedule": "0 0 * * *"
+    }
+  ],
   "rewrites": [
     { "source": "/(.*)", "destination": "/" }
   ]

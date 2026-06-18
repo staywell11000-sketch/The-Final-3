@@ -10,24 +10,46 @@ import {
 } from "./objectAcl";
 
 const REPLIT_SIDECAR_ENDPOINT = "http://127.0.0.1:1106";
+const isVercel = !!process.env.VERCEL;
+const isReplit = !!process.env.REPL_ID;
 
-export const objectStorageClient = new Storage({
-  credentials: {
-    audience: "replit",
-    subject_token_type: "access_token",
-    token_url: `${REPLIT_SIDECAR_ENDPOINT}/token`,
-    type: "external_account",
-    credential_source: {
-      url: `${REPLIT_SIDECAR_ENDPOINT}/credential`,
-      format: {
-        type: "json",
-        subject_token_field_name: "access_token",
+let storageClient: Storage;
+
+if (isReplit && !isVercel) {
+  storageClient = new Storage({
+    credentials: {
+      audience: "replit",
+      subject_token_type: "access_token",
+      token_url: `${REPLIT_SIDECAR_ENDPOINT}/token`,
+      type: "external_account",
+      credential_source: {
+        url: `${REPLIT_SIDECAR_ENDPOINT}/credential`,
+        format: {
+          type: "json",
+          subject_token_field_name: "access_token",
+        },
       },
+      universe_domain: "googleapis.com",
     },
-    universe_domain: "googleapis.com",
-  },
-  projectId: "",
-});
+    projectId: "",
+  });
+} else {
+  storageClient = new Storage({
+    projectId: process.env.GCP_PROJECT_ID || "",
+    ...(process.env.GCP_KEY_FILE
+      ? { keyFilename: process.env.GCP_KEY_FILE }
+      : process.env.GCP_CLIENT_EMAIL
+        ? {
+            credentials: {
+              client_email: process.env.GCP_CLIENT_EMAIL,
+              private_key: (process.env.GCP_PRIVATE_KEY || "").replace(/\\n/g, "\n"),
+            },
+          }
+        : {}),
+  });
+}
+
+export const objectStorageClient = storageClient;
 
 export class ObjectNotFoundError extends Error {
   constructor() {
@@ -238,30 +260,43 @@ async function signObjectURL({
   method: "GET" | "PUT" | "DELETE" | "HEAD";
   ttlSec: number;
 }): Promise<string> {
-  const request = {
-    bucket_name: bucketName,
-    object_name: objectName,
-    method,
-    expires_at: new Date(Date.now() + ttlSec * 1000).toISOString(),
-  };
-  const response = await fetch(
-    `${REPLIT_SIDECAR_ENDPOINT}/object-storage/signed-object-url`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(request),
-      signal: AbortSignal.timeout(30_000),
-    }
-  );
-  if (!response.ok) {
-    throw new Error(
-      `Failed to sign object URL, errorcode: ${response.status}, ` +
-        `make sure you're running on Replit`
+  if (isReplit && !isVercel) {
+    const request = {
+      bucket_name: bucketName,
+      object_name: objectName,
+      method,
+      expires_at: new Date(Date.now() + ttlSec * 1000).toISOString(),
+    };
+    const response = await fetch(
+      `${REPLIT_SIDECAR_ENDPOINT}/object-storage/signed-object-url`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(request),
+        signal: AbortSignal.timeout(30_000),
+      }
     );
-  }
+    if (!response.ok) {
+      throw new Error(
+        `Failed to sign object URL, errorcode: ${response.status}, ` +
+          `make sure you're running on Replit`
+      );
+    }
 
-  const { signed_url: signedURL } = (await response.json()) as { signed_url: string };
-  return signedURL;
+    const { signed_url: signedURL } = (await response.json()) as { signed_url: string };
+    return signedURL;
+  } else {
+    const bucket = objectStorageClient.bucket(bucketName);
+    const file = bucket.file(objectName);
+
+    const [signedUrl] = await file.getSignedUrl({
+      version: "v4",
+      action: method === "GET" ? "read" : method === "PUT" ? "write" : "delete",
+      expires: Date.now() + ttlSec * 1000,
+    });
+
+    return signedUrl;
+  }
 }

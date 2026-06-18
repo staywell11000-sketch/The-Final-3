@@ -1,12 +1,9 @@
 import app from "./app";
 import { logger } from "./lib/logger";
-import { startWhatsAppReconciliationJob } from "./jobs/whatsappReconciliation";
-import { startMetaLeadSyncJob } from "./services/metaLeadSync";
-import { startNightlyAIAnalysisJob } from "./jobs/nightlyAIAnalysis";
-import { startPlanExpiryJob } from "./jobs/planExpiry";
 
-// When running as a standalone server (not on Vercel)
-if (!process.env.VERCEL) {
+const isVercel = !!process.env.VERCEL;
+
+if (!isVercel) {
   const rawPort = process.env["PORT"];
 
   if (!rawPort) {
@@ -28,11 +25,9 @@ if (!process.env.VERCEL) {
     }
 
     logger.info({ port }, "Server listening");
-    startWhatsAppReconciliationJob();
-    startMetaLeadSyncJob();
-    startNightlyAIAnalysisJob();
-    startPlanExpiryJob();
   });
 }
+
+export const handler = app;
 
 export default app;

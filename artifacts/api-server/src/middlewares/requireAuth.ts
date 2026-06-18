@@ -184,5 +184,5 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
     return res.status(500).json({ error: "Server error during authentication" });
   }
 
-  return next();
+  next();
 }
