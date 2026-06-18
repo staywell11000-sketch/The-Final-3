@@ -18,7 +18,7 @@ export default function ForgotPasswordPage() {
     setLoading(true)
     setError("")
 
-    const base = import.meta.env.BASE_URL.replace(/\/$/, "")
+    const base = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "")
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}${base}/reset-password`,
     })

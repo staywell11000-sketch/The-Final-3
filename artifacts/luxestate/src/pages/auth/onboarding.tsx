@@ -13,7 +13,7 @@ import {
   CheckCircle2, Zap, Crown, Star, X, Plus,
 } from "lucide-react"
 
-const BASE = import.meta.env.BASE_URL.replace(/\/$/, "")
+const BASE = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "")
 const TOTAL_STEPS = 4
 
 const BUSINESS_TYPES = [

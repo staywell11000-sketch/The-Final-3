@@ -93,7 +93,7 @@ function TriggerAutomationDialog({
   const { session } = useAuth()
   const [firing, setFiring] = useState<number | null>(null)
 
-  const API = import.meta.env.BASE_URL.replace(/\/$/, "") + "/api"
+  const API = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "") + "/api"
   const headers = {
     "Content-Type": "application/json",
     ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),

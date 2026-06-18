@@ -5,7 +5,7 @@ import {
   Property, PropertyCategory, PropertyStatus,
 } from "@/components/dashboard/properties-data";
 
-const BASE = import.meta.env.BASE_URL.replace(/\/$/, "") + "/api";
+const BASE = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "") + "/api";
 
 async function getToken(): Promise<string | null> {
   const { data } = await supabase.auth.getSession();
@@ -111,7 +111,7 @@ export type PropertiesFilters = {
 export function objectPathToUrl(objectPath: string): string {
   if (!objectPath) return "";
   if (objectPath.startsWith("http")) return objectPath;
-  return objectPath.replace(/^\/objects/, `${import.meta.env.BASE_URL.replace(/\/$/, "")}/api/storage/objects`);
+  return objectPath.replace(/^\/objects/, `${(import.meta.env.BASE_URL ?? "/").replace(/\/$/, "")}/api/storage/objects`);
 }
 
 // ── Data mappers ─────────────────────────────────────────────────────────────

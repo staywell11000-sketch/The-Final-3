@@ -166,7 +166,7 @@ export function useUpdateRolePermissions() {
 
 export async function validateInvitation(email: string, code: string) {
   const res = await fetch(
-    `${import.meta.env.BASE_URL.replace(/\/$/, "")}/api/invitations/validate`,
+    `${(import.meta.env.BASE_URL ?? "/").replace(/\/$/, "")}/api/invitations/validate`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },

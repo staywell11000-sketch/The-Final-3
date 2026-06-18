@@ -1,6 +1,6 @@
 import { supabase } from "./supabase";
 
-const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
+const BASE = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "");
 
 async function getAuthHeaders(): Promise<Record<string, string>> {
   const { data: { session } } = await supabase.auth.getSession();

@@ -44,7 +44,7 @@ export type Message = {
 // ─── Helpers ──────────────────────────────────────────────
 
 function getBase(): string {
-  return import.meta.env.BASE_URL.replace(/\/$/, "")
+  return (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "")
 }
 
 async function getAuthHeaders(): Promise<Record<string, string>> {

@@ -3,7 +3,7 @@ import { Lead } from "@/components/dashboard/leads-types";
 import { supabase } from "./supabase";
 import { useAuth } from "./auth-context";
 
-const BASE = import.meta.env.BASE_URL.replace(/\/$/, "") + "/api";
+const BASE = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "") + "/api";
 
 export type CreateLeadInput = Omit<Lead, "id">;
 export type UpdateLeadInput = Partial<Omit<Lead, "id">>;

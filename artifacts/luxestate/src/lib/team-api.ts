@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "./supabase";
 
-const BASE = import.meta.env.BASE_URL.replace(/\/$/, "") + "/api";
+const BASE = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "") + "/api";
 
 export type TeamRole = "admin" | "manager" | "agent";
 

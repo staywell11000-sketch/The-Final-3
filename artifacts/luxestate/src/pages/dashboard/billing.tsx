@@ -37,7 +37,7 @@ const AI_BOOSTERS = [
 ]
 
 function objectPathToUrl(objectPath: string): string {
-  return objectPath.replace(/^\/objects/, `${import.meta.env.BASE_URL.replace(/\/$/, "")}/api/storage/objects`)
+  return objectPath.replace(/^\/objects/, `${(import.meta.env.BASE_URL ?? "/").replace(/\/$/, "")}/api/storage/objects`)
 }
 
 async function uploadScreenshot(file: File): Promise<string> {

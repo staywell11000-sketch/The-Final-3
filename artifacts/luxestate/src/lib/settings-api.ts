@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient, keepPreviousData } from "@tansta
 import { useAuth } from "./auth-context"
 import { supabase } from "./supabase"
 
-const API = import.meta.env.BASE_URL.replace(/\/$/, "") + "/api"
+const API = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "") + "/api"
 
 export type UserProfile = {
   id: string

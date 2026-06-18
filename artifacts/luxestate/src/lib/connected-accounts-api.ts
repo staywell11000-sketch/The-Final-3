@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { supabase } from "./supabase"
 
-const getBase = () => import.meta.env.BASE_URL.replace(/\/$/, "")
+const getBase = () => (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "")
 
 async function getAuthHeaders(): Promise<Record<string, string>> {
   const { data: { session } } = await supabase.auth.getSession()

@@ -112,7 +112,7 @@ export default function SignUpPage() {
   const handleGoogle = async () => {
     setGoogleLoading(true)
     setError("")
-    const base = import.meta.env.BASE_URL.replace(/\/$/, "")
+    const base = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "")
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: { redirectTo: `${window.location.origin}${base}/dashboard` },

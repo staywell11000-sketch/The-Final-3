@@ -523,7 +523,7 @@ export default function SettingsPage() {
       const { data: { session: s } } = await supabase.auth.getSession()
       const headers: Record<string, string> = s?.access_token
         ? { Authorization: `Bearer ${s.access_token}` } : {}
-      const BASE = import.meta.env.BASE_URL.replace(/\/$/, "")
+      const BASE = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "")
       const [leadsRes, dealsRes, propertiesRes] = await Promise.all([
         fetch(`${BASE}/api/leads`, { headers }),
         fetch(`${BASE}/api/deals`, { headers }),

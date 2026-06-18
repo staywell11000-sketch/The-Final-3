@@ -71,7 +71,7 @@ import AdminAiSettings from "@/pages/admin/ai-settings"
 import AIUsagePage from "@/pages/dashboard/ai-usage"
 import { LanguageProvider } from "@/lib/i18n"
 
-const basePath = import.meta.env.BASE_URL.replace(/\/$/, "")
+const basePath = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "")
 
 function LoadingScreen() {
   return (

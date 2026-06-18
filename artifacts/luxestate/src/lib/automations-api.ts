@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "./auth-context";
 
-const API = import.meta.env.BASE_URL.replace(/\/$/, "") + "/api";
+const API = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "") + "/api";
 
 export type Condition = {
   field:    string;

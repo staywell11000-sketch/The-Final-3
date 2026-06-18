@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { supabase } from "./supabase"
 
-const BASE = import.meta.env.BASE_URL.replace(/\/$/, "")
+const BASE = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "")
 
 export type UserProfile = {
   id: string

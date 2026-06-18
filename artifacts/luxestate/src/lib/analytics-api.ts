@@ -3,7 +3,7 @@ import { useAuth } from "./auth-context";
 import { useCallback } from "react";
 import { supabase } from "./supabase";
 
-const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
+const BASE = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "");
 const API = `${BASE}/api`;
 
 export type AnalyticsKPIs = {

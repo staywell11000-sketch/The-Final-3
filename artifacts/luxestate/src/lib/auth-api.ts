@@ -1,4 +1,4 @@
-const BASE = import.meta.env.BASE_URL.replace(/\/$/, "")
+const BASE = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "")
 
 /**
  * Checks whether an email address has a registered account in our system.
